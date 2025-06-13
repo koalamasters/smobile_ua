@@ -1,0 +1,26 @@
+{% if checkout_error  %}
+    <div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i>{{ checkout_error }}</div>
+{% else %}
+    <div class="buttons">
+        <div class="pull-right">
+            <a id="process" href="#" class="btn btn-primary">{{ button_confirm }}</a>
+        </div>
+    </div>
+{% endif %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#process").click(function(event){
+            $.ajax({
+                type: 'GET',
+                url: 'index.php?route=extension/payment/whitepay/confirm',
+                success: function (json) {
+                    console.log('Order in process');
+                    if (json['redirect']) {
+                        window.location.href = json['redirect'];
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,56 @@
+<div class="oct-checkout-block-title d-flex align-items-center mb-3">
+	<img src="catalog/view/theme/oct_showcase/img/sprite-fastorder.svg#include--delivery-icon" alt="" width="24" height="24">
+	<span class="text-uppercase- ps-3">{{ heading_shipping_block }}</span>
+</div>
+{% if error_warning %}
+	<div class="alert alert-warning fsz-14"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+{% endif %}
+{% if shipping_methods %}
+	<p class="mb-3">{{ text_shipping_method }}</p>
+	<div class="shipping-method-box">
+		{% for shipping_method in shipping_methods %}
+			{#                                            <p class="mb-2">#}
+			{#                                                <strong>{{ shipping_method.title }}</strong>#}
+			{#                                            </p>#}
+			{% if not shipping_method.error %}
+				{% for quote in shipping_method['quote'] %}
+					<div class="form-check d-flex align-items-center  {% if quote.code == 'pickup.pickup' %} mb-0 {% endif %}">
+						<label class="form-check-label d-flex align-items-center">
+							{% if quote.code == code or  not code %}
+								{% set code = quote.code %}
+								<input type="radio" class="form-check-input"
+									   name="shipping_method" value="{{ quote.code }}"
+									   title="{{ quote.title }}" checked="checked"/>
+							{% else %}
+								<input type="radio" class="form-check-input"
+									   name="shipping_method" value="{{ quote.code }}"
+									   title="{{ quote.title }}"/>
+							{% endif %}
+							{{ quote.title }}
+							{% if show_cost_in_delivery_block is defined and show_cost_in_delivery_block %} - {{ quote.text }}{% endif %}
+						</label>
+
+						{% if quote.code == 'pickup.pickup' %}
+							<div class="delivery-price-block text-uppercase" data-code="{{ quote.code }}">{{ delivery_free }}</div>
+						{% else %}
+							<div class="delivery-price-block text-uppercase" data-code="{{ quote.code }}">{{ delivery_free }}{#{ delivery_carrier_tariffs }#}</div>
+						{% endif %}
+					</div>
+
+					{% if quote.code == 'pickup.pickup' %}
+						<div class="delivery-description fsz-14">
+
+							<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M8 0.5C12.1349 0.5 15.5 3.86514 15.5 8V8.00195C15.5136 11.0262 13.6245 13.9059 11.6416 16.0781C10.6596 17.1539 9.675 18.0342 8.93555 18.6455C8.56625 18.9508 8.25883 19.1882 8.04492 19.3486C8.0293 19.3604 8.01364 19.3709 7.99902 19.3818C7.3583 18.9115 5.78812 17.6992 4.24609 15.998C2.36568 13.9234 0.600152 11.2045 0.503906 8.28125L0.5 7.99707V7.99512C0.5 3.86549 3.86498 0.500044 8 0.5ZM8 3.5C5.51389 3.50004 3.5 5.51388 3.5 8C3.5 10.4861 5.51389 12.5 8 12.5C10.4861 12.5 12.5 10.4861 12.5 8C12.5 5.51386 10.4861 3.5 8 3.5Z" fill="#001F3F" stroke="#001F3F"/>
+							</svg>
+							Київ, вул. Мокра (Кудряшова) 20а, оф.1
+						</div>
+					{% endif %}
+
+				{% endfor %}
+			{% else %}
+				<div class="alert alert-danger fsz-14">{{ shipping_method.error }}</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+{% endif %}

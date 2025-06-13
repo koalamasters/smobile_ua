@@ -1,0 +1,129 @@
+<div class="block panel panel-default">
+    <div class="panel-heading">
+        <button type="button" onclick="$(this).closest('.block').remove();" class="btn btn-danger btn-xs pull-right">
+            <i class="fa fa-trash"></i>
+        </button>
+        Блок {{ index + 1 }}
+    </div>
+
+    <div class="panel-body">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Зображення</label>
+                <div class="input-group ">
+                    <input type="text" name="blocks[{{ index }}][image]" value="{{ block.image ?? '' }}" id="input-image-{{ index }}" class="form-control"/>
+
+                    <span class="input-group-btn">
+                        <button type="button"
+                                class="btn btn-default upload-btn"
+                                data-image="input-image-{{ index }}"
+                                data-thumb="img-input-image-{{ index }}">
+                          <i class="fa fa-folder-open"></i>
+                        </button>
+                    </span>
+                </div>
+
+                <img id="img-input-image-{{ index }}" src="{{ block.image ?? '' }}" style="width: 100%; height: auto; margin-top: 15px;">
+
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            {#
+            <div class="form-group">
+                <label>Заголовок</label>
+                {% for language in languages %}
+                    <div class="d-flex listing-block-input-wrapper">
+                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="U A">
+                        <input type="text" name="blocks[{{ index }}][title][{{ language.code }}]"
+                               value="{{ block.title[language.code] ?? '' }}" class="form-control"
+                               placeholder="{{ language.name }}"/>
+                    </div>
+                {% endfor %}
+                <div class="title-styles">
+                    <label for="blocks[{{ index }}][bold_title]" style="font-weight: bold">
+
+                        <input type="checkbox" name="blocks[{{ index }}][bold_title]" id="blocks[{{ index }}][bold_title]" {% if block.bold_title == 'on'%} checked {% endif%} class="form-control"/>
+                        Жирність
+                    </label>
+
+                    <label for="blocks[{{ index }}][italic_title]" style="font-weight: normal; font-style: italic">
+
+                        <input type="checkbox" name="blocks[{{ index }}][italic_title]" id="blocks[{{ index }}][italic_title]" {% if block.italic_title == 'on'%} checked {% endif%} class="form-control"/>
+                        Курсив
+                    </label>
+
+                    <label for="blocks[{{ index }}][underline_title]" style="font-weight: normal; text-decoration: underline">
+                        <input type="checkbox" name="blocks[{{ index }}][underline_title]" id="blocks[{{ index }}][underline_title]" {% if block.underline_title == 'on'%} checked {% endif%} class="form-control"/>
+                        Підкреслення
+                    </label>
+                </div>
+            </div>
+            #}
+
+            {# <div class="form-group">
+                <label>Текст 2</label>
+                {% for language in languages %}
+                <div class="d-flex">
+                    <img src="language/{{ language.code }}/{{ language.code }}.png" title="U A">
+                    <input type="text" name="blocks[{{ index }}][text2][{{ language.code }}]"
+                           value="{{ block.text2[language.code] ?? '' }}" class="form-control"
+                           placeholder="{{ language.name }}"/>
+                </div>
+                {% endfor %}
+            </div>#}
+            <div class="form-group">
+                <label>Текст під банером</label>
+                {% for language in languages %}
+                    <div class="d-flex listing-block-input-wrapper">
+                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="U A">
+                        <input type="text" name="blocks[{{ index }}][button][{{ language.code }}]"
+                               value="{{ block.button[language.code] ?? '' }}" class="form-control"
+                               placeholder="{{ language.name }}"/>
+                    </div>
+                {% endfor %}
+
+                {#
+
+                <div class="button-styles">
+                <label for="blocks[{{ index }}][bold_button]" style="font-weight: bold">
+                    <input type="checkbox" name="blocks[{{ index }}][bold_button]" id="blocks[{{ index }}][bold_button]" {% if block.bold_button == 'on'%} checked {% endif%} class="form-control"/>
+                    Жирність
+                </label>
+
+                <label for="blocks[{{ index }}][italic_button]" style="font-weight: normal; font-style: italic">
+                    <input type="checkbox" name="blocks[{{ index }}][italic_button]" id="blocks[{{ index }}][italic_button]" {% if block.italic_button == 'on'%} checked {% endif%} class="form-control"/>
+                    Курсив
+                </label>
+
+                <label for="blocks[{{ index }}][underline_button]" style="font-weight: normal; text-decoration: underline">
+                    <input type="checkbox" name="blocks[{{ index }}][underline_button]" id="blocks[{{ index }}][underline_button]" {% if block.underline_button == 'on'%} checked {% endif%} class="form-control"/>
+                    Підкреслення
+                </label>
+            </div>
+
+                #}
+            </div>
+
+            <div class="form-group">
+                <label>Посилання</label>
+                {% for language in languages %}
+                    <div class="d-flex listing-block-input-wrapper">
+                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="U A">
+                        <input type="text" name="blocks[{{ index }}][link][{{ language.code }}]"
+                               value="{{ block.link[language.code] ?? '' }}" class="form-control"
+                               placeholder="{{ language.name }}"/>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label>Сортування</label>
+                <div class="d-flex listing-block-input-wrapper">
+                    <input type="number" name="blocks[{{ index }}][sort]" value="{{ index+1 }}" class="form-control" style="padding-left: 15px;"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

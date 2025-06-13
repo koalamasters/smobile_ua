@@ -1,0 +1,77 @@
+<div class="hpm-block hpm-block-cat hpm-block-cat{{ serie_id }}">
+    {% if product_name_as_title and title_name %}
+        <h3>{{ title_name }}</h3>
+    {% endif %}
+    
+    {% for column in product_columns %}
+        {% if res[column.key] is defined and res[column.key]|length > 0 %}
+                <div class="column-{{ column.key }}">
+                    <h4>{{ column_names[column.key] }}</h4>
+                    <div class="hpm-button-wrapper">
+                        {% if column.type == "color_circle" %}
+                            {% for button in res[column.key] %}
+                                {% if button.is_active %} 
+                                    <span data-pid="{{ button.id }}" data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top" data-html="true" data-bs-html="true" {# title="{{ button.title }}"#} class="hpm-button {{ button.class }}">
+                                {% else %}
+                                    <a data-pid="{{ button.id }}" href="{{ button.link }}" data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top"  data-html="true" data-bs-html="true" {# title="{{ button.title }}"#} class="hpm-button {{ button.class }}">
+                                {% endif %}
+
+                                {% if button.val starts with "<img" %}
+                                    <span class="hpmcircle" style="width: {{ product_image_width }}px; height: {{ product_image_height }}px;" >
+                                        {{ button.val }}
+                                    </span>
+                                {% else %}
+                                    <span class="hpmcircle" style="width: {{ product_image_width }}px; height: {{ product_image_height }}px; background: {% if gradient_status %} radial-gradient(circle at 10px 10px, {{ button.val }}, {{ gradient_color }}) {% else %} {{ button.val }} {% endif %};" >
+                                    </span>
+                                {% endif %}
+
+                                {% if button.is_active %} 
+                                    </span>
+                                {% else %}
+                                    </a>
+                                {% endif %}
+
+                            {% endfor %}
+                        {% elseif column.type == "button" %}
+                            {% for button in res[column.key] %}
+                                {% if button.is_active %} 
+                                    <span data-pid="{{ button.id }}" data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top" data-html="true" data-bs-html="true" {# title="{{ button.title }}"#} class="hpm-button {{ button.class }}">{{ button.val }}</span>
+                                {% else %}
+                                    <a data-pid="{{ button.id }}" data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top" data-html="true" data-bs-html="true" {# title="{{ button.title }}"#} href="{{ button.link }}" class="hpm-button {{ button.class }}">{{ button.val }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% elseif column.type == "select_img" %}
+                            <div class="dropdown dropdown-select">
+                                <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" data-bs-toggle="dropdown">
+                                    {% for button in res[column.key] %}
+                                        {% if button.is_active %}
+                                            <img height="20" src="{{ button.img }}"/> {{ button.val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </button>
+                                <ul class="dropdown-menu">
+                                    {% for button in res[column.key] %}
+                                        <li class="{{ button.class }}">
+                                            <a title="{{ button.name }}" data-pid="{{ button.id }}" href="{{ button.link }}">
+                                                <img height="20" src="{{ button.img }}"/> {{ button.val }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% else %}
+                            <select class="form-control">
+                                {% for button in res[column.key] %}
+                                    <option data-link="{{ button.link }}" value="{{ button.id }}" class="{{ button.class }}" {% if button.is_active %} selected {% endif %}>
+                                        {{ button.val }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </div>
+                </div>
+        {% endif %}
+     {% endfor %}
+
+     {% if show_minmax %} <div class='minmax'>{{ min_max }}</div> {% endif %}
+ </div>

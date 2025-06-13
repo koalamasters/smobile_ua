@@ -1,0 +1,1336 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+	    <button type="button" data-toggle="tooltip" title="{{ text_version }} {{ version }}" class="btn btn-default">{{ version }}</button>
+	    <button onclick="$('#input-apply').attr('value', '1'); $('#' + $('#form-preorder').attr('id')).submit();" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success"><i class="fa fa-save"></i></button>
+        <button type="submit" form="form-category" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+	{% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+	<div id="success"></div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+	    <ul class="nav nav-tabs">
+		  <li class="active"><a href="#tab-preorder" data-toggle="tab">{{ tab_preorder }}</a></li>
+		  <li><a href="#tab-setting" data-toggle="tab">{{ tab_setting }}</a></li>
+		  <li><a href="#tab-contact" data-toggle="tab">{{ tab_contact }}</a></li>
+	    </ul>
+	    <div class="tab-content">
+		  <div class="tab-pane active" id="tab-preorder">
+		    <div class="row">
+			  <div class="panel-body">
+			    <div class="pull-right">
+				  <button type="button" data-toggle="tooltip" title="{{ button_send_all }}" class="btn btn-primary" onclick="editPreOrders();"><i class="fa fa-send-o"></i> {{ button_send_all }}</button>
+				  <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-preorder-delete').submit() : false;"><i class="fa fa-trash-o"></i> {{ button_delete }}</button>
+			    </div>
+			  </div>
+		    </div>
+		    <div class="row">
+			  <div class="panel-body">
+			    <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-preorder-delete">
+			      <div class="table-responsive">
+				    <table class="table table-bordered table-hover">
+				      <thead>
+					    <tr>
+						  <td width="1" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+						  <td class="text-center">{{ column_image }}</td>
+					      <td class="text-left">{% if sort == 'product_name' %}<a href="{{ sort_product_name }}" class="{{ order|lower }}">{{ column_product_name }}</a>{% else %}<a href="{{ sort_product_name }}">{{ column_product_name }}</a>{% endif %}</td>
+						  <td class="text-left">{% if sort == 'po.name' %}<a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>{% else %}<a href="{{ sort_name }}">{{ column_name }}</a>{% endif %}</td>						  
+					      <td class="text-left">{% if sort == 'po.email' %}<a href="{{ sort_email }}" class="{{ order|lower }}">{{ column_email }}</a>{% else %}<a href="{{ sort_email }}">{{ column_email }}</a>{% endif %}</td>
+						  <td class="text-left">{% if sort == 'po.phone' %}<a href="{{ sort_phone }}" class="{{ order|lower }}">{{ column_phone }}</a>{% else %}<a href="{{ sort_phone }}">{{ column_phone }}</a>{% endif %}</td>
+					      <td class="text-left">{% if sort == 'po.date_added' %}<a href="{{ sort_date_added }}" class="{{ order|lower }}">{{ column_date_added }}</a>{% else %}<a href="{{ sort_date_added }}">{{ column_date_added }}</a>{% endif %}</td>
+					      <td class="text-right">{% if sort == 'po.status' %}<a href="{{ sort_status }}" class="{{ order|lower }}">{{ column_status }}</a>{% else %}<a href="{{ sort_status }}">{{ column_status }}</a>{% endif %}</td>
+					    </tr>
+					  </thead>
+				      <tbody>
+					    {% if preorders %}
+					    {% for preorder in preorders %}
+					    <tr>
+					      <td class="text-center">{% if preorder.preorder_id in selected %}<input type="checkbox" name="selected[]" value="{{ preorder.preorder_id }}" checked="checked" />{% else %}<input type="checkbox" name="selected[]" value="{{ preorder.preorder_id }}" />{% endif %}</td>
+						  <td class="text-center">
+						    {% if preorder.product_image %}
+						    <img src="{{ preorder.product_image }}" alt="{{ preorder.product_name }}" class="img-thumbnail" />
+						    {% else %}
+						    <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span>
+						    {% endif %}
+						  </td>
+					      <td class="text-left">
+						    <p><a href="{{ preorder.product_edit }}">{{ preorder.product_name }}</a></p>
+							{% set option_quantity = true %}
+							{% for product_option in preorder.product_options %}
+							{% if preorder['product_option'][product_option.product_option_id] is defined %}
+							{% for product_option_value in product_option.product_option_value %}
+							{% if not preorder['product_option'][product_option.product_option_id] is iterable %}
+							{% if preorder['product_option'][product_option.product_option_id] == product_option_value.product_option_value_id %}
+							<strong>{{ product_option.name }}:</strong> <span class="text-{% if product_option_value.quantity %}secondary{% else %}danger{% set option_quantity = false %}{% endif %}">{{ product_option_value.name }}</span><br>
+							{% endif %}
+							{% else %}
+							{% for option_value in preorder['product_option'][product_option.product_option_id] %}
+							{% if option_value == product_option_value.product_option_value_id %}
+							<strong>{{ product_option.name }}:</strong> <span class="text-{% if product_option_value.quantity %}secondary{% else %}danger{% set option_quantity = false %}{% endif %}">{{ product_option_value.name }}</span><br>
+							{% endif %}
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+						  </td>
+						  <td class="text-left">
+						    {% if preorder.customer_edit %}
+						    <a href="{{ preorder.customer_edit }}">{{ preorder.name }}</a>
+						    {% else %}
+						    {{ preorder.name }}
+						    {% endif %}
+						  </td>
+					      <td class="text-left">{{ preorder.email }}</td>
+						  <td class="text-left">{{ preorder.phone }}</td>
+					      <td class="text-left">{{ preorder.date_added }}</td>
+					      <td class="text-right" id="status-{{ preorder.preorder_id }}">
+						    {% if preorder.status %}
+							<button type="button" class="btn btn-block btn-success" disabled="disabled">{{ text_notified }}</button>
+							{% else %}
+							{% if (preorder.quantity and option_quantity) or (preorder.product_stock_status_id in module_preorder_out_sale_statuses) %}
+							<button type="button" onclick="editPreOrder('{{ preorder.preorder_id }}')" class="btn btn-block btn-primary">{{ button_send }}</button>
+							{% else %}
+							<button type="button" class="btn btn-block btn-default" disabled="disabled">{{ text_out_stock }}</button>
+							{% endif %}
+							{% endif %}
+						  </td>
+					    </tr>
+					    {% endfor %}
+					    {% else %}
+					    <tr>
+					      <td class="text-center" colspan="6">{{ text_no_results }}</td>
+					    </tr>
+					    {% endif %}
+				      </tbody>
+				    </table>
+			      </div>
+			    </form>
+			    <div class="row">
+			      <div class="col-sm-6 text-left">{{ pagination }}</div>
+			      <div class="col-sm-6 text-right">{{ results }}</div>
+			    </div>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="tab-pane" id="tab-setting">
+		    <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-preorder" class="form-horizontal">
+			  <input type="hidden" name="module_preorder_apply" id="input-apply" value="0" />
+		      <input type="hidden" name="module_preorder_status" value="1" />
+			  <div class="row">
+			    <div class="col-sm-2">
+			      <ul class="nav nav-pills nav-stacked">
+				    <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+					<li><a href="#tab-form" data-toggle="tab">{{ tab_form }}</a></li>
+					<li><a href="#tab-button" data-toggle="tab">{{ tab_button }}</a></li>
+					<li><a href="#tab-sms" data-toggle="tab">{{ tab_sms }}</a></li>
+					<li><a href="#tab-cron" data-toggle="tab">{{ tab_cron }}</a></li>
+					<li><a href="#tab-alert" data-toggle="tab">{{ tab_alert }}</a></li>
+					<li><a href="#tab-seo" data-toggle="tab">{{ tab_seo }}</a></li>
+			      </ul>
+			    </div>
+				<div class="col-sm-10">
+				  <div class="tab-content">
+				    <div class="tab-pane active" id="tab-general">
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-mail-alert">{{ entry_mail_alert }}</label>
+					    <div class="col-sm-10">
+						  <select name="module_preorder_mail_alert" id="input-mail-alert" class="form-control">
+						    {% if module_preorder_mail_alert %}
+						    <option value="1" selected="selected">{{ text_enabled }}</option>
+						    <option value="0">{{ text_disabled }}</option>
+						    {% else %}
+						    <option value="1">{{ text_enabled }}</option>
+						    <option value="0" selected="selected">{{ text_disabled }}</option>
+						    {% endif %}
+						  </select>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-edit-product-alert">{{ entry_edit_product_alert }}</label>
+					    <div class="col-sm-10">
+						  <select name="module_preorder_edit_product_alert" id="input-edit-product-alert" class="form-control">
+						    {% if module_preorder_edit_product_alert %}
+						    <option value="1" selected="selected">{{ text_enabled }}</option>
+						    <option value="0">{{ text_disabled }}</option>
+						    {% else %}
+						    <option value="1">{{ text_enabled }}</option>
+						    <option value="0" selected="selected">{{ text_disabled }}</option>
+						    {% endif %}
+						  </select>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label">{{ entry_stock_status }}</label>
+					    <div class="col-sm-9">
+						  <div class="well well-sm" style="height: 150px; overflow: auto;">
+						    {% if stock_statuses %}
+						    {% for stock_status in stock_statuses %}
+						    <div class="checkbox">
+							  <label>
+							    {% if stock_status.stock_status_id in module_preorder_stock_statuses %}
+							    <input type="checkbox" name="module_preorder_stock_statuses[]" value="{{ stock_status.stock_status_id }}" checked="checked" />
+							    {{ stock_status.name }}
+							    {% else %}
+							    <input type="checkbox" name="module_preorder_stock_statuses[]" value="{{ stock_status.stock_status_id }}"/>
+							    {{ stock_status.name }}
+							    {% endif %}
+							  </label>
+						    </div>
+						    {% endfor %}
+						    {% endif %}
+						  </div>
+						  <a class="btn btn-primary" onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a>
+						  <a class="btn btn-primary" onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label">{{ entry_out_sale_status }}</label>
+					    <div class="col-sm-9">
+						  <div class="well well-sm" style="height: 150px; overflow: auto;">
+						    {% if stock_statuses %}
+						    {% for stock_status in stock_statuses %}
+						    <div class="checkbox">
+							  <label>
+							    {% if stock_status.stock_status_id in module_preorder_out_sale_statuses %}
+							    <input type="checkbox" name="module_preorder_out_sale_statuses[]" value="{{ stock_status.stock_status_id }}" checked="checked" />
+							    {{ stock_status.name }}
+							    {% else %}
+							    <input type="checkbox" name="module_preorder_out_sale_statuses[]" value="{{ stock_status.stock_status_id }}"/>
+							    {{ stock_status.name }}
+							    {% endif %}
+							  </label>
+						    </div>
+						    {% endfor %}
+						    {% endif %}
+						  </div>
+						  <a class="btn btn-primary" onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a>
+						  <a class="btn btn-primary" onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-menu">{{ entry_menu }}</label>
+					    <div class="col-sm-10">
+						  <select name="module_preorder_menu" id="input-menu" class="form-control">
+						    {% if module_preorder_menu %}
+						    <option value="1" selected="selected">{{ text_enabled }}</option>
+						    <option value="0">{{ text_disabled }}</option>
+						    {% else %}
+						    <option value="1">{{ text_enabled }}</option>
+						    <option value="0" selected="selected">{{ text_disabled }}</option>
+						    {% endif %}
+						  </select>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-date-format">{{ entry_date_format }}</label>
+					    <div class="col-sm-10">
+						  {% for language in languages %}
+						  <div class="input-group">
+							<span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+							<input type="text" name="module_preorder_date_format[{{ language.language_id }}]" placeholder="{{ entry_date_format }}" value="{{ module_preorder_date_format[language.language_id] ? module_preorder_date_format[language.language_id] : 'd.m.Y' }}" class="form-control" />
+						  </div>
+						  {% endfor %}
+					    </div>
+					  </div>
+					</div>
+					<div class="tab-pane" id="tab-form">
+					  <fieldset>
+                        <legend>{{ text_description }}</legend>
+					    <ul class="nav nav-tabs" id="language">
+						  {% for language in languages %}
+						  <li><a href="#language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+					    <div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language{{ language.language_id }}">
+						    <div class="form-group">
+							  <label class="col-sm-2 control-label" for="input-title{{ language.language_id }}">{{ entry_title }}</label>
+							  <div class="col-sm-10">
+							    <input type="text" name="module_preorder_description[{{ language.language_id }}][title]" value="{{ module_preorder_description[language.language_id] ? module_preorder_description[language.language_id].title }}" placeholder="{{ entry_title }}" id="input-title{{ language.language_id }}" class="form-control" />
+							  </div>
+						    </div>
+						    <div class="form-group">
+							  <label class="col-sm-2 control-label" for="input-text-top{{ language.language_id }}">{{ entry_text_top }}</label>
+							  <div class="col-sm-10">
+							    <textarea name="module_preorder_description[{{ language.language_id }}][text_top]" placeholder="{{ entry_text_top }}" id="input-text-top{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}">{{ module_preorder_description[language.language_id] ? module_preorder_description[language.language_id].text_top }}</textarea>
+							  </div>
+						    </div>
+						    <div class="form-group">
+							  <label class="col-sm-2 control-label" for="input-text-bottom{{ language.language_id }}">{{ entry_text_bottom }}</label>
+							  <div class="col-sm-10">
+							    <textarea name="module_preorder_description[{{ language.language_id }}][text_bottom]" placeholder="{{ entry_text_bottom }}" id="input-text-bottom{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}">{{ module_preorder_description[language.language_id] ? module_preorder_description[language.language_id].text_bottom }}</textarea>
+							  </div>
+						    </div>
+						    <div class="form-group">
+							  <label class="col-sm-2 control-label" for="input-text-agree{{ language.language_id }}">{{ entry_text_agree }}</label>
+							  <div class="col-sm-10">
+							    <textarea name="module_preorder_description[{{ language.language_id }}][text_agree]" placeholder="{{ entry_text_agree }}" id="input-text-agree{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}">{{ module_preorder_description[language.language_id] ? module_preorder_description[language.language_id].text_agree }}</textarea>
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_field }}</legend>
+						<div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+					      <div class="col-sm-10">
+						    <select name="module_preorder_name" id="input-name" class="form-control">
+						      {% if module_preorder_name == 2 %}
+						      <option value="2" selected="selected">{{ text_required }}</option>
+						      <option value="1">{{ text_no_required }}</option>
+						      <option value="0">{{ text_disabled }}</option>
+						      {% elseif module_preorder_name == 1 %}
+						      <option value="2">{{ text_required }}</option>
+						      <option value="1" selected="selected">{{ text_no_required }}</option>
+						      <option value="0">{{ text_disabled }}</option>
+						      {% else %}
+						      <option value="2">{{ text_required }}</option>
+						      <option value="1">{{ text_no_required }}</option>
+						      <option value="0" selected="selected">{{ text_disabled }}</option>
+						      {% endif %}
+						    </select>
+					      </div>
+					    </div>
+					    <div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-email">{{ entry_email }}</label>
+					      <div class="col-sm-10">
+						    <select name="module_preorder_email" id="input-email" class="form-control">
+						      {% if module_preorder_email == 2 %}
+						      <option value="2" selected="selected">{{ text_required }}</option>
+						      <option value="1">{{ text_no_required }}</option>
+						      <option value="0">{{ text_disabled }}</option>
+						      {% elseif module_preorder_email == 1 %}
+						      <option value="2">{{ text_required }}</option>
+						      <option value="1" selected="selected">{{ text_no_required }}</option>
+						      <option value="0">{{ text_disabled }}</option>
+						      {% else %}
+						      <option value="2">{{ text_required }}</option>
+						      <option value="1">{{ text_no_required }}</option>
+						      <option value="0" selected="selected">{{ text_disabled }}</option>
+						      {% endif %}
+						    </select>
+					      </div>
+					    </div>
+					    <div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-phone">{{ entry_phone }}</label>
+					      <div class="col-sm-10">
+						    <select name="module_preorder_phone" id="input-phone" class="form-control">
+						      {% if module_preorder_phone == 2 %}
+						      <option value="2" selected="selected">{{ text_required }}</option>
+						      <option value="1">{{ text_no_required }}</option>
+						      <option value="0">{{ text_disabled }}</option>
+						      {% elseif module_preorder_phone == 1 %}
+						      <option value="2">{{ text_required }}</option>
+						      <option value="1" selected="selected">{{ text_no_required }}</option>
+						      <option value="0">{{ text_disabled }}</option>
+						      {% else %}
+						      <option value="2">{{ text_required }}</option>
+						      <option value="1">{{ text_no_required }}</option>
+						      <option value="0" selected="selected">{{ text_disabled }}</option>
+						      {% endif %}
+						    </select>
+					      </div>
+					    </div>
+						<div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-captcha">{{ entry_captcha }}</label>
+					      <div class="col-sm-10">
+						    <select name="module_preorder_captcha" id="input-captcha" class="form-control"> 
+						      {% for captcha in captcha_list %}
+						      {% if module_preorder_captcha == captcha.extension %}
+						      <option value="{{ captcha.extension }}" selected="selected">{{ captcha.name }}</option>
+						      {% else %}
+						      <option value="{{ captcha.extension }}">{{ captcha.name }}</option>
+						      {% endif %}
+							  {% endfor %}
+						    </select>
+					      </div>
+					    </div>
+						<div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-agree">{{ entry_agree }}</label>
+					      <div class="col-sm-10">
+						    <select name="module_preorder_agree" id="input-agree" class="form-control">
+						      {% if module_preorder_agree %}
+						      <option value="1" selected="selected">{{ text_enabled }}</option>
+						      <option value="0">{{ text_disabled }}</option>
+						      {% else %}
+						      <option value="1">{{ text_enabled }}</option>
+						      <option value="0" selected="selected">{{ text_disabled }}</option>
+						      {% endif %}
+						    </select>
+					      </div>
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_phone_mask }}</legend>
+						<div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-phone-mask">{{ entry_phone_mask }}</label>
+					      <div class="col-sm-10">
+						    <select name="module_preorder_phone_mask" id="input-phone-mask" class="form-control">
+						      {% if module_preorder_phone_mask %}
+						      <option value="1" selected="selected">{{ text_enabled }}</option>
+						      <option value="0">{{ text_disabled }}</option>
+						      {% else %}
+						      <option value="1">{{ text_enabled }}</option>
+						      <option value="0" selected="selected">{{ text_disabled }}</option>
+						      {% endif %}
+						    </select>
+					      </div>
+					    </div>
+					    <div class="table-responsive">
+						  <table id="country" class="table table-bordered table-hover">
+						    <thead>
+					          <tr>
+							    <td>{{ entry_country }}</td>
+						        <td>{{ entry_phone_mask }}</td>
+							    <td class="text-center">{{ entry_image }}</td>
+							    <td>{{ entry_sort_order }}</td>
+							    <td>{{ entry_default }}</td>
+						        <td>{{ entry_status }}</td>
+							    <td></td>
+					          </tr>
+					        </thead>
+				            <tbody>
+						    {% set country_key = 0 %}
+						    {% for key, preorder_country in module_preorder_countries %}
+					          <tr id="country-row{{ key }}">
+							    <td>
+							      <select name="module_preorder_countries[{{ key }}][country_id]" class="form-control">
+								    <option value="">{{ text_select }}</option>
+								    {% for country in countries %}
+								    {% if country.country_id == preorder_country.country_id %}
+								    <option value="{{ country.country_id }}" selected="selected">{{ country.name }}</option>
+								    {% else %}
+								    <option value="{{ country.country_id }}">{{ country.name }}</option>
+								    {% endif %}
+								    {% endfor %}
+							      </select>
+							    </td>
+							    <td>
+							      <input type="text" name="module_preorder_countries[{{ key }}][code]" value="{{ preorder_country.code }}" placeholder="{{ entry_code }}" class="form-control" />
+							      <input type="text" name="module_preorder_countries[{{ key }}][mask]" value="{{ preorder_country.mask }}" placeholder="{{ entry_phone_mask }}" class="form-control" />
+							    </td>
+							    <td class="text-center">
+								  <a href="" id="thumb-image{{ key }}" data-toggle="image" class="img-thumbnail"><img style="width: 30px;" src="{% if preorder_country.image %}/image/{{ preorder_country.image }}{% else %}{{ flag }}{% endif %}" alt="" title="" data-placeholder="{{ flag }}" /></a><input type="hidden" name="module_preorder_countries[{{ key }}][image]" value="{{ preorder_country.image }}" id="input-image{{ key }}" />
+							    </td>
+							    <td>
+							      <input type="text" name="module_preorder_countries[{{ key }}][sort_order]" value="{{ preorder_country.sort_order }}" placeholder="{{ entry_sort_order }}" class="form-control" />
+							    </td>
+							    <td>
+							      <select name="module_preorder_countries[{{ key }}][default]" class="form-control">
+								    {% if preorder_country.default %}
+								    <option value="1" selected="selected">{{ text_enabled }}</option>
+								    <option value="0">{{ text_disabled }}</option>
+								    {% else %}
+								    <option value="1">{{ text_enabled }}</option>
+								    <option value="0" selected="selected">{{ text_disabled }}</option>
+								    {% endif %}
+								  </select>
+							    </td>
+						        <td>
+							      <select name="module_preorder_countries[{{ key }}][status]" class="form-control">
+								    {% if preorder_country.status %}
+								    <option value="1" selected="selected">{{ text_enabled }}</option>
+								    <option value="0">{{ text_disabled }}</option>
+								    {% else %}
+								    <option value="1">{{ text_enabled }}</option>
+								    <option value="0" selected="selected">{{ text_disabled }}</option>
+								    {% endif %}
+								  </select>
+							    </td>
+						        <td class="text-right">
+							      <button type="button" onclick="$('#country-row{{ key }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+						        </td>
+							  </tr>
+							  {% set country_key = key + 1 %}
+							  {% endfor %}
+				            </tbody>
+						    <tfoot>
+						      <tr>
+							    <td colspan="6"></td>
+							    <td class="text-right"><button type="button" onclick="addCountry();" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+						      </tr>
+						    </tfoot>
+				          </table>
+			            </div>
+					  </fieldset>
+					</div>
+					<div class="tab-pane" id="tab-button">
+					  <fieldset>
+                        <legend>{{ text_module }}</legend>
+						<div class="table-responsive">
+                          <table class="table table-bordered table-hover">
+						    <thead>
+							  <tr>
+							    <td>{{ column_type }}</td>
+								<td>{{ column_text }}</td>
+								<td>{{ column_class }}</td>
+								<td>{{ column_view }}</td>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+							    <td>{{ text_preorder }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[module][preorder][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['module']['preorder']['text'][language.language_id] ? module_preorder_button['module']['preorder']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[module][preorder][class]" value="{{ module_preorder_button['module']['preorder']['class'] ? module_preorder_button['module']['preorder']['class'] : 'button-preorder-default' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[module][preorder][view]" class="form-control">
+									{% if module_preorder_button['module']['preorder']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['module']['preorder']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							  <tr>
+							    <td>{{ text_out_sale }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[module][out_sale][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['module']['out_sale']['text'][language.language_id] ? module_preorder_button['module']['out_sale']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[module][out_sale][class]" value="{{ module_preorder_button['module']['out_sale']['class'] ? module_preorder_button['module']['out_sale']['class'] : 'button-out-sale-default' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[module][out_sale][view]" class="form-control">
+									{% if module_preorder_button['module']['out_sale']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['module']['out_sale']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_catalog }}</legend>
+						<div class="table-responsive">
+                          <table class="table table-bordered table-hover">
+						    <thead>
+							  <tr>
+							    <td>{{ column_type }}</td>
+								<td>{{ column_text }}</td>
+								<td>{{ column_class }}</td>
+								<td>{{ column_view }}</td>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+							    <td>{{ text_preorder }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[catalog][preorder][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['catalog']['preorder']['text'][language.language_id] ? module_preorder_button['catalog']['preorder']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[catalog][preorder][class]" value="{{ module_preorder_button['catalog']['preorder']['class'] ? module_preorder_button['catalog']['preorder']['class'] : 'button-preorder-default' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[catalog][preorder][view]" class="form-control">
+									{% if module_preorder_button['catalog']['preorder']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['catalog']['preorder']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							  <tr>
+							    <td>{{ text_out_sale }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[catalog][out_sale][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['catalog']['out_sale']['text'][language.language_id] ? module_preorder_button['catalog']['out_sale']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[catalog][out_sale][class]" value="{{ module_preorder_button['catalog']['out_sale']['class'] ? module_preorder_button['catalog']['out_sale']['class'] : 'button-out-sale-default' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[catalog][out_sale][view]" class="form-control">
+									{% if module_preorder_button['catalog']['out_sale']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['catalog']['out_sale']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_compare }}</legend>
+						<div class="table-responsive">
+                          <table class="table table-bordered table-hover">
+						    <thead>
+							  <tr>
+							    <td>{{ column_type }}</td>
+								<td>{{ column_text }}</td>
+								<td>{{ column_class }}</td>
+								<td>{{ column_view }}</td>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+							    <td>{{ text_preorder }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[compare][preorder][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['compare']['preorder']['text'][language.language_id] ? module_preorder_button['compare']['preorder']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[compare][preorder][class]" value="{{ module_preorder_button['compare']['preorder']['class'] ? module_preorder_button['compare']['preorder']['class'] : 'btn btn-danger btn-block button-preorder-compare' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[compare][preorder][view]" class="form-control">
+									{% if module_preorder_button['compare']['preorder']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['compare']['preorder']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							  <tr>
+							    <td>{{ text_out_sale }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[compare][out_sale][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['compare']['out_sale']['text'][language.language_id] ? module_preorder_button['compare']['out_sale']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[compare][out_sale][class]" value="{{ module_preorder_button['compare']['out_sale']['class'] ? module_preorder_button['compare']['out_sale']['class'] : 'btn btn-danger btn-block button-out-sale-compare' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[compare][out_sale][view]" class="form-control">
+									{% if module_preorder_button['compare']['out_sale']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['compare']['out_sale']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_wishlist }}</legend>
+						<div class="table-responsive">
+                          <table class="table table-bordered table-hover">
+						    <thead>
+							  <tr>
+							    <td>{{ column_type }}</td>
+								<td>{{ column_text }}</td>
+								<td>{{ column_class }}</td>
+								<td>{{ column_view }}</td>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+							    <td>{{ text_preorder }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[wishlist][preorder][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['wishlist']['preorder']['text'][language.language_id] ? module_preorder_button['wishlist']['preorder']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[wishlist][preorder][class]" value="{{ module_preorder_button['wishlist']['preorder']['class'] ? module_preorder_button['wishlist']['preorder']['class'] : 'btn btn-danger' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[wishlist][preorder][view]" class="form-control">
+									{% if module_preorder_button['wishlist']['preorder']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['wishlist']['preorder']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							  <tr>
+							    <td>{{ text_out_sale }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[wishlist][out_sale][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['wishlist']['out_sale']['text'][language.language_id] ? module_preorder_button['wishlist']['out_sale']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[wishlist][out_sale][class]" value="{{ module_preorder_button['wishlist']['out_sale']['class'] ? module_preorder_button['wishlist']['out_sale']['class'] : 'btn btn-danger' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[wishlist][out_sale][view]" class="form-control">
+									{% if module_preorder_button['wishlist']['out_sale']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['wishlist']['out_sale']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_product }}</legend>
+						<div class="table-responsive">
+                          <table class="table table-bordered table-hover">
+						    <thead>
+							  <tr>
+							    <td>{{ column_type }}</td>
+								<td>{{ column_text }}</td>
+								<td>{{ column_class }}</td>
+								<td>{{ column_view }}</td>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+							    <td>{{ text_preorder }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[product][preorder][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['product']['preorder']['text'][language.language_id] ? module_preorder_button['product']['preorder']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[product][preorder][class]" value="{{ module_preorder_button['product']['preorder']['class'] ? module_preorder_button['product']['preorder']['class'] : 'btn btn-danger btn-lg btn-block' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[product][preorder][view]" class="form-control">
+									{% if module_preorder_button['product']['preorder']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['product']['preorder']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							  <tr>
+							    <td>{{ text_out_sale }}</td>
+								<td>
+								  {% for language in languages %}
+								  <div class="input-group">
+									<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+									<input type="text" name="module_preorder_button[product][out_sale][text][{{ language['language_id'] }}]" placeholder="{{ column_text }}" value="{{ module_preorder_button['product']['out_sale']['text'][language.language_id] ? module_preorder_button['product']['out_sale']['text'][language.language_id] }}" class="form-control" />
+								  </div>
+								  {% endfor %}
+								</td>
+								<td>
+								  <input type="text" name="module_preorder_button[product][out_sale][class]" value="{{ module_preorder_button['product']['out_sale']['class'] ? module_preorder_button['product']['out_sale']['class'] : 'btn btn-danger btn-lg btn-block' }}" placeholder="{{ column_class }}" class="form-control" />
+								</td>
+								<td>
+								  <select name="module_preorder_button[product][out_sale][view]" class="form-control">
+									{% if module_preorder_button['product']['out_sale']['view'] == 2 %}
+									<option value="2" selected="selected">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% elseif module_preorder_button['product']['out_sale']['view'] == 1 %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1" selected="selected">{{ text_no_icon_text }}</option>
+									<option value="0">{{ text_icon_no_text }}</option>
+									{% else %}
+									<option value="2">{{ text_icon_text }}</option>
+									<option value="1">{{ text_no_icon_text }}</option>
+									<option value="0" selected="selected">{{ text_icon_no_text }}</option>
+									{% endif %}
+								  </select>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+					  </fieldset>
+					</div>
+					<div class="tab-pane" id="tab-sms">
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-sms-status">{{ entry_status }}</label>
+					    <div class="col-sm-10">
+						  <select name="module_preorder_sms_status" id="input-sms-status" class="form-control">
+						    {% if module_preorder_sms_status == 'smsru' %}
+						    <option value="smsru" selected="selected">{{ text_smsru }}</option>
+							<option value="turbosms">{{ text_turbosms }}</option>
+						    <option value="0">{{ text_disabled }}</option>
+						    {% elseif module_preorder_sms_status == 'turbosms' %}
+						    <option value="smsru">{{ text_smsru }}</option>
+							<option value="turbosms" selected="selected">{{ text_turbosms }}</option>
+						    <option value="0">{{ text_disabled }}</option>
+						    {% else %}
+							<option value="smsru">{{ text_smsru }}</option>
+							<option value="turbosms">{{ text_turbosms }}</option>
+						    <option value="0" selected="selected">{{ text_disabled }}</option>
+							{% endif %}
+						  </select>
+					    </div>
+					  </div>
+					  <fieldset>
+					    <legend>{{ text_smsru }}</legend>
+						<div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-smsru-api-key">{{ entry_api_key }}</label>
+					      <div class="col-sm-10">
+						    <input type="text" name="module_preorder_smsru_api_key" value="{{ module_preorder_smsru_api_key }}" placeholder="{{ entry_api_key }}" id="input-smsru-api-key" class="form-control" />
+					      </div>
+					    </div>
+					    <div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-smsru-sender">{{ entry_sender }}</label>
+					      <div class="col-sm-10">
+						    <input type="text" name="module_preorder_smsru_sender" value="{{ module_preorder_smsru_sender }}" placeholder="{{ entry_sender }}" id="input-smsru-sender" class="form-control" />
+					      </div>
+					    </div>
+					  </fieldset>
+					  <fieldset>
+					    <legend>{{ text_turbosms }}</legend>
+						<div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-turbosms-login">{{ entry_login }}</label>
+					      <div class="col-sm-10">
+						    <input type="text" name="module_preorder_turbosms_login" value="{{ module_preorder_turbosms_login }}" placeholder="{{ entry_login }}" id="input-turbosms-login" class="form-control" />
+					      </div>
+					    </div>
+						<div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-turbosms-password">{{ entry_password }}</label>
+					      <div class="col-sm-10">
+						    <input type="text" name="module_preorder_turbosms_password" value="{{ module_preorder_turbosms_password }}" placeholder="{{ entry_login }}" id="input-turbosms-password" class="form-control" />
+					      </div>
+					    </div>
+					    <div class="form-group">
+					      <label class="col-sm-2 control-label" for="input-turbosms-sender">{{ entry_sender }}</label>
+					      <div class="col-sm-10">
+						    <input type="text" name="module_preorder_turbosms_sender" value="{{ module_preorder_turbosms_sender }}" placeholder="{{ entry_sender }}" id="input-turbosms-sender" class="form-control" />
+					      </div>
+					    </div>
+					  </fieldset>
+					</div>
+					<div class="tab-pane" id="tab-cron">
+					  <div class="alert alert-info"><i class="fa fa-check-circle"></i> {{ module_preorder_cron_path }}</div>
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-cron-status">{{ entry_status }}</label>
+					    <div class="col-sm-10">
+						  <select name="module_preorder_cron_status" id="input-cron-status" class="form-control">
+						    {% if module_preorder_cron_status %}
+						    <option value="1" selected="selected">{{ text_enabled }}</option>
+						    <option value="0">{{ text_disabled }}</option>
+						    {% else %}
+						    <option value="1">{{ text_enabled }}</option>
+						    <option value="0" selected="selected">{{ text_disabled }}</option>
+						    {% endif %}
+						  </select>
+					    </div>
+					  </div>
+					</div>
+					<div class="tab-pane" id="tab-alert">
+					  <fieldset>
+                        <legend>{{ text_mail_admin }}</legend>
+						<ul class="nav nav-tabs" id="language-mail-admin">
+						  {% for language in languages %}
+						  <li><a href="#language-mail-admin{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+						<div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language-mail-admin{{ language.language_id }}">
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-email-admin-title{{ language.language_id }}">{{ entry_title }}</label>
+							  <div class="col-sm-10">
+							    <input type="text" name="module_preorder_mail_admin[{{ language.language_id }}][title]" value="{{ module_preorder_mail_admin[language.language_id].title ? module_preorder_mail_admin[language.language_id].title }}" class="form-control" />
+								{% if error_mail_admin_title[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_admin_title[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-email-admin-text{{ language.language_id }}">{{ entry_text }}</label>
+							  <div class="col-sm-10">
+							    <textarea rows="5" name="module_preorder_mail_admin[{{ language.language_id }}][text]" placeholder="{{ entry_text }}" id="input-email-admin-text{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}">{{ module_preorder_mail_admin[language.language_id].text ? module_preorder_mail_admin[language.language_id].text }}</textarea>
+								{% if error_mail_admin_text[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_admin_text[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_mail_registered }}</legend>
+						<ul class="nav nav-tabs" id="language-mail-registered">
+						  {% for language in languages %}
+						  <li><a href="#language-mail-registered{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+						<div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language-mail-registered{{ language.language_id }}">
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-mail-registered-title{{ language.language_id }}">{{ entry_title }}</label>
+							  <div class="col-sm-10">
+							    <input type="text" name="module_preorder_mail_registered[{{ language.language_id }}][title]" value="{{ module_preorder_mail_registered[language.language_id].title ? module_preorder_mail_registered[language.language_id].title }}" placeholder="{{ entry_title }}" id="input-mail-registered-title{{ language.language_id }}" class="form-control" />
+								{% if error_mail_registered_title[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_registered_title[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-mail-registered-text{{ language.language_id }}">{{ entry_text }}</label>
+							  <div class="col-sm-10">
+							    <textarea rows="5" name="module_preorder_mail_registered[{{ language.language_id }}][text]" placeholder="{{ entry_text }}" id="input-mail-registered-text{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}">{{ module_preorder_mail_registered[language.language_id].text ? module_preorder_mail_registered[language.language_id].text }}</textarea>
+								{% if error_mail_registered_text[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_registered_text[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_mail_guest }}</legend>
+						<ul class="nav nav-tabs" id="language-mail-guest">
+						  {% for language in languages %}
+						  <li><a href="#language-mail-guest{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+						<div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language-mail-guest{{ language.language_id }}">
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-mail-guest-title{{ language.language_id }}">{{ entry_title }}</label>
+							  <div class="col-sm-10">
+							    <input type="text" name="module_preorder_mail_guest[{{ language.language_id }}][title]" value="{{ module_preorder_mail_guest[language.language_id].title ? module_preorder_mail_guest[language.language_id].title }}" class="form-control" />
+								{% if error_mail_guest_title[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_guest_title[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-mail-guest-text{{ language.language_id }}">{{ entry_text }}</label>
+							  <div class="col-sm-10">
+							    <textarea rows="5" name="module_preorder_mail_guest[{{ language.language_id }}][text]" placeholder="{{ entry_text }}" id="input-mail-guest-text{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}">{{ module_preorder_mail_guest[language.language_id].text ? module_preorder_mail_guest[language.language_id].text }}</textarea>
+								{% if error_mail_guest_text[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_guest_text[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_mail_out_sale_registered }}</legend>
+						<ul class="nav nav-tabs" id="language-mail-out-sale-registered">
+						  {% for language in languages %}
+						  <li><a href="#language-mail-out-sale-registered{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+						<div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language-mail-out-sale-registered{{ language.language_id }}">
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-mail-out-sale-registered-title{{ language.language_id }}">{{ entry_title }}</label>
+							  <div class="col-sm-10">
+							    <input type="text" name="module_preorder_mail_out_sale_registered[{{ language.language_id }}][title]" value="{{ module_preorder_mail_out_sale_registered[language.language_id].title ? module_preorder_mail_out_sale_registered[language.language_id].title }}" placeholder="{{ entry_title }}" id="input-mail-out-sale-registered-title{{ language.language_id }}" class="form-control" />
+								{% if error_mail_out_sale_registered_title[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_out_sale_registered_title[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-mail-out-sale-registered-text{{ language.language_id }}">{{ entry_text }}</label>
+							  <div class="col-sm-10">
+							    <textarea rows="5" name="module_preorder_mail_out_sale_registered[{{ language.language_id }}][text]" placeholder="{{ entry_text }}" id="input-mail-out-sale-registered-text{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}">{{ module_preorder_mail_out_sale_registered[language.language_id].text ? module_preorder_mail_out_sale_registered[language.language_id].text }}</textarea>
+								{% if error_mail_out_sale_registered_text[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_out_sale_registered_text[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_mail_out_sale_guest }}</legend>
+						<ul class="nav nav-tabs" id="language-mail-out-sale-guest">
+						  {% for language in languages %}
+						  <li><a href="#language-mail-out-sale-guest{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+						<div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language-mail-out-sale-guest{{ language.language_id }}">
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-mail-out-sale-guest-title{{ language.language_id }}">{{ entry_title }}</label>
+							  <div class="col-sm-10">
+							    <input type="text" name="module_preorder_mail_out_sale_guest[{{ language.language_id }}][title]" value="{{ module_preorder_mail_out_sale_guest[language.language_id].title ? module_preorder_mail_out_sale_guest[language.language_id].title }}" placeholder="{{ entry_title }}" id="input-mail-out-sale-guest-title{{ language.language_id }}" class="form-control" />
+								{% if error_mail_out_sale_guest_title[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_out_sale_guest_title[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-mail-out-sale-guest-text{{ language.language_id }}">{{ entry_text }}</label>
+							  <div class="col-sm-10">
+							    <textarea rows="5" name="module_preorder_mail_out_sale_guest[{{ language.language_id }}][text]" placeholder="{{ entry_text }}" id="input-mail-out-sale-guest-text{{ language.language_id }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}">{{ module_preorder_mail_out_sale_guest[language.language_id].text ? module_preorder_mail_out_sale_guest[language.language_id].text }}</textarea>
+								{% if error_mail_out_sale_guest_text[language.language_id] %}
+							    <div class="text-danger">{{ error_mail_out_sale_guest_text[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_sms_registered }}</legend>
+						<ul class="nav nav-tabs" id="language-sms-registered">
+						  {% for language in languages %}
+						  <li><a href="#language-sms-registered{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+						<div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language-sms-registered{{ language.language_id }}">
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-sms-registered-text{{ language.language_id }}">{{ entry_text }}</label>
+							  <div class="col-sm-10">
+							    <textarea rows="5" name="module_preorder_sms_registered[{{ language.language_id }}][text]" placeholder="{{ entry_text }}" id="input-sms-registered-text{{ language.language_id }}" class="form-control">{{ module_preorder_sms_registered[language.language_id].text ? module_preorder_sms_registered[language.language_id].text }}</textarea>
+								{% if error_sms_registered_text[language.language_id] %}
+							    <div class="text-danger">{{ error_sms_registered_text[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_sms_guest }}</legend>
+						<ul class="nav nav-tabs" id="language-sms-guest">
+						  {% for language in languages %}
+						  <li><a href="#language-sms-guest{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+						<div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language-sms-guest{{ language.language_id }}">
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-sms-guest-text{{ language.language_id }}">{{ entry_text }}</label>
+							  <div class="col-sm-10">
+							    <textarea rows="5" name="module_preorder_sms_guest[{{ language.language_id }}][text]" placeholder="{{ entry_text }}" id="input-sms-guest-text{{ language.language_id }}" class="form-control">{{ module_preorder_sms_guest[language.language_id].text ? module_preorder_sms_guest[language.language_id].text }}</textarea>
+								{% if error_sms_guest_text[language.language_id] %}
+							    <div class="text-danger">{{ error_sms_guest_text[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_sms_out_sale_registered }}</legend>
+						<ul class="nav nav-tabs" id="language-sms-out-sale-registered">
+						  {% for language in languages %}
+						  <li><a href="#language-sms-out-sale-registered{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+						<div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language-sms-out-sale-registered{{ language.language_id }}">
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-sms-out-sale-registered-text{{ language.language_id }}">{{ entry_text }}</label>
+							  <div class="col-sm-10">
+							    <textarea rows="5" name="module_preorder_sms_out_sale_registered[{{ language.language_id }}][text]" placeholder="{{ entry_text }}" id="input-sms-out-sale-registered-text{{ language.language_id }}" class="form-control">{{ module_preorder_sms_out_sale_registered[language.language_id].text ? module_preorder_sms_out_sale_registered[language.language_id].text }}</textarea>
+								{% if error_sms_out_sale_registered_text[language.language_id] is defined %}
+							    <div class="text-danger">{{ error_sms_out_sale_registered_text[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <fieldset>
+                        <legend>{{ text_sms_out_sale_guest }}</legend>
+						<ul class="nav nav-tabs" id="language-sms-out-sale-guest">
+						  {% for language in languages %}
+						  <li><a href="#language-sms-out-sale-guest{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+						  {% endfor %}
+					    </ul>
+						<div class="tab-content">
+						  {% for language in languages %}
+						  <div class="tab-pane" id="language-sms-out-sale-guest{{ language.language_id }}">
+						    <div class="form-group required">
+							  <label class="col-sm-2 control-label" for="input-sms-out-sale-guest-text{{ language.language_id }}">{{ entry_text }}</label>
+							  <div class="col-sm-10">
+							    <textarea rows="5" name="module_preorder_sms_out_sale_guest[{{ language.language_id }}][text]" placeholder="{{ entry_text }}" id="input-sms-out-sale-guest-text{{ language.language_id }}" class="form-control">{{ module_preorder_sms_out_sale_guest[language.language_id].text ? module_preorder_sms_out_sale_guest[language.language_id].text }}</textarea>
+								{% if error_sms_out_sale_guest_text[language.language_id] is defined %}
+							    <div class="text-danger">{{ error_sms_out_sale_guest_text[language.language_id] }}</div>
+							    {% endif %}
+							  </div>
+						    </div>
+					      </div>
+						  {% endfor %}
+					    </div>
+					  </fieldset>
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-mail-css">{{ entry_mail_css }}</label>
+						<div class="col-sm-10">
+						  <textarea rows="20" name="module_preorder_mail_css" placeholder="{{ entry_mail_css }}" id="input-mail-css" class="form-control">{{ module_preorder_mail_css }}</textarea>
+					    </div>
+					  </div>
+					</div>
+					<div class="tab-pane" id="tab-seo">
+					  <div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ text_keyword }}</div>            
+					  <div class="table-responsive">
+						<table class="table table-bordered table-hover">
+						  <thead>
+							<tr>
+							  <td class="text-left">{{ entry_store }}</td>
+							  <td class="text-left">{{ entry_keyword }}</td>
+							</tr>
+						  </thead>
+						  <tbody>
+							{% for store in stores %}
+							<tr>
+							  <td class="text-left">{{ store.name }}</td>
+							  <td class="text-left">{% for language in languages %}
+								<div class="input-group"><span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+								  <input type="text" name="module_preorder_seo_url[{{ store.store_id }}][{{ language.language_id }}]" value="{% if module_preorder_seo_url[store.store_id][language.language_id] %}{{ module_preorder_seo_url[store.store_id][language.language_id] }}{% endif %}" placeholder="{{ entry_keyword }}" class="form-control" />
+								</div>
+								{% if error_keyword[store.store_id][language.language_id] %}
+								<div class="text-danger">{{ error_keyword[store.store_id][language.language_id] }}</div>
+								{% endif %} 
+								{% endfor %}
+							  </td>
+							</tr>
+							{% endfor %}
+						  </tbody>
+						</table>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+		    </form>
+		  </div>
+		  <div class="tab-pane" id="tab-contact">
+			<div>{{ text_tab_contact }}</div>
+		  </div>
+	    </div>	
+      </div>
+    </div>
+  </div>
+<script type="text/javascript"><!--
+function editPreOrder(preorder_id) {
+	$.ajax({
+		url: 'index.php?route=extension/module/preorder/editPreOrder&user_token={{ user_token }}&preorder_id=' +  preorder_id,
+		success: function() {
+			location.reload();
+		}
+	});
+}
+
+function editPreOrders() {
+	$.ajax({
+		url: 'index.php?route=extension/module/preorder/editPreOrders&user_token={{ user_token }}',
+		success: function() {
+			location.reload();
+		}
+	});
+}
+
+var country_key = {{ country_key }};
+
+function addCountry() {
+	html = '<tr id="country-row' + country_key + '">';
+	html += '<td>';
+	html += '<select name="module_preorder_countries[' + country_key + '][country_id]" class="form-control">';
+	html += '<option value="">{{ text_select }}</option>';
+	{% for country in countries %}
+	html += '<option value="{{ country.country_id }}">{{ country.name }}</option>';
+	{% endfor %}
+	html += '</select>';
+	html += '</td>';
+	html += '<td>';
+	html += '<input type="text" name="module_preorder_countries[' + country_key + '][code]" value="" placeholder="{{ entry_code }}" class="form-control" />';
+	html += '<input type="text" name="module_preorder_countries[' + country_key + '][mask]" value="" placeholder="{{ entry_phone_mask }}" class="form-control" />';
+	html += '</td>';
+	html += '<td class="text-center">';
+	html += '<a href="" id="thumb-image' + country_key + '" data-toggle="image" class="img-thumbnail"><img style="width: 30px;" src="{{ flag }}" alt="" title="" data-placeholder="{{ flag }}" /></a><input type="hidden" name="module_preorder_countries[' + country_key + '][image]" value="" id="input-image' + country_key + '" />';
+	html += '</td>';
+	html += '<td>';
+	html += '<input type="text" name="module_preorder_countries[' + country_key + '][sort_order]" value="" placeholder="{{ entry_sort_order }}" class="form-control" />';
+	html += '</td>';
+	html += '<td>';
+	html += '<select name="module_preorder_countries[' + country_key + '][default]" class="form-control">';
+	html += '<option value="1">{{ text_enabled }}</option>';
+	html += '<option value="0" selected="selected">{{ text_disabled }}</option>';
+	html += '</select>';
+	html += '</td>';
+	html += '<td>';
+	html += '<select name="module_preorder_countries[' + country_key + '][status]" class="form-control">';
+	html += '<option value="1" selected="selected">{{ text_enabled }}</option>';
+	html += '<option value="0">{{ text_disabled }}</option>';
+	html += '</select>';
+	html += '</td>';
+	html += '<td class="text-right">';
+	html += '<button type="button" onclick="$(\'#country-row' + country_key + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+	html += '</td>';
+	html += '</tr>';
+
+	$('#country tbody').append(html);
+	
+	country_key++;
+}
+//--></script>
+<script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+<link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+<script type="text/javascript"><!--
+	$('#language a:first').tab('show');
+	$('#language-mail-admin a:first').tab('show');
+	$('#language-mail-registered a:first').tab('show');
+	$('#language-mail-guest a:first').tab('show');
+	$('#language-mail-out-sale-registered a:first').tab('show');
+	$('#language-mail-out-sale-guest a:first').tab('show');
+	$('#language-sms-registered a:first').tab('show');
+	$('#language-sms-guest a:first').tab('show');
+	$('#language-sms-out-sale-registered a:first').tab('show');
+	$('#language-sms-out-sale-guest a:first').tab('show');
+//--></script>
+</div>
+{{ footer }}

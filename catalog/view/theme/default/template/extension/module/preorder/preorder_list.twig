@@ -1,0 +1,83 @@
+{{ header }}
+<div class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      <h1>{{ heading_title }}</h1>
+      {% if preorders %}
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="preorders">
+          <thead>
+            <tr>
+              <td>{{ column_preorder_id }}</td>
+			  <td class="text-center">{{ column_product_image }}</td>
+			  <td>{{ column_product_name }}</td>
+              {% if field_name %}<td>{{ column_name }}</td>{% endif %}
+			  {% if field_email %}<td>{{ column_email }}</td>{% endif %}
+			  {% if field_phone %}<td>{{ column_phone }}</td>{% endif %}
+              <td>{{ column_status }}</td>
+              <td>{{ column_date_added }}</td>
+            </tr>
+          </thead>
+          <tbody>
+			{% for key, preorder in preorders %}
+            <tr id="preorder{{ preorder.preorder_id }}">
+              <td>#{{ preorder.preorder_id }}</td>
+			  <td class="text-center"><a href="{{ preorder.product_href }}"><img src="{{ preorder.product_image }}" class="img-thumbnail"></a></td>
+			  <td>
+			    <a href="{{ preorder.product_href }}">{{ preorder.product_name }}</a>
+				{% if preorder.product_options %}<br>
+				{% for product_option in preorder.product_options %}
+				{% if preorder['product_option'][product_option.product_option_id] is defined %}
+				{% for product_option_value in product_option.product_option_value %}
+				{% if not preorder['product_option'][product_option.product_option_id] is iterable %}
+				{% if preorder['product_option'][product_option.product_option_id] == product_option_value.product_option_value_id %}
+				<small>{{ product_option.name }}: {{ product_option_value.name }}</small><br>
+				{% endif %}
+				{% else %}
+				{% for option_value in preorder['product_option'][product_option.product_option_id] %}
+				{% if option_value == product_option_value.product_option_value_id %}
+				<small>{{ product_option.name }}: {{ product_option_value.name }}</small><br>
+				{% endif %}
+				{% endfor %}
+				{% endif %}
+				{% endfor %}
+				{% endif %}
+				{% endfor %}
+				{% endif %}
+			  </td>
+              {% if field_name %}<td>{{ preorder.name }}</td>{% endif %}
+              {% if field_email %}<td>{{ preorder.email }}</td>{% endif %}
+			  {% if field_phone %}<td>{{ preorder.phone }}</td>{% endif %}
+              <td>{{ preorder.status }}</td>
+              <td>{{ preorder.date_added }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-left">{{ pagination }}</div>
+        <div class="col-sm-6 text-right">{{ results }}</div>
+      </div>
+      {% else %}
+      <p>{{ text_empty }}</p>
+      {% endif %}
+      <div class="buttons clearfix">
+        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+      </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}

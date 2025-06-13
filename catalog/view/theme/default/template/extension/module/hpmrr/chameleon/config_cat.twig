@@ -1,0 +1,79 @@
+<script>
+var hpmrr_cat_config =
+{
+    redirect: {{ hpmrr_cat_redirect }},
+    item_selector: '.product-layout',
+    price_selector: '.price',
+    main_photo_selector: '.image img',
+    name_selector: '.product-name a',
+    change_href: '.product-name a, .image a',
+    cart_button: 'button[onclick ^= "cart.add"]',
+    wishlist_button: 'button[onclick ^= "wishlist.add"]',
+    compare_button: 'button[onclick ^= "compare.add"]',
+    fastbuy_button: 'button[onclick ^="fastbuy"]',
+    fastview_button: 'button[onclick ^="quickview_open"]',
+    stock_selector: '.stock-status',
+    model_selector: '.model',
+    price_html: function($pinfo)
+    {
+        return  '<span class="price_value">' + $pinfo.price + '</span>';
+    },
+    get_discount_prec(special, price)
+    {
+        return Math.round((1 - (special / price)) * 100);
+    },
+    special_price_html: function($pinfo)
+    {
+        let precent = this.get_discount_prec($pinfo.special_noformat,$pinfo.price_noformat);
+        return '<span class="price-old">'+
+        '<span class="price_value">' + $pinfo.price + '</span>'+
+        '<span class="sticker-ch-pd procent-skidka">-' + precent + ' %</span>'+
+        '</span>'+
+        '<span class="price-new">'+
+        '<span class="special_value">' + $pinfo.special + '</span>'+
+        '</span>';
+    },
+    replace_piece_cat: function($pinfo, $btn)
+    {
+        var $item = $btn.parents(this.item_selector);
+        var cartadd_onclick = "cart.add('" + $pinfo.product_id + "', '1');";
+        var wishlist_onclick = "wishlist.add('" + $pinfo.product_id + "');";
+        var compare_onclick = "compare.add('" + $pinfo.product_id + "');";
+        var fastbuy_onclick = "fastbuy('" + $pinfo.product_id + "');";
+        var fastview_onclick = "quickview_open('" + $pinfo.product_id + "');";
+        
+        $item.find(this.stock_selector).removeClass("outofstock instock");
+  
+        if($pinfo.quantity <= 0)
+        {
+            $item.find(this.stock_selector).addClass("outofstock");
+            $item.find(this.cart_button).addClass("disabled").attr('disabled','disabled');
+        }
+        else
+        {
+            $item.find(this.stock_selector).addClass("instock");
+            $item.find(this.cart_button).removeClass("disabled").removeAttr('disabled');
+        }
+        
+        $item.find("input[name='product_id']").val($pinfo.product_id);
+        $item.find(".hpm-block-cat").replaceWith($pinfo.hpm);
+        $item.find(this.change_href).attr('href', $pinfo.href.replace(/&amp;/g, "&"));
+        $item.find(this.main_photo_selector).attr('src', $pinfo.thumb).attr('srcset', $pinfo.thumb);
+        $item.find(this.name_selector).html($pinfo.name);
+        
+        $item.find(this.cart_button).attr('onclick', cartadd_onclick);
+        $item.find(this.wishlist_button).attr('onclick', wishlist_onclick);
+        $item.find(this.compare_button).attr('onclick', compare_onclick);
+        $item.find(this.fastbuy_button).attr('onclick', fastbuy_onclick);
+        $item.find(this.fastview_button).attr('onclick', fastview_onclick);
+        
+        $item.find(this.stock_selector).html($pinfo.stock);
+        $item.find(this.model_selector).html($pinfo.model);
+
+        if($pinfo.special)
+            $item.find(this.price_selector).html(this.special_price_html($pinfo));
+        else
+            $item.find(this.price_selector).html(this.price_html($pinfo));
+    }
+}
+</script>

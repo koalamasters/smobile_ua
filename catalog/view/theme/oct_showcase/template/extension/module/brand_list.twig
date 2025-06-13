@@ -1,0 +1,14 @@
+<div id="home-brand-list">
+    <div class="brand-list-wrapper">
+        {% for banner in banners %}
+
+            <a href=" {{ banner.link }}" class="home-brnad-list-item {{ banner.class }}">
+                <img src=" {{ banner.img }}" alt="">
+            </a>
+        {% endfor %}
+
+        <a href="/index.php?route=product/manufacturer" class="home-brnad-list-item">
+            {{text_all_brands}}
+        </a>
+    </div>
+</div>

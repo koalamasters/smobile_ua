@@ -1,0 +1,74 @@
+{{ header }}
+{{ column_left }}
+<div id="content" class="kit-series kit-edit">
+
+    <div class="container-fluid">
+{% if (error_warning) %} 
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+            {% endif %} 
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Связка по названию товара</h3>
+        </div>
+        <div class="panel-body">
+            <input type='text' id='search-prd' placeholder="Начните вводить и нажмите ENTER" class='form-control'>
+            <div class='clearfix'></div>
+            <h3 id='result' class='text-right alert alert-success'>Тут будет ответ сервера</h3>
+        </div>
+    </div>
+
+    {{ footer }}
+</div>
+</div>
+<!-- Start Kit_Modal -->
+<script>
+    $(document).ready(function () {
+        $('#search-prd').autocomplete({'source': autocomplete_source2,'select': autocomplete_select2});
+
+        $("#search-prd").keyup(function(event) {
+            if (event.keyCode === 13) {
+                autolinks_by_part_of_name();
+            }
+        });
+    });
+
+    function autocomplete_source2(request, response) {
+        $.ajax({
+            url: 'index.php?route=extension/module/hpmrr/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function (json) {
+                response($.map(json, function (item) {
+                    return {
+                        label: item['name'],
+                        value: item['product_id']
+                    }
+                }));
+            }
+        });
+    }
+    function autocomplete_select2(item) {}
+
+    function autolinks_by_part_of_name()
+    {
+        var name = $("#search-prd").val();
+        
+        if(name.length == 0)
+        {
+            alert('Выберите имя товара');
+        }
+        else
+        {
+            $.ajax({
+                url: 'index.php?route=extension/module/hpmrr/autolinks_by_part_of_name_ajax&name='+encodeURIComponent(name)+'&user_token={{ user_token }}',
+                dataType: 'json',
+                success: function (json) {
+                    $("#result").html(json['result']);
+                }
+            });
+        }
+    }   
+
+</script>
+

@@ -1,0 +1,33 @@
+{# <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "ProductGroup",
+        "@id": "#coat_parent",
+        "name": "Wool winter coat",
+        "description": "Wool coat, new for the coming winter season",
+        "url": "https://www.example.com/coat",
+        "brand": {
+          "@type": "Brand",
+          "name": "Good brand"
+        },
+        "productGroupID": "{{ parent_sku }}",
+        "variesBy": [
+          "https://schema.org/size",
+          "https://schema.org/color"
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "isVariantOf": { "@id": "#coat_parent" },
+        "name": "Large dark blue coat",
+        "description": "Large wool light blue coat for the winter season",
+        "offers": {
+          "@type": "Offer",
+          "url": "https://www.example.com/coat?size=large&color=lightblue",
+          "price": 49.99
+        }
+      }
+    ]
+    </script> #}

@@ -1,0 +1,36 @@
+<div class="buttons">
+    <input type="button" value="{{ button_confirm }}" id="button-confirm" data-loading-text="{{ text_loading }}" class="sc-btn sc-btn-primary br-4" />
+</div>
+<script>
+    console.log('COD')
+
+$('#button-confirm').on('click', function() {
+    setTimeout(function (){
+        // masked('body', true);
+        $('#additinonal-wait').removeClass('d-none');
+        console.log('additinonal-wait')
+    }, 1000)
+	$.ajax({
+		url: 'index.php?route=extension/payment/cod/confirm',
+		dataType: 'json',
+		cache: false,
+		beforeSend: function() {
+            // masked('body', true);
+            $('#additinonal-wait').removeClass('d-none');
+			$('#button-confirm').button('loading');
+            console.log('additinonal-wait')
+		},
+		complete: function() {
+			$('#button-confirm').button('reset');
+		},
+		success: function(json) {
+			if (json['redirect']) {
+				location = json['redirect'];	
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+</script>

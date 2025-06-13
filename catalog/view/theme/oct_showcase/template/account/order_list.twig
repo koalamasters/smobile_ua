@@ -1,0 +1,212 @@
+{{ header }}
+<div id="account-order" class="container-fluid container-lg flex-grow-1 mobile-no-gutters">
+	<nav aria-label="breadcrumb">
+        <ul class="breadcrumb sc-breadcrumb fsz-12">
+        {% for breadcrumb in breadcrumbs %}
+            {% if loop.last %}
+                <li class="breadcrumb-item sc-breadcrumb-item">{{ breadcrumb.text }}</li>
+            {% else %}
+                <li class="breadcrumb-item sc-breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </nav>
+	<main class="main">
+		
+		<div class="content-top-box">{{ content_top }}</div>
+		<div class="row sc-account-row">
+			{{ column_left }}
+		    {% if column_left and column_right %}
+		    	{% set class = 'col-xl-6' %}
+		    {% elseif column_left or column_right %}
+				{% set class = 'col-xl-9 col-md-8' %}
+		    {% else %}
+		    	{% set class = 'col-xl-12' %}
+		    {% endif %}
+		    <div id="content" class="{{ class }}">
+			    <div class="">
+					<h1 class="personal-h1">{{ heading_title }}</h1>
+					{% if orders %}
+						<div class="sc-account-table">
+
+								{% for order in orders %}
+
+
+
+									<div id="order-id-{{ order.order_id }}" class="f-flex order-list-item order-id-{{ order.order_id }}" >
+
+										<div class="order-list-item-header-wrapper">
+											<div class="order-list-item-head justify-content-between">
+
+	{#										{{ order.view }}#}
+												<div class="order-list-item-head-info-1">
+													<div class="order-list-dark">
+														#{{ order.order_id }} від {{ order.date_added }}
+													</div>
+
+													<div class="order-list-status br-8 order-status-id-{{ order.order_info.order_status_id }}">{{ order.status }}</div>
+												</div>
+
+												<div class="order-list-item-head-info-2">
+													<div class="order-list-dark">Сума замовлення</div>
+													<div class="order-list-item-total">{{ order.total }}</div>
+												</div>
+
+												<div class="order-list-item-head-info-3">
+													{% for order_item in order.product_list %}
+														<a href="{{ order_item.link }}">
+															<img class="br-8" src="{{ order_item.img }}" alt="">
+														</a>
+													{% endfor %}
+												</div>
+											</div>
+											<div class="order-list-item-exapnd">
+												<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<g opacity="0.5">
+														<path d="M9.5 6.5L14.5 11.5L9.5 16.5" stroke="#407CB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+													</g>
+												</svg>
+											</div>
+										</div>
+										<div class="order-list-item-body-wrapper hidden">
+											<div class="order-list-item-body">
+												<div class="order-item-products">
+													{% for order_item in order.product_list %}
+														<div class="reorder reorder-product" data-id="{{ order_item.product_id }}"></div>
+														<div class="order-item-product">
+															<div class="order-item-product-image-wrapper">
+																<a href="{{ order_item.link }}" class="order-item-product-image">
+																	<img class="br-12" src="{{ order_item.img }}" alt="">
+																</a>
+															</div>
+															<div class="order-item-product-content-wrapepr">
+																<div class="order-item-product-content">
+
+																	<a href="{{ order_item.link }}" class="order-item-product-content-title">{{ order_item.name }}</a>
+
+																	<div class="order-item-product-content-model">Код товару {{ order_item.model }}</div>
+																	<div class="order-item-product-content-prices">
+																		{% if order_item.original_price > order_item.price %}
+																			<div class="sc-module-price-km">
+																				<div class="sc-module-price-km-prices">
+																					<div class="km-price-linethrow fw-400">{{ order_item.original_price_text }}</div>
+																					<div class="km-price-special">{{ order_item.price_text }}</div>
+																				</div>
+																				<div class="sc-module-price-km-usdt fw-400">
+																					{{ order_item.usdt_price}} usdt
+																				</div>
+																			</div>
+																		{% else %}
+																			<div class="sc-module-price-km">
+																				<div class="sc-module-price-km-prices">
+																					<div class="km-price-regular fw-500">{{ order_item.price_text }}</div>
+																				</div>
+																				<div class="sc-module-price-km-usdt fw-400">
+																					{{ order_item.usdt_price}} usdt
+																				</div>
+																			</div>
+																		{% endif %}
+{#																		{{ order_item.total }}#}
+																	</div>
+																</div>
+															</div>
+
+														</div>
+													{% endfor %}
+												</div>
+
+
+
+
+
+
+
+
+												<div class="order-info">
+													<div class="d-flex order-info-list w-65">
+														<div class="order-info-item">
+															<div class="order-info-item-name">Ім'я</div>
+															<div class="order-info-item-value">{{ order.order_info.shipping_firstname }}</div>
+														</div>
+														<div class="order-info-item">
+															<div class="order-info-item-name">Прізвище</div>
+															<div class="order-info-item-value">{{ order.order_info.shipping_lastname }}</div>
+														</div>
+														<div class="order-info-item">
+															<div class="order-info-item-name">E-Mail</div>
+															<div class="order-info-item-value">{{ order.order_info.email }}</div>
+														</div>
+														<div class="order-info-item">
+															<div class="order-info-item-name">Телефон</div>
+															<div class="order-info-item-value">{{ order.order_info.telephone }}</div>
+														</div>
+														<div class="order-info-item">
+															<div class="order-info-item-name">Доставка</div>
+															<div class="order-info-item-value">{{ order.order_info.shipping_address_1 }}</div>
+														</div>
+													</div>
+
+													<div class="d-flex order-info-list w-35">
+
+														<div class="order-info-item">
+															<div class="order-info-item-name">Вартість товарів</div>
+															<div class="order-info-item-value">{{ order.total }}</div>
+														</div>
+
+														<div class="order-info-item">
+															<div class="order-info-item-name">Знижка</div>
+															<div class="order-info-item-value">{{ order.sale_count }}</div>
+														</div>
+
+
+														<div class="order-info-item">
+															<div class="order-info-item-name">Всього до оплати</div>
+															<div class="order-info-item-value">{{ order.total }}</div>
+														</div>
+													</div>
+												</div>
+
+											</div>
+											<span class="btn-reorder br-8" onclick="reorder({{ order.order_id }})">
+											Повторити замовлення
+										</span>
+										</div>
+
+
+
+
+
+									</div>
+									{% endfor %}
+
+
+						</div>
+						<div class="row my-3 dark-text fsz-14">
+							<div class="col-sm-6 text-start">{{ pagination }}</div>
+							<div class="col-sm-6 text-end">{{ results }}</div>
+						</div>
+					{% else %}
+						<div class="fw-500 mb-3 dark-text">{{ text_empty }}</div>
+					{% endif %}
+{#					<a href="{{ continue }}" class="sc-btn sc-btn-primary br-4 sc-account-login-button">{{ button_continue }}</a>#}
+			    </div>
+		    </div>
+		    {{ column_right }}
+		</div>
+		{{ content_bottom }}
+	</main>
+	<script>
+		function reorder(order_id = 0) {
+			$('#order-id-'+order_id+' .reorder-product').each(function () {
+				let product_id = $(this).attr('data-id');
+				cart.add(product_id, 1)
+			});
+		}
+
+		$('.order-list-item-exapnd').click(function(){
+			$(this).toggleClass('active');
+			$(this).closest('.order-list-item').find('.order-list-item-body-wrapper').toggleClass('hidden');
+		});
+	</script>
+</div>
+{{ footer }}

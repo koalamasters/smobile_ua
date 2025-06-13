@@ -1,0 +1,43 @@
+<div class="product swiper-slide{% if hide_desktop %} hide_desktop{% endif %}{% if hide_tablet %} hide_tablet{% endif %}{% if hide_mobile %} hide_mobile{% endif %}" data-main-product-id="{{ main_product_id }}" data-default-product-key="{{ product_key }}"  data-cart-product-key="{{ cart_product_key }}" {% if complect_id %}data-kit-id="{{ complect_id }}" data-kit-product-id="{{ product_id }}"{% else %}data-group-id="{{ group_id }}" data-group-product-id="{{ product_id }}"{% endif %}>
+    <div class="product-wrap">
+        <div class="product-top">
+            {% if href %}
+                <a href="{{ href }}" class="image dop-product-show-product-info" >
+                    <img src="{{ image }}" alt="{{ name }}">
+                </a>
+            {% else %}
+                <div class="image">
+                    <img src="{{ image }}" alt="{{ name }}">
+                </div>
+            {% endif %}
+            <div>
+                {% if href %}
+                    <a href="{{ href }}" class="name dop-product-show-product-info">{{ name }}</a>
+                {% else %}
+                    <div class="name">{{ name }}</div>
+                {% endif %}
+                {% if description %} 
+                    <div class="description">{{ description }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="product-bottom">
+            <div class="price">
+                {% if special %}
+                    <div class="old-price">
+                        <span>{{ price }}</span>
+                        {% if discount_procent %}
+                            <span class="discount-procent">-{{ discount_procent }}%</span>
+                        {% endif %}
+                    </div>
+                    <div class="new-price">{{ special }}</div>
+                {% else %}
+                    {{ price }}
+                {% endif %}
+            </div>
+            {% if not no_button_cart %}
+                <a class="button-cart{% if in_cart %} in-cart{% endif %}"><span class="ex-cart-btn-icon"></span></a>
+            {% endif %}
+        </div>
+    </div>
+</div>

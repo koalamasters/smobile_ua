@@ -1,0 +1,70 @@
+{% if reviews %}
+	{% for review in reviews %}
+		<div class="sc-product-content-reviews-item">
+			<div class="d-flex review-item-head">
+				<div class="sc-product-content-reviews-item-info">
+					<div class="sc-last-reviews-author-name fw-500 km-dark-text">{{ review.author }}</div>
+					<div class="sc-last-reviews-date fsz-12 fw-400">{{ review.date_added }}</div>
+				</div>
+				<div class="sc-product-content-reviews-rating-stars d-flex align-items-center">
+					{% for i in 1..5 %}
+						{% if review.rating < i %}
+							<span class="sc-module-rating-star"></span>
+						{% else %}
+							<span class="sc-module-rating-star sc-module-rating-star-is"></span>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+
+
+			<div class="sc-product-content-reviews-item-text pt-3">{{ review.text }}</div>
+
+
+			{% if review.video or review.images%}
+
+				<div class="sc-product-content-media">
+
+					{% if review.video %}
+						<div class="review-video-wrapper ">
+							<div class="review-video-title fw-600 dark-text">{{ text_video_review }}</div>
+							<div class="review-video-item">
+								<a rel="nofollow" target="_blank" href="{{ review.video }}" class="review-video-link">
+									<img src="https://img.youtube.com/vi/{{ review.video_code }}/0.jpg" class="review-video-thumb review-image-item" alt="">
+								</a>
+
+							</div>
+						</div>
+					{% endif %}
+
+					{% if review.images %}
+						<div>
+							<div class="review-image-title fw-600 dark-text">Фото</div>
+							<div class="review-images-wrapper" id="">
+
+								{% for position,image in review.images %}
+									<div class="review-image-wrapper">
+										<a href="/image/{{ image }}" class="review-image-item-link" data-position="{{ position }}">
+											<img src="/image/{{ image }}" alt="" class="review-image-item">
+										</a>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					{% endif %}
+
+				</div>
+			{% endif %}
+
+			{% if review.reply %}
+				<div class="sc-product-content-reviews-item-answer p-3 br-4 mt-3">{{ review.reply }}</div>
+			{% endif %}
+		</div>
+	{% endfor %}
+	<div class="pt-4">{{ pagination }}</div>
+{% else %}
+	<div class="sc-empty-reviews ">
+		<p class="fw-500 fsz-16 mb-3">Немає відгуків про даний товар, станьте першим і поділіться враженнями.</p>
+
+	</div>
+{% endif %}

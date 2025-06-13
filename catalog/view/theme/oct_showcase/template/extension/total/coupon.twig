@@ -1,0 +1,65 @@
+<div class="sc-cart-actions-block p-0 pb-4">
+	{#    <div class="sc-cart-actions-block-title d-flex align-items-center fw-600 dark-text">{{ heading_title }}</div>#}
+
+
+
+	<div id="collapse-coupon" class="form-group  ">
+		<label for="input-coupon" class="sc-control-label fsz-14 fw-500 mb-2 color-half-dark">Промокод</label>
+		<div class="d-flex cart-coupon-wrapper">
+			<input type="text" name="coupon" value="{{ coupon }}" placeholder="{{ entry_coupon }}" id="input-coupon" class="form-control" />
+
+			<button type="button" id="button-coupon" data-loading-text="{{ text_loading }}"  class="color-dark fsz-16" />{{ button_coupon }}</button>
+
+		</div>
+		{% if(coupon_info.ignore_special == 1) %}
+			<div class="coupon-notice">
+				Промокод не діє на товари зі знижкою!
+			</div>
+		{% endif %}
+		<script>
+			$('#button-coupon').on('click', function() {
+				$.ajax({
+					url: 'index.php?route=extension/total/coupon/coupon',
+					type: 'post',
+					data: 'coupon=' + encodeURIComponent($('input[name=\'coupon\']').val()),
+					dataType: 'json',
+					cache: false,
+					beforeSend: function() {
+						$('#button-coupon').button('loading');
+					},
+					complete: function() {
+						$('#button-coupon').button('reset');
+					},
+					success: function(json) {
+						$('.alert-dismissible').remove();
+
+						if (json['error']) {
+							scNotify('danger', json['error']);
+						}
+
+						if (json['redirect']) {
+							//location = json['redirect'];
+							$("#cart-table").load('index.php?route=checkout/oct_fastorder/cart', $('.oct-checkout input[type=\'text\'], .oct-checkout input[type=\'date\'], .oct-checkout input[type=\'datetime-local\'], .oct-checkout input[type=\'time\'], .oct-checkout input[type=\'password\'], .oct-checkout input[type=\'hidden\'], .oct-checkout input[type=\'checkbox\']:checked, .oct-checkout input[type=\'radio\']:checked, .oct-checkout textarea, .oct-checkout select'));
+
+							$.ajax({
+								url: '/index.php?route=checkout/oct_fastorder/cart&gettotal=y',
+								dataType: 'json',
+								success: function(response) {
+									let total = response.total;
+									if (total) {
+										$('.oct-checkout-actions-total-item.end-total span:last-child').text(total);
+									}
+								}
+							});
+
+
+						}
+					},
+					error: function(xhr, ajaxOptions, thrownError) {
+						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+					}
+				});
+			});
+		</script>
+	</div>
+</div>

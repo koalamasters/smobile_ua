@@ -1,0 +1,224 @@
+.contact-popup-bg{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgb(0 0 0 / 35%);
+    z-index: 100;
+    display: none;
+    opacity: 0;
+    transition: .3s;
+	z-index: 13000;
+}
+.success_copied {
+	position: absolute;
+    right: 105%;
+    color: rgb(255, 255, 255);
+    opacity: 0;
+	font-style: normal;
+}
+.contact-popup-bg.active{
+    display: block;
+}
+
+.contact-popup{
+    position: fixed;
+    right: 50px;
+    bottom: 30px;
+    z-index: 1500;
+}
+
+.contact-popup .contact-popup-button{
+    cursor: pointer;
+    display: flex;
+    background: #001f3f;
+    padding: 5px;
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    position: relative;
+	transition: .2s;
+}
+
+.contact-popup .contact-popup-button:hover{
+	transform: scale(1.1);
+	transition: .2s;
+}
+.contact-popup .contact-popup-button img{
+    height: 32px;
+    width: 32px;
+    display: block;
+    margin-top: 2px;
+    position: absolute;
+    transition: .2s;
+}
+
+.contact-popup .contact-popup-button .main-btn{
+    opacity: 1;
+	top: 50%;
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+}
+
+.contact-popup .contact-popup-button .close-btn{
+    opacity: 0;
+    width: 32px;
+    height: 32px;
+    margin-top: 0;
+	top: 20px;
+}
+
+
+.contact-popup.active {
+   z-index: 13000;
+}
+.contact-popup.active .contact-popup-button .main-btn{
+    opacity: 0;
+}
+
+.contact-popup.active .contact-popup-button .close-btn{
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+
+.contact-popup .contact-popup-items{
+    flex-direction: column;
+    justify-content: flex-end;
+    display: none;
+    transition: .3s;
+    transform: translateY(0px);
+    margin-right: 12px;
+}
+
+.contact-popup .contact-popup-items.active{
+    display: flex;
+}
+
+.contact-popup .contact-popup-items.active.up{
+    transform: translateY(-10px);
+}
+
+.contact-popup .contact-popup-items .contact-popup-item{
+    transition: .3s;
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: flex;
+    color: #000;
+    align-items: center;
+}
+
+.contact-popup .contact-popup-items .contact-popup-item:hover .contact-popup-item-text{
+    transition: .15s;
+    box-shadow: 4px 4px 5px 0px rgb(0 0 0 / 12%);
+}
+
+
+.contact-popup .contact-popup-items .contact-popup-item:hover{
+    transform: translateX(-5px);
+}
+
+.contact-popup .contact-popup-item-icon{
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.contact-popup .contact-popup-item-icon img{
+    height: 48px;
+    width: 48px;
+}
+
+.contact-popup .contact-popup-item-text{
+	font-family: 'BebasNeuePro',Arial,sans-serif;
+	font-size: 18px;
+    font-weight: 500;
+    background: #fff;
+    color: #000;
+    padding: 8px;
+    border-radius: 5px;
+    margin-right: 15px;
+    min-width: 165px;
+    display: inline-block;
+    text-align: center;
+}
+.contact-popup-wrapper {
+    position: relative;
+}
+
+.popup-question {
+    position: absolute;
+    top: 0px;
+    left: -175px;
+    max-width: fit-content;
+    min-width: 155px;
+    cursor: pointer;
+    display: none;
+    white-space: nowrap;
+	font-family: 'Nunito Sans',Arial,sans-serif;
+    font-weight: 600;
+}
+
+.popup-question div {
+    background: #001f3f;
+    padding: 3px 5px 3px 15px;
+    position: relative;
+    border-radius: 6px;
+    color: #fff;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.popup-question div::before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    z-index: 11;
+    top: 6px;
+    right: -8px;
+    border-width: 10px 6px 10px 6px;
+    border-style: solid;
+    border-color: #001f3f;
+    border-top-color: transparent;
+    border-right-color: transparent;
+}
+
+.popup-question img {
+    width: 40px;
+	height: auto;
+}
+
+@media only screen and (max-width: 575px) {
+    .popup-question {
+        top: 2px;
+        left: -175px;
+        display: none!important;
+    }
+
+    .single_variation_wrap .product-action {
+        width: 100%;
+    }
+}
+
+.dec.qtybtn + .dec.qtybtn,
+.inc.qtybtn + .inc.qtybtn {
+    display: none;
+}
+
+.axil-section-gap {
+    padding: 20px 0 80px 0;
+}
+
+
+@media screen and (max-width: 991px) {
+    .contact-popup {
+        right: 20px;
+        bottom: 120px;
+    }
+}

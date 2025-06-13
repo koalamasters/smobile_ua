@@ -1,0 +1,13 @@
+{% if settings is defined %}
+<a href="{{ settings }}" data-toggle="tooltip" title="{{ text_settings }}" class="btn btn-primary"><i class="fa fa-cogs"></i> </i></a>
+{% endif %}
+
+<a href="{{ list }}" data-toggle="tooltip" title="{{ text_list }}" class="btn btn-primary"><i class="fa fa-user"></i></a>
+
+ <a href="{{ clist }}" data-toggle="tooltip" title="{{ text_clist }}" class="btn btn-primary"><i class="fa fa-book"></i></i></a>
+
+<a href="{{ orderreport }}" data-toggle="tooltip" title="{{ heading_title_report }}" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> <i class="fa fa-bar-chart-o fa-fw"></i></a>
+
+<a href="{{ payouts }}" data-toggle="tooltip" title="{{ heading_title_payouts }}" class="btn btn-primary"><i class="fa fa-book"></i></a>
+
+<a href="{{ customerreport }}" data-toggle="tooltip" title="{{ heading_title_customer }}" class="btn btn-primary"><i class="fa fa-user"></i> <i class="fa fa-bar-chart-o fa-fw"></i></a>

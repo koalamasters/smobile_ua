@@ -1,0 +1,461 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        {{ menu }}
+      </div>
+      <h1><i class="fa fa-user fa-fw" style="color:tomato;"></i> {{ text_settings }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+      {% if licensed_md5 == 'd9a22d7a8178d5b42a8750123cbfe5b1' %}
+        <button id="saveSettings" class="btn btn-success">Save Settings</button>
+       {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if support_status is defined and support_status == 'enabled' %}
+    <div class="table-responsive"> 
+      <table id="order_details" class="table table-bordered table-striped">
+        <tbody>
+        <tr>
+          <td style="width:7%;background: #8e8e8e;color: white;">License Info</td>
+          <td style="width:5%;background: #efefef;">Order Id</td>
+          <td>{{ support_order_id }}</td>
+          <td style="width:4%;background: #efefef;">Domain</td>
+          <td>{{ domain }}</td>
+          <td style="width:8%;background: #efefef;">Registered To</td>
+          <td>{{ support_email }}</td>
+          <td style="width:7%;background: #efefef;">Registered</td>
+          <td>{{ support_registered_date }}</td>
+          <td style="width:7%;background: #efefef;">Support Ends</td>
+          <td>{{ support_order_date }}</td>
+        </tr>
+        </tbody>
+        <tfooter>
+          <tr>
+            <td colspan="11" class="text-center">{{ text_free_support_remaining }}</td>
+          </tr>
+        </tfooter>
+      </table>
+    </div>
+  {% else %}
+   <div class="table-responsive"> 
+      <table id="order_details" class="table table-bordered table-striped">
+        <tfooter>
+          <tr>
+            <td class="text-center">{{ text_free_support_remaining }}</td>
+          </tr>
+        </tfooter>
+      </table>
+    </div>
+    {% endif %}
+  <div class="panel panel-default">
+   <div class="panel-body">
+   {% if licensed_md5 == 'd9a22d7a8178d5b42a8750123cbfe5b1' %}
+      <div class="form-horizontal">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-agent-selection" data-toggle="tab">{{ tab_agent_selection }}</a></li>
+        <li><a href="#tab-backend-display" data-toggle="tab">{{ tab_backend_display }}</a></li>
+        <li><a href="#tab-commission-calculation" data-toggle="tab">{{ tab_commission_calculation }}</a></li>
+        <li><a href="#tab-agent-multistore" data-toggle="tab">{{ tab_agent_multistore }}</a></li>
+        <li><a href="#tab-agent-permission" data-toggle="tab">{{ tab_agent_permission }}</a></li>
+        <li><a href="#tab-transaction-styling" data-toggle="tab">{{ tab_transaction_styling }}</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab-agent-selection">
+          <div class="alert alert-info alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ tab_agent_selection_note }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+          </div>
+          <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-register">{{ text_salesagent_register }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_register" id="input-register" class="form-control">
+            {% if salesagent_register %}
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %}
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %}
+            {% if not salesagent_register %}
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %}
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %}
+          </select>
+          </div>
+        </div>
+         <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-lowstcheckout">{{ text_salesagent_checkout }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_checkout" id="input-lowstcheckout" class="form-control">
+            {% if salesagent_checkout %}
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %}
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %}
+            {% if not salesagent_checkout %}
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %}
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %}
+          </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-selecttype"><span data-toggle="tooltip" title="{{ help_salesagent_selecttype }}">{{ text_salesagent_selecttype }}</span></label>
+          <div class="col-sm-10">
+          <select name="salesagent_selecttype" id="input-selecttype" class="form-control">
+            {% if (salesagent_selecttype) %} 
+            <option value="1" selected="selected">Input Code Selection</option>
+            {% else %} 
+            <option value="1">Input Code Selection</option>
+            {% endif %} 
+            {% if (not salesagent_selecttype) %} 
+            <option value="0" selected="selected">Select Box</option>
+            {% else %} 
+            <option value="0">Select Box</option>
+            {% endif %} 
+          </select>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-backend-display"> 
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-backendcheckout">{{ text_salesagent_backend_checkout }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_backend_checkout" id="input-backendcheckout" class="form-control">
+            {% if salesagent_backend_checkout %}
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %}
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %}
+            {% if not salesagent_backend_checkout %}
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %}
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %}
+          </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-backendorderedit">{{ text_salesagent_orderformedit }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_backend_orderedit" id="input-backendorderedit" class="form-control">
+            {% if salesagent_backend_orderedit %}
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %}
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %}
+            {% if not salesagent_backend_orderedit %}
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %}
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %}
+          </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-orderhistory">{{ text_salesagent_orderhistory }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_orderhistory" id="input-orderhistory" class="form-control">
+            {% if (salesagent_orderhistory) %} 
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %} 
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %} 
+            {% if (not salesagent_orderhistory) %} 
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %} 
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %} 
+          </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-customershow">{{ text_salesagent_customershow }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_customershow" id="input-customershow" class="form-control">
+            {% if (salesagent_customershow) %} 
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %} 
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %} 
+            {% if (not salesagent_customershow) %} 
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %} 
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %} 
+          </select>
+          </div>
+        </div>
+     </div>
+        <div class="tab-pane" id="tab-commission-calculation"> 
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-salesagent_commissiontotal">{{ text_salesagent_commissiontotal }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_commissiontotal" id="input-salesagent_commissiontotal" class="form-control">
+            {% if salesagent_commissiontotal %}
+            <option value="1" selected="selected">{{ text_subtotal }}</option>
+            {% else %}
+            <option value="1">{{ text_subtotal }}</option>
+            {% endif %}
+            {% if not salesagent_commissiontotal %}
+            <option value="0" selected="selected">{{ text_total }}</option>
+            {% else %}
+            <option value="0">{{ text_total }}</option>
+            {% endif %}
+          </select>
+          </div>
+        </div>
+         <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-coupondiscount"><span data-toggle="tooltip" title="{{ help_salesagent_coupondiscount }}">{{ text_salesagent_coupondiscount }}</span></label>
+          <div class="col-sm-10">
+          <select name="salesagent_coupondiscount" id="input-coupondiscount" class="form-control">
+            {% if salesagent_coupondiscount %}
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %}
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %}
+            {% if not salesagent_coupondiscount %}
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %}
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %}
+          </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-storecredit"><span data-toggle="tooltip" title="{{ help_salesagent_storecredit }}">{{ text_salesagent_storecredit }}</span></label>
+          <div class="col-sm-10">
+          <select name="salesagent_storecredit" id="input-storecredit" class="form-control">
+            {% if salesagent_storecredit %}
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %}
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %}
+            {% if not salesagent_storecredit %}
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %}
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %}
+          </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-recurrsive">{{ text_salesagent_recurrsive }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_recurrsive" id="input-recurrsive" class="form-control">
+            {% if (salesagent_recurrsive) %} 
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %} 
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %} 
+            {% if (not salesagent_recurrsive) %} 
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %} 
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %} 
+          </select>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-agent-multistore"> 
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-autostore">{{ text_salesagent_autostore }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_autostore" id="input-autostore" class="form-control">
+            {% if (salesagent_autostore) %} 
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            {% else %} 
+            <option value="1">{{ text_enabled }}</option>
+            {% endif %} 
+            {% if (not salesagent_autostore) %} 
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% else %} 
+            <option value="0">{{ text_disabled }}</option>
+            {% endif %} 
+          </select>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-agent-permission">   
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-deleteorder">{{ text_salesagent_deleteorder }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_deleteorder" id="input-deleteorder" class="form-control">
+            {% if (salesagent_deleteorder) %} 
+            <option value="1" selected="selected">{{ text_yes }}</option>
+            {% else %} 
+            <option value="1">{{ text_yes }}</option>
+            {% endif %} 
+            {% if (not salesagent_deleteorder) %} 
+            <option value="0" selected="selected">{{ text_no }}</option>
+            {% else %} 
+            <option value="0">{{ text_no }}</option>
+            {% endif %} 
+          </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-deleteorder">{{ text_salesagent_addorderhistory }}</label>
+          <div class="col-sm-10">
+          <select name="salesagent_addorderhistory" id="input-deleteorder" class="form-control">
+            {% if (salesagent_addorderhistory) %} 
+            <option value="1" selected="selected">{{ text_yes }}</option>
+            {% else %} 
+            <option value="1">{{ text_yes }}</option>
+            {% endif %} 
+            {% if (not salesagent_addorderhistory) %} 
+            <option value="0" selected="selected">{{ text_no }}</option>
+            {% else %} 
+            <option value="0">{{ text_no }}</option>
+            {% endif %} 
+          </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-orderstatuspermission"><span data-toggle="tooltip" title="{{ help_orderstatuspermission }}">{{ text_orderstatuspermission }}</span></label>
+
+          <div class="col-sm-10">
+            <div class="well well-sm" style="height: 150px; overflow: auto;"> {% for order_status in order_statuses %}
+              <div class="checkbox">
+                <label> {% if order_status.order_status_id in salesagent_orderstatuspermission %}
+                  <input type="checkbox" name="salesagent_orderstatuspermission[]" value="{{ order_status.order_status_id }}" checked="checked" />
+                  {{ order_status.name }}
+                  {% else %}
+                  <input type="checkbox" name="salesagent_orderstatuspermission[]" value="{{ order_status.order_status_id }}" />
+                  {{ order_status.name }}
+                  {% endif %} </label>
+              </div>
+              {% endfor %} 
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-usergrouprestrictions"><span data-toggle="tooltip" title="{{ help_usergrouprestrictions }}">{{ text_usergrouprestrictions }}</span></label>
+            <div class="col-sm-10">
+            <div class="well well-sm" style="height: 150px; overflow: auto;"> {% for user_group in user_groups %}
+              <div class="checkbox">
+                <label> {% if user_group.user_group_id in salesagent_usergrouprestrictions %}
+                  <input type="checkbox" name="salesagent_usergrouprestrictions[]" value="{{ user_group.user_group_id }}" checked="checked" />
+                  {{ user_group.name }}
+                  {% else %}
+                  <input type="checkbox" name="salesagent_usergrouprestrictions[]" value="{{ user_group.user_group_id }}" />
+                  {{ user_group.name }}
+                  {% endif %} </label>
+              </div>
+              {% endfor %} 
+            </div>
+            </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-transaction-styling"> 
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-orderstatuspermission"><span data-toggle="tooltip" title="{{ help_orderstatus_display }}">{{ text_orderstatus_display }}</span></label>
+
+          <div class="col-sm-10">
+            <div class="well well-sm" style="height: 150px; overflow: auto;"> {% for order_status in order_statuses %}
+              <div class="checkbox">
+                <label> {% if order_status.order_status_id in salesagent_orderstatus_transactions %}
+                  <input type="checkbox" name="salesagent_orderstatus_transactions[]" value="{{ order_status.order_status_id }}" checked="checked" />
+                  {{ order_status.name }}
+                  {% else %}
+                  <input type="checkbox" name="salesagent_orderstatus_transactions[]" value="{{ order_status.order_status_id }}" />
+                  {{ order_status.name }}
+                  {% endif %} </label>
+              </div>
+              {% endfor %} 
+            </div>
+          </div>
+        </div>
+        
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-unpaid-color">{{ text_unpaid_color }}</label>
+          <div class="col-sm-3">
+          <input type="color" name="salesagent_unpaid_color" id="input-unpaid-color" value="{{ salesagent_unpaid_color }}" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-paid-color">{{ text_paid_color }}</label>
+          <div class="col-sm-3">
+          <input type="color" name="salesagent_paid_color" id="input-paid-color" value="{{ salesagent_paid_color }}" class="form-control" />
+          </div>
+        </div>
+
+
+      </div>
+      </div>
+    </div>
+      {% endif %}
+       {% if licensed=='none' %}
+          {{ license_purchase_thanks }}
+          {% if regerror is defined and regerror %} {{ regerror_quote_msg }} {% endif %}
+          {% if regerror is defined and regerror %} <p style="color:red;">Error msg: {{ regerror }}</p>{% endif %}
+            <h2>{{ license_registration }}</h2>
+            <form name="reg" method="post" action="{{ oc_licensing_home }}register.php" id="reg" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="opencart_email">{{ license_opencart_email }}</label>
+                    <div class="col-sm-10">
+                      <input name="opencart_email" type="text" autofocus required id="opencart_email" form="reg" class="form-control">
+                    </div>
+                  {% if emailmal is defined and emailmal and regerror == 'emailmal' %}<p style="color:red;">{{ check_email }}</p>{% endif %}
+                </div>  
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="order_id">{{ license_opencart_orderid }}</label>
+                    <div class="col-sm-10">
+                      <input name="order_id" type="text" autofocus required id="order_id" form="reg" class="form-control">
+                    </div>
+                  </div>
+                  {% if regerror is defined and regerror == 'orderid' %}<p style="color:red;">{{ check_orderid }}</p>{% endif %}
+                <div class="form-group">
+                  <div class="col-sm-12">
+                     <button type="submit" form="reg" data-toggle="tooltip" title="{{ license_registration }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                     <input name="extension_id" type="hidden" id="extension_id" form="reg" value="{{ extension_id }}"><input type="hidden" name="aurl" value="{{ aurl }}" form="reg"><input type="hidden" name="auri" value="{{ auri }}">
+                  </div>
+                </div>
+          </form>
+          {% endif %}
+          {% if licensed == 'curl' %}
+          {{ server_error_curl }}
+          {% endif %}
+      </div>
+    </div>
+  </div>
+</div>  
+  <script type="text/javascript"><!--
+$('.date').datetimepicker({
+  pickTime: false
+});
+//--></script></div>
+
+<script type="text/javascript">
+$('button#saveSettings').on("click",function(){
+  $.ajax({
+     url: 'index.php?route=extension/module/salesagent/savesettings&user_token={{ user_token }}',
+     data: $('select,input[type=checkbox]:checked,input[type=color]'),
+      dataType: 'json',     
+      success: function(json) {
+        $('.alert').remove();
+        if(json.success != undefined) {
+          $('.panel-body').prepend('<div class="alert alert-success">' + json.success + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+        } else {
+          $('.panel-body').prepend('<div class="alert alert-warning">' + json.error + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+        }
+      }
+    });
+})
+</script>
+{{ footer }}

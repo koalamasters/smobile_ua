@@ -1,0 +1,66 @@
+.mono_checkout__button {
+    font-family: 'Nunito Sans', sans-serif;
+    background: #000000;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    gap: 0 10px;
+    line-height: 34px;
+    padding: 0 30px;
+    cursor: pointer;
+    font-weight: 600;
+    outline: none;
+    box-shadow: none;
+    transition: opacity .3s ease-in-out;
+    border-radius: 8px;
+    border: 0;
+    justify-content: center;
+}
+
+.mono_checkout__button img {
+    background: none;
+}
+
+.mono_checkout__button--white_short,
+.mono_checkout__button--black_short {
+    flex-direction: column;
+    justify-content: center;
+    font-size: 12px;
+    padding: 12px 30px 15px;
+    line-height: normal;
+}
+
+.mono_checkout__button--white_short,
+.mono_checkout__button--white {
+    background: #fff;
+    color: #000;
+}
+
+.mono_checkout__button:active {
+    transform: translateY(1px);
+}
+
+.mono_checkout__button:focus,
+.mono_checkout__button:hover {
+    opacity: .8;
+}
+
+#mono_checkout_product_page {
+    display: flex;
+    width: max-content;
+    margin: 16px 0;
+    justify-content: center;
+    line-height: 42px;
+}
+
+#mono_checkout_product_page.mono_checkout__button--black_short,
+#mono_checkout_product_page.mono_checkout__button--white_short {
+    width: auto;
+    margin: 16px auto;
+    line-height: normal;
+}
+
+
+
+

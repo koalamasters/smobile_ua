@@ -1,0 +1,8 @@
+{% if blog_categories %}
+	{% for blog_category in blog_categories %}
+		<a href="{{ blog_category.href }}" class="posts__category {{ blog_category.active_class }}">
+			<div class="posts__category-title">{{ blog_category.name }}</div>
+			<div class="posts__category-count">{{ blog_category.count }}</div>
+		</a>
+	{% endfor %}
+{% endif %}

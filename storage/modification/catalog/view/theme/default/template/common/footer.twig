@@ -1,0 +1,202 @@
+<footer>
+  <div class="container">
+    <div class="row">
+      {% if informations %}
+      <div class="col-sm-3">
+        <h5>{{ text_information }}</h5>
+        <ul class="list-unstyled">
+         {% for information in informations %}
+          <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <div class="col-sm-3">
+        <h5>{{ text_service }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ contact }}">{{ text_contact }}</a></li>
+          <li><a href="{{ return }}">{{ text_return }}</a></li>
+          <li><a href="{{ sitemap }}">{{ text_sitemap }}</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h5>{{ text_extra }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ manufacturer }}">{{ text_manufacturer }}</a></li>
+          <li><a href="{{ voucher }}">{{ text_voucher }}</a></li>
+          <li><a href="{{ affiliate }}">{{ text_affiliate }}</a></li>
+          <li><a href="{{ special }}">{{ text_special }}</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h5>{{ text_account }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ account }}">{{ text_account }}</a></li>
+          <li><a href="{{ order }}">{{ text_order }}</a></li>
+          <li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>
+          <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <p>{{ powered }}</p>
+  </div>
+</footer>
+
+            {% if module_mono_checkout_cart_show %}
+            <link rel="stylesheet" href="catalog/view/javascript/mono_checkout/css/fonts.css">
+            <link rel="stylesheet" href="catalog/view/javascript/mono_checkout/css/mono.css">
+            <link rel="stylesheet" href="catalog/view/javascript/mono_checkout/css/noty.min.css">
+            <script>
+                $.ajax({ url: 'catalog/view/javascript/mono_checkout/js/noty.min.js', dataType: 'script', async: true });
+                $.ajax({ url: 'catalog/view/javascript/mono_checkout/js/mono.js', dataType: 'script', async: true });
+            </script>
+            <script type="text/javascript"><!--
+                $('{{ module_mono_checkout_cart_popup_elem }}').after('{{ mono_checkout_button }}');
+
+                $(document).on("ajaxComplete", function (event, xhr, settings) {
+                     if($('#mono_checkout_cart_modal').length) return;
+
+                    if (settings.url === 'index.php?route=common/cart/info' || settings.url === 'index.php?route=extension/module/luxshop_newfastordercart' || settings.url.indexOf('index.php?route=octemplates/module/oct_popup_cart') > -1 || settings.url === 'index.php?route=common/aridius_cart/info' || settings.url === 'index.php?route=extension/module/cart_popup') {
+                       $('{{ module_mono_checkout_cart_popup_elem }}').after('{{ mono_checkout_button }}');
+                    }
+                });
+            //--></script>
+            {% endif %}
+            
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+<!--
+OpenCart is open source software and you are free to remove the powered by OpenCart if you want, but its generally accepted practise to make a small donation.
+Please donate via PayPal to donate@opencart.com
+//-->
+
+		<style>
+		.ukrcreditsticker {
+			position:absolute;
+			text-align: left;
+			color: #000;
+			top: 5px;
+			right:20px;
+			z-index:99;
+		}
+		.ukrcreditsticker>div {
+			position: relative;
+			border: 1px solid #8BC34A;
+			border-radius:5px;
+			background:#fff;
+			margin-bottom:5px;
+			height:42px;
+			width:42px
+		}
+		.ukrcreditsticker span {
+			position: absolute;
+			font-size: 14px;
+			font-weight:700;
+			right: 2px;	
+			bottom:2px;
+			text-shadow: -1px -1px 0 #FFF;
+		}
+
+		.ukrcreditsticker .ukrcreditPP {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditPB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditII {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditIA {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditMB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/MB_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditAB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/AB_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditSB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/SB_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditAA {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/AA_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditPL {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PL_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditPU {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PU_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		@media (max-width: 767px) {
+			.ukrcreditsticker>div {
+				height:30px;
+				width:30px;
+			}
+			.ukrcreditsticker span {
+				line-height: 12px;
+			}
+			.ukrcreditsticker .ukrcreditPP {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+				background-size: 26px;
+			}
+			.ukrcreditsticker .ukrcreditPB {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+				background-size: 26px;
+			}
+			.ukrcreditsticker .ukrcreditII {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+				background-size: 26px;
+			}
+			.ukrcreditsticker .ukrcreditIA {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+				background-size: 26px;
+			}
+			.ukrcreditsticker .ukrcreditMB {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/MB_logo.png') center center no-repeat;
+				background-size: 26px;
+			}
+			.ukrcreditsticker .ukrcreditAB {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/AB_logo.png') center center no-repeat;
+				background-size: 26px;
+			}	
+			.ukrcreditsticker .ukrcreditSB {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/SB_logo.png') center center no-repeat;
+				background-size: 26px;
+			}
+			.ukrcreditsticker .ukrcreditAA {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/AA_logo.png') center center no-repeat;
+				background-size: 26px;
+			}
+			.ukrcreditsticker .ukrcreditPL {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/PL_logo.png') center center no-repeat;
+				background-size: 26px;
+			}
+			.ukrcreditsticker .ukrcreditPU {
+				background: #fff url('/catalog/view/theme/default/image/ukrcredits/PU_logo.png') center center no-repeat;
+				background-size: 26px;
+			}
+		}
+		</style>
+			
+{{ hpmrr_cat_cfg }}
+
+		{# // remarketing #}
+		{% if remarketing_status %}
+		{% if remarketing_footer %}
+		{{ remarketing_footer }}
+		{% endif %}
+		{% endif %}
+		
+</body></html>

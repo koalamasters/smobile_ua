@@ -1,0 +1,88 @@
+.button-preorder-default + button, .button-out-sale-default + button {
+	width: 60% !important;
+}
+@media (max-width: 767px) {
+	.button-preorder-default + button, .button-out-sale-default + button {
+		width: 33.33%;
+	}
+}
+@media (max-width: 1200px) {
+	.button-preorder-default + button, .button-out-sale-default + button {
+		width: 33.33%;
+	}
+}
+.button-preorder-compare + input {
+	margin-top: 0px !important;
+}
+#preorder-box .image img {
+	margin:0 auto;
+}
+#preorder-box .input-group {
+	width: 100%;
+}
+#preorder-box .dropdown-menu > li > button {
+    color: #333;
+	text-align: left;
+}
+#preorder-box .dropdown-menu li > button:hover {
+	text-decoration: none;
+	color: #ffffff;
+	background-color: #229ac8;
+	background-image: linear-gradient(to bottom, #23a1d1, #1f90bb);
+	background-repeat: repeat-x;
+}
+#preorder-box label.code {
+	cursor: pointer;
+	background-color: #fff;
+}
+#preorder-box .input-group .input-group-addon {
+/*	height: 34px; */
+}
+#preorder-box .countries {
+	width: 100%;
+}
+#preorder-box .input-group > label {
+	width: 75px;
+}
+#preorder-box .countries > div {
+	max-height: 170px;
+    overflow-y: auto;
+	overflow-x: hidden;
+}
+#preorder-box .countries > div button {
+	color: #888;
+    text-shadow: 0 1px 0 #FFF;
+    text-decoration: none;
+}
+#preorder-box .countries > div button:hover {
+	text-shadow: none;
+	color: #ffffff;
+	background-color: #229ac8;
+	background-image: linear-gradient(to bottom, #23a1d1, #1f90bb);
+	background-repeat: repeat-x;
+}
+#preorder-box .countries  button span:first-child {
+	float: left;
+}
+#preorder-box .countries  button span:last-child {
+	float: right;
+}
+
+.preorder-form-title{
+	margin-bottom: 10px;
+}
+
+.preorder-form-description{
+	font-size: 14px;
+}
+
+@media (max-width: 470px) {
+	.p-xs-0{
+		padding: 0;
+	}
+}
+
+
+#button-preorder i{
+	margin-right: 10px;
+}

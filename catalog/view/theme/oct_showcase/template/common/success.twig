@@ -1,0 +1,216 @@
+{{ header }}
+<div id="common-success" class="container-fluid container-lg flex-grow-1 mobile-no-gutters">
+	<nav aria-label="breadcrumb">
+        <ul class="breadcrumb sc-breadcrumb fsz-12">
+        {% for breadcrumb in breadcrumbs %}
+            {% if loop.last %}
+                <li class="breadcrumb-item sc-breadcrumb-item">{{ breadcrumb.text }}</li>
+            {% else %}
+                <li class="breadcrumb-item sc-breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </nav>
+	<main class="main">
+
+		{% if not order %}
+			<div class="row">
+				<div class="col-12 sc-page-title pb-3">
+					<h1>{{ heading_title }}</h1>
+				</div>
+			</div>
+		{% endif %}
+		<div class="content-top-box">{{ content_top }}</div>
+		<div class="row">
+			{{ column_left }}
+		    {% if column_left and column_right %}
+		    {% set class = 'col-xl-6' %}
+		    {% elseif column_left or column_right %}
+		    {% set class = 'col-xl-9' %}
+		    {% else %}
+		    {% set class = 'col-xl-12' %}
+		    {% endif %}
+
+
+		    <div id="content" class="{{ class }}">
+				{% if order %}
+				<div class="success-top-wrapper">
+					<div class="success-top-title">✅ {{ top_title }}</div>
+					<div class="success-top-subtitle">{{ top_sub_title }}</div>
+				</div>
+				{% endif %}
+
+			    <div class="content-block p-3 p-md-4 mobile-no-radius">
+
+					<div style="max-width: 960px; margin: 0 auto;" class="dsadasdas" >
+						{% if order %}
+							<div id="order-id-{{ order.order_id }}" class="f-flex order-list-item order-id-{{ order.order_id }}" >
+
+								<div class="order-list-item-header-wrapper">
+									<div class="order-list-item-head justify-content-between">
+
+										{#										{{ order.view }}#}
+										<div class="order-list-item-head-info-1">
+											<div class="order-list-dark">
+												#{{ order.order_id }} від {{ order.date_added }}
+											</div>
+
+											{% if order.order_status %}
+												<div class="order-list-status br-8 order-status-id-{{ order.order_status_id }}">{{ order.order_status }}</div>
+											{% endif %}
+										</div>
+
+										<div class="order-list-item-head-info-2">
+											<div class="order-list-dark">Сума замовлення</div>
+											<div class="order-list-item-total">{{ order.total }}</div>
+										</div>
+
+										<div class="order-list-item-head-info-3">
+											{% for order_item in order.product_list %}
+												<a href="{{ order_item.link }}">
+													<img class="br-8" src="{{ order_item.img }}" alt="">
+												</a>
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+								<div class="order-list-item-body-wrapper">
+									<div class="order-list-item-body">
+										<div class="order-item-products">
+											{% for order_item in order.product_list %}
+												<div class="reorder reorder-product" data-id="{{ order_item.product_id }}"></div>
+												<div class="order-item-product">
+													<div class="order-item-product-image-wrapper">
+														<a href="{{ order_item.link }}" class="order-item-product-image">
+															<img class="br-12" src="{{ order_item.img }}" alt="">
+														</a>
+													</div>
+													<div class="order-item-product-content-wrapepr">
+														<div class="order-item-product-content">
+
+															<a href="{{ order_item.link }}" class="order-item-product-content-title">{{ order_item.name }}</a>
+
+															<div class="order-item-product-content-model">Код товару {{ order_item.model }}</div>
+															<div class="order-item-product-content-prices">
+																{% if order_item.original_price > order_item.price %}
+																	<div class="sc-module-price-km">
+																		<div class="sc-module-price-km-prices">
+																			<div class="km-price-linethrow fw-400">{{ order_item.original_price_text }}</div>
+																			<div class="km-price-special">{{ order_item.price_text }}</div>
+																		</div>
+																		<div class="sc-module-price-km-usdt fw-400">
+																			{{ order_item.usdt_price}} usdt
+																		</div>
+																	</div>
+																{% else %}
+																	<div class="sc-module-price-km">
+																		<div class="sc-module-price-km-prices">
+																			<div class="km-price-regular fw-500">{{ order_item.price_text }}</div>
+																		</div>
+																		<div class="sc-module-price-km-usdt fw-400">
+																			{{ order_item.usdt_price}} usdt
+																		</div>
+																	</div>
+																{% endif %}
+																{#																		{{ order_item.total }}#}
+															</div>
+														</div>
+													</div>
+
+												</div>
+											{% endfor %}
+										</div>
+										<div class="order-info">
+											<div class="d-flex order-info-list w-65">
+												<div class="order-info-item">
+													<div class="order-info-item-name">{{ success_name }}</div>
+													<div class="order-info-item-value">{{ order.shipping_firstname }}</div>
+												</div>
+												<div class="order-info-item">
+													<div class="order-info-item-name">{{ success_lastname }}</div>
+													<div class="order-info-item-value">{{ order.shipping_lastname }}</div>
+												</div>
+												<div class="order-info-item">
+													<div class="order-info-item-name">{{ success_email }}</div>
+													<div class="order-info-item-value">{{ order.email }}</div>
+												</div>
+												<div class="order-info-item">
+													<div class="order-info-item-name">{{ success_phone }}</div>
+													<div class="order-info-item-value">{{ order.telephone }}</div>
+												</div>
+												<div class="order-info-item">
+													<div class="order-info-item-name">{{ success_delivery }}</div>
+													<div class="order-info-item-value">{{ order.shipping_address_1 }}</div>
+												</div>
+											</div>
+
+											<div class="d-flex order-info-list w-35">
+
+												<div class="order-info-item">
+													<div class="order-info-item-name">{{ success_delivery_price }}</div>
+													<div class="order-info-item-value">{{ order.total }}</div>
+												</div>
+
+												<div class="order-info-item">
+													<div class="order-info-item-name">{{ success_special }}</div>
+													<div class="order-info-item-value">{{ order.sale_count }}</div>
+												</div>
+
+
+												<div class="order-info-item">
+													<div class="order-info-item-name">{{ success_total }}</div>
+													<div class="order-info-item-value">{{ order.total }}</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+							<script>
+								function reorder(order_id = 0) {
+									$('#order-id-'+order_id+' .reorder-product').each(function () {
+										let product_id = $(this).attr('data-id');
+										cart.add(product_id, 1)
+									});
+								}
+
+								$('.order-list-item-exapnd').click(function(){
+									$(this).toggleClass('active');
+									$(this).closest('.order-list-item').find('.order-list-item-body-wrapper').toggleClass('hidden');
+								});
+							</script>
+
+
+							<div class="bottom-buttons">
+								{% if logged %}
+									<a class="bottom-buttons-cabinet br-12" href="{{ orders_link }}">{{ go_to_my_orders }}</a>
+								{% endif %}
+								<a class="bottom-buttons-home br-12" href="{{ home_link }}">{{ continute_shopping }}</a>
+							</div>
+						{% else %}
+							<div class="fw-500">
+								{{ text_message }}
+							</div>
+						{% endif %}
+					</div>
+
+
+			    </div>
+		    </div>
+		    {{ column_right }}
+		</div>
+		{{ content_bottom }}
+	</main>
+</div>
+{% if ((oct_analytics_google_ecommerce is defined and oct_analytics_google_ecommerce == "on") and (oct_analytics_order_id is defined and oct_analytics_order_id)) %}
+<script>
+window.dataGoogleLayer = window.dataGoogleLayer || [];
+dataGoogleLayer = {{ toGoogle }};
+if(typeof dataGoogleLayer != 'undefined') {
+gtag('event', 'purchase', dataGoogleLayer);
+}
+</script>
+{% endif %}
+{{ footer }}

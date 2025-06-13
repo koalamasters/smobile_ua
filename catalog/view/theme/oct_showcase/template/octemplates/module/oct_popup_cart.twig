@@ -1,0 +1,650 @@
+{% if isPopup is defined and isPopup %}
+	<div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-cart">
+			<div class="modal-content">
+				<div class="modal-header km-p-4">
+					<h5 class="modal-title fsz-32 d-flex align-items-center justify-content-between" id="cartModalLabel">{{ heading_title }}</h5>
+					<a class="modal-go-cart" href="{{ cart_link }}">{{ text_go_to_cart }}</a>
+					<button type="button" class="btn-close modal-cart-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body position-relative p-0">
+					<div>
+						{% if products or vouchers %}
+							<div id="modalCartBody">
+
+								{#								<div class="pb-3 fsz-14 fw-500 dark-text text-center">#}
+								{#									<div>{{ text_cart_items }}</div>#}
+								{#									<a href="{{ cart_link }}" class="blue-link d-block text-center fsz-14 fw-500">{{ button_cart }}</a>#}
+								{#								</div>#}
+
+								<div class="cehcked-items-wrapper pt-4 pb-4">
+{#									<div class="cehcked-items">#}
+{#										<input type="checkbox" class="popup-cart-item-checkbox-all">#}
+{#										{{ text_checked }} <span id="checked">0</span> з <span id="full-count">{{ products|length }}</span>#}
+{#									</div>#}
+
+									<div class="cehcked-actions">
+{#										<div class="cehcked-action-item cehcked-action-item-wishist" onclick="addCheckedCartProductsWishlist()">#}
+{#											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">#}
+{#												<path d="M20.8401 4.60987C20.3294 4.09888 19.7229 3.69352 19.0555 3.41696C18.388 3.14039 17.6726 2.99805 16.9501 2.99805C16.2276 2.99805 15.5122 3.14039 14.8448 3.41696C14.1773 3.69352 13.5709 4.09888 13.0601 4.60987L12.0001 5.66987L10.9401 4.60987C9.90843 3.57818 8.50915 2.99858 7.05012 2.99858C5.59109 2.99858 4.19181 3.57818 3.16012 4.60987C2.12843 5.64156 1.54883 7.04084 1.54883 8.49987C1.54883 9.95891 2.12843 11.3582 3.16012 12.3899L4.22012 13.4499L12.0001 21.2299L19.7801 13.4499L20.8401 12.3899C21.3511 11.8791 21.7565 11.2727 22.033 10.6052C22.3096 9.93777 22.4519 9.22236 22.4519 8.49987C22.4519 7.77738 22.3096 7.06198 22.033 6.39452C21.7565 5.72706 21.3511 5.12063 20.8401 4.60987Z" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>#}
+{#											</svg>#}
+{#										</div>#}
+
+
+										<div class="cehcked-action-item cehcked-action-item-cart" onclick="clearCart()">
+											{{ clear_cart }}
+										</div>
+									</div>
+
+								</div>
+
+
+								<div class="modal-body-cart-items mb-3 km-p-4">
+									{% for product in products %}
+										<div class="popup-cart-item p-3">
+											<div class="d-flex">
+
+{#												<div class="popup-cart-checkbox-item">#}
+{#													<input type="checkbox" name="popup-cart-item-checkbox" class="popup-cart-item-checkbox" value="{{ product.product_id }}" data-product-id="{{ product.product_id }}">#}
+{#												</div>#}
+												<div class="popup-cart-image-wrapper d-flex flex-column">
+													{% if product.thumb %}
+														<img class="popup-cart-image" src="{{ product.thumb }}" alt="{{ product.name }}"/>
+													{% endif %}
+												</div>
+												<div class="sidebar-cart-item-right fsz-12 ps-3 flex-grow-1">
+													<div class="sidebar-cart-info">
+														<div class="sidebar-cart-item-title fw-500 fsz-14">
+															<a href="{{ product.href }}">{{ product.name }}</a>
+															<div class="popup-cart-product-model">{{ text_product_code }}: {{ product.model }}</div>
+
+															{#															<div class="popup-cart-product-model">{{ product.total }}</div>#}
+
+															{% if product.special > 0 %}
+																<div class="sc-module-price-km">
+																	<div class="sc-module-price-km-prices">
+																		<div class="km-price-linethrow">{{ product.price_text }}</div>
+																		<div class="km-price-special">{{ product.special_text }}</div>
+																	</div>
+																	<div class="sc-module-price-km-usdt">
+																		{{ product.usdt }} usdt
+																	</div>
+																</div>
+															{% else %}
+																<div class="sc-module-price-km">
+																	<div class="sc-module-price-km-prices">
+																		<div class="km-price-regular fw-500">{{ product.price_text }}</div>
+																	</div>
+																	<div class="sc-module-price-km-usdt">
+																		{{ product.usdt }} usdt
+																	</div>
+																</div>
+															{% endif %}
+
+
+															{% if not product.stock %}
+																<span class="required">***</span>
+															{% endif %}
+														</div>
+
+														{% if product.option %}
+															{% for option in product.option %}
+																<div class="sidebar-cart-item-option"><span class="dark-text">{{ option.name }}:</span> {{ option.value }}</div>
+															{% endfor %}
+														{% endif %}
+													</div>
+													<div class="sidebar-cart-item-buttons d-flex align-items-center justify-content-between flex-grow-1 pt-3 mt-auto">
+														<div class="sc-module-quantity d-flex align-items-center justify-content-center br-12">
+															<input name="product_id_q" value="{{ product.product_id }}" type="hidden" />
+															<input name="product_id" value="{{ product.key }}" type="hidden" />
+															<input name="product_stock_{{ product.key }}" id="product_stock_{{ product.key }}" value="{{ product.quantity_product }}" type="hidden" />
+															<input name="product_key" value="{{ product.key }}" style="display: none;" hidden />
+
+															<button
+																	type="button"
+																	class="product-quanitity-{{ product.quantity }} sc-module-quantity-btn d-flex align-items-center justify-content-center"
+
+																	{% if product.quantity == 1 %}
+																		onclick="remove(this, 'remove'); return false;"
+																	{% else %}
+																		onclick="update_manual('#main-quantity-val-{{ product.key }}', 'minus', '{{ product.key }}'); return validate('#main-quantity-val-{{ product.key }}');"
+																	{% endif %}
+
+															>
+
+																{% if product.quantity == 1 %}
+																	<svg  xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" x="0" y="0" viewBox="0 0 48 48" style="enable-background:new 0 0 512 512;width: 20px;height: 18px;" xml:space="preserve" class="hover-red"><g><g data-name="Recycle Bin"><path d="M39 6h-9V5a3 3 0 0 0-3-3h-7a3 3 0 0 0-3 3v1H9a3 3 0 0 0-3 3v2a3 3 0 0 0 2.025 2.824l.854 27.332a4.977 4.977 0 0 0 5 4.844h20.244a4.977 4.977 0 0 0 5-4.844l.854-27.332A3 3 0 0 0 42 11V9a3 3 0 0 0-3-3zM19 5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v1h-9zm18.122 36.094a2.987 2.987 0 0 1-3 2.906H13.877a2.987 2.987 0 0 1-3-2.906L10.032 14h27.936zM40 11a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h30a1 1 0 0 1 1 1z" fill="#c0c0c0" opacity="1" data-original="#000000" class=""></path><path d="M24 19a1 1 0 0 0-1 1v18a1 1 0 0 0 2 0V20a1 1 0 0 0-1-1zM31.028 19a.972.972 0 0 0-1.028.972l-.5 18A1 1 0 0 0 30.472 39h.028a1 1 0 0 0 1-.972l.5-18A1 1 0 0 0 31.028 19zM16.972 19A1 1 0 0 0 16 20.028l.5 18a1 1 0 0 0 1 .972h.028a1 1 0 0 0 .972-1.028l-.5-18A1 1 0 0 0 16.972 19z" fill="#c0c0c0" opacity="1" data-original="#000000" class=""></path></g></g></svg>
+																{% else %}
+																	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+																		<path d="M18 12.498H6C5.86739 12.498 5.74022 12.4454 5.64645 12.3516C5.55268 12.2578 5.5 12.1307 5.5 11.998C5.5 11.8654 5.55268 11.7383 5.64645 11.6445C5.74022 11.5507 5.86739 11.498 6 11.498H18C18.1326 11.498 18.2598 11.5507 18.3536 11.6445C18.4473 11.7383 18.5 11.8654 18.5 11.998C18.5 12.1307 18.4473 12.2578 18.3536 12.3516C18.2598 12.4454 18.1326 12.498 18 12.498Z" fill="#407CB2" stroke="#407CB2"/>
+																	</svg>
+																{% endif %}
+
+
+
+															</button>
+
+
+															<input type="text" name="quantity" class="form-control br-l-0" id="main-quantity-val-{{ product.key }}" value="{{ product.quantity }}" onchange="update_manual('#main-quantity-val-{{ product.key }}', 'manual', '{{ product.key }}'); return validate('#main-quantity-val-{{ product.key }}');" keypress="update_manual('#main-quantity-val-{{ product.key }}', '', '{{ product.key }}'); return validate('#main-quantity-val-{{ product.key }}');" inputmode="numeric">
+															<button type="button" class="sc-module-quantity-btn d-flex align-items-center justify-content-center" onclick="update_manual('#main-quantity-val-{{ product.key }}', 'plus', '{{ product.key }}'); return validate('#main-quantity-val-{{ product.key }}');">
+																<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path d="M13 12.498H12.5V12.998V17.998C12.5 18.1307 12.4473 18.2578 12.3536 18.3516C12.2598 18.4454 12.1326 18.498 12 18.498C11.8674 18.498 11.7402 18.4454 11.6464 18.3516C11.5527 18.2578 11.5 18.1307 11.5 17.998V12.998V12.498H11H6C5.86739 12.498 5.74022 12.4454 5.64645 12.3516C5.55268 12.2578 5.5 12.1307 5.5 11.998C5.5 11.8654 5.55268 11.7383 5.64645 11.6445C5.74022 11.5507 5.86739 11.498 6 11.498H11H11.5V10.998V5.99805C11.5 5.86544 11.5527 5.73826 11.6464 5.64449C11.7402 5.55073 11.8674 5.49805 12 5.49805C12.1326 5.49805 12.2598 5.55073 12.3536 5.64449C12.4473 5.73826 12.5 5.86544 12.5 5.99805V10.998V11.498H13H18C18.1326 11.498 18.2598 11.5507 18.3536 11.6445C18.4473 11.7383 18.5 11.8654 18.5 11.998C18.5 12.1307 18.4473 12.2578 18.3536 12.3516C18.2598 12.4454 18.1326 12.498 18 12.498H13Z" fill="#407CB2" stroke="#407CB2"/>
+																</svg>
+
+															</button>
+														</div>
+														<input name="product_key" value="{{ product.key }}" style="display: none;" hidden />
+														<input name="product_id_q" value="{{ product.product_id }}" style="display: none;" hidden />
+{#														<div  class="popup-cart-item-delete" onclick="remove(this, 'remove'); return false;">#}
+{#															{{ text_delete }}#}
+{#														</div>#}
+														<span class="popup-cart-item-wish" onclick="wishlist.add('{{ product.product_id }}');"></span>
+													</div>
+												</div>
+											</div>
+										</div>
+									{% endfor %}
+
+
+
+									{% for voucher in vouchers %}
+										<div class="d-flex align-items-center">
+											<div class="rm-cart-text">{{ voucher.description }}</div>
+											<button type="button" class="sc-btn sc-btn-danger sc-btn-with-icon br-4" onclick="voucher.remove('{{ voucher.key }}');">
+												<span class="rm-btn-icon"></span>
+											</button>
+										</div>
+									{% endfor %}
+									{% if error_warning %}
+										<div class="required mt-3">*** {{ error_warning }}</div>
+									{% endif %}
+								</div>
+
+
+								<div class="popup-cart-total km-p-4">
+									<div class="popup-cart-total-text">{{ total }}</div>
+									<div class="popup-cart-total-value">{{ cart_total }} грн</div>
+								</div>
+							</div>
+
+
+
+							<div class="modal-cart-bottom km-p-4">
+								<div class="row">
+									<div class="col-md-6">
+										{% if oct_byoneclick is defined and oct_byoneclick %}
+											{{ oct_byoneclick }}
+										{% endif %}
+									</div>
+
+									<div class="col-md-6">
+										<a href="{{ checkout_link }}" class="br-8 h-48 km-cart-button-order sc-btn sc-btn-primary br-4 w-100 text-decoration-none">{{ button_checkout }}</a>
+										<script>
+											$('#cartModal .km-cart-button-order').on('click', function() {
+												fbq('track', 'InitiateCheckout');
+											});
+										</script>
+										<button id="mono_checkout_cart_page" class="br-8 h-48 mono_checkout__button mono_checkout__button--black">
+											Оформити з
+											<img src="catalog/view/theme/default/image/mono_checkout/monocheckout_logo_white.svg" alt="button_logo"></button>
+										<script>
+											$('#cartModal #mono_checkout_cart_page').on('click', function() {
+												var monoCheckoutTotalSum = $('#modalCartBody .popup-cart-total-value').text().replaceAll('грн', '').replaceAll(' ', '').trim();
+												fbq('track', 'mono_checkout', {
+													currency: "UAH",
+													value: Number(monoCheckoutTotalSum)
+												});
+											});
+										</script>
+									</div>
+
+								</div>
+
+								{% if product_related_cart %}
+									<div class="cart-reated-title">
+										Також вас можуть зацікавити
+									</div>
+
+									<div class="row gy-2 g-sm-2 sc-module sc-category-products km-category-products km-modif-product-moudle-list">
+
+										{% for product in product_related_cart %}
+											<div class="product-layout sc-module-col product-grid " data-pid="{{ product.product_id }}">
+												<div class="content-block h-100 d-flex flex-column p-0 bg-unset {% if product.oct_grayscale %} sc-no-stock{% endif %}">
+													<div class="{# sc-module-img #} position-relative mb-12 product-cat-img-wrapper">
+														<a href="{{ product.href }}" title="{{ product.name }}">
+															<img
+																	src="{{ product.thumb }}"
+																	{% if oct_lazyload is defined and oct_lazyload %}
+																		data-srcset="{{ product.thumb }} 100w"
+																		srcset="{{ oct_lazy_image }} 100w"
+																		sizes="100vw"
+																		class="img-fluid oct-lazy aspect-r-3-4 aspect-r-3-4-cover"
+																	{% else %}
+																		class="img-fluid aspect-r-3-4 aspect-r-3-4-cover"
+																	{% endif %}
+																	alt="{{ product.name }}"
+																	width="{{ product.width }}"
+																	height="{{ product.height }}"/>
+														</a>
+														<div class="sc-module-stickers d-flex flex-d-col mt-3">
+															{% if oct_sticker_you_save and product.you_save %}
+																<div class="sc-module-sticker br-4 fsz-10 fw-500 sc-module-sticker-red sc-module-sticker-infinity">{{ product.you_save }}</div>
+															{% endif %}
+
+															{% if not product.quantity %}
+																<div class="sc-module-sticker br-4 fsz-10 fw-500 sc-module-sticker-green sc-module-sticker-infinity hidden">{{ oct_product_stock }}</div>
+															{% endif %}
+
+															{% if product.oct_stickers is not empty %}
+																{% for key, oct_sticker in product.oct_stickers %}
+																	{% if oct_sticker is not empty and oct_sticker is iterable %}
+																		<div class="sc-module-sticker sc-module-sticker-image pe-0 py-0 order-1">
+																			<img src="{{ oct_sticker.image }}" alt="{{ oct_sticker.title }}" data-bs-html="true" data-bs-placement="top" data-bs-toggle="popover" data-bs-trigger="hover" title="{{ oct_sticker.title }}" data-bs-content="{{ oct_sticker.description }}" width="24" height="24" />
+																		</div>
+																	{% elseif oct_sticker is not empty %}
+																		<div class="sc-module-sticker br-4 fsz-10 fw-500 sc-module-sticker-{{ key }} order-0">
+																			{{ oct_sticker }}
+																		</div>
+																	{% endif %}
+																{% endfor %}
+															{% endif %}
+														</div>
+
+
+
+														{% if product.can_buy is not empty and product.can_buy %}
+															<button data-product-id="{{ product.product_id }}" type="button" aria-label="To cart" class="km-grid-add-to-cart-small sc-btn sc-btn-with-icon br-4 sc-module-cart-btn">
+																<svg width="16" height="21" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path d="M11.25 5.94922V6.69922H12H15C15.0663 6.69922 15.1299 6.72556 15.1768 6.77244C15.2237 6.81933 15.25 6.88291 15.25 6.94922V17.9492C15.25 18.546 15.0129 19.1183 14.591 19.5402C14.169 19.9622 13.5967 20.1992 13 20.1992H3C2.40326 20.1992 1.83097 19.9622 1.40901 19.5402C0.987053 19.1183 0.75 18.546 0.75 17.9492V6.94922C0.75 6.88292 0.776339 6.81933 0.823223 6.77244C0.870108 6.72556 0.933697 6.69922 1 6.69922H4H4.75V5.94922V4.94922C4.75 4.08727 5.09241 3.26061 5.7019 2.65112C6.3114 2.04163 7.13805 1.69922 8 1.69922C8.86195 1.69922 9.6886 2.04163 10.2981 2.65112C10.9076 3.26061 11.25 4.08727 11.25 4.94922V5.94922ZM10 6.69922H10.75V5.94922V4.94922C10.75 4.21987 10.4603 3.5204 9.94454 3.00468C9.42882 2.48895 8.72935 2.19922 8 2.19922C7.27065 2.19922 6.57118 2.48895 6.05546 3.00467C5.53973 3.5204 5.25 4.21987 5.25 4.94922V5.94922V6.69922H6H10ZM2 7.19922H1.25V7.94922V17.9492C1.25 18.4133 1.43437 18.8585 1.76256 19.1867C2.09075 19.5148 2.53587 19.6992 3 19.6992H13C13.4641 19.6992 13.9092 19.5148 14.2374 19.1867C14.5656 18.8585 14.75 18.4133 14.75 17.9492V7.94922V7.19922H14H12H11.25V7.94922V8.94922C11.25 9.01552 11.2237 9.07911 11.1768 9.126C11.1299 9.17288 11.0663 9.19922 11 9.19922C10.9337 9.19922 10.8701 9.17288 10.8232 9.126C10.7763 9.07911 10.75 9.01552 10.75 8.94922V7.94922V7.19922H10H6H5.25V7.94922V8.94922C5.25 9.01552 5.22366 9.07911 5.17678 9.126C5.12989 9.17288 5.0663 9.19922 5 9.19922C4.9337 9.19922 4.87011 9.17288 4.82322 9.126C4.77634 9.07911 4.75 9.01552 4.75 8.94922V7.94922V7.19922H4H2Z" stroke="#001F3F" stroke-width="1.5"/>
+																</svg>
+															</button>
+															<input type="hidden" name="product_id" value="{{ product.product_id }}" />
+															<script>
+																$('.modal-cart-bottom .km-grid-add-to-cart-small[data-product-id="{{ product.product_id }}"]').on('click', function() {
+																	fbq('track', 'AddToCart', {
+																		content_type: 'product',
+																		content_ids: ['{{ product.product_id }}'],
+																		value: {{ product.special is defined and product.special ? product.special | number_format(2, '.', '') : product.price | number_format(2, '.', '') }},
+																		currency: 'UAH'
+																	});
+																});
+															</script>
+														{% endif %}
+
+													</div>
+													<div class="sc-module-caption d-flex flex-column justify-content-between h-100 max-w-100">
+														<div class="sc-module-info">
+															<a href="{{ product.href }}" class="sc-module-title dark-text fw-500 fsz-16 mt-0 mb5">{{ product.name }}</a>
+															<div class="sc-module-product-info">
+
+																{% if product.oct_model is not empty %}
+																	<div class="sc-module-model light-text fsz-16"><span>{{ oct_view_model_cat }}</span>{{ product.oct_model }}</div>
+																{% endif %}
+
+															</div>
+														</div>
+
+														<div class="sc-module-price-km">
+															<div class="sc-module-price-km-prices">
+																{% if not product.special %}
+																	<div class="km-price-regular fw-500">{{ product.price }}</div>
+																{% else %}
+																	<div class="km-price-linethrow fw-400">{{ product.price }}</div>
+																	<div class="km-price-special">{{ product.special }}</div>
+																{% endif %}
+															</div>
+															<div class="sc-module-price-km-usdt fw-400">
+																{{ product.usdt_price }} usdt
+															</div>
+														</div>
+
+													</div>
+													{% if product.can_buy != 1 %}
+
+														<button style="width: 100%!important;" onclick="octStockNotifier('{{ product.product_id }}');" type="button" class="fsz-12 sc-btn sc-btn-primary br-4 sc-stock-notifier-btn">
+															<span class="sc-btn-text">{{ oct_stock_notifier_text }}</span>
+														</button>
+
+													{% endif %}
+
+													{% if product.oct_atributes is defined and product.oct_atributes %}
+														<div class="sc-category-attr p-3 fsz-10 dark-text d-none d-md-block">
+															{% for attribute in product.oct_atributes %}
+																<div class="sc-category-attr-item">
+																	<span class="fw-500">{{ attribute.name }}:</span> {{ attribute.text }}
+																</div>
+															{% endfor %}
+														</div>
+													{% endif %}
+												</div>
+											</div>
+										{% endfor %}
+
+
+									</div>
+								{% endif %}
+
+								<div class="modal-cart-bottom-buttons">
+									<div class="modal-cart-bottom-buttons-wrapper mt-3">
+
+										{#								<button id="mono_checkout_product_page" class="mono_checkout__button mono_checkout__button--black"><img src="catalog/view/theme/default/image/mono_checkout/monocheckout_logo_white.svg" alt="button_logo"></button>#}
+
+
+									</div>
+									<button type="button" class="km-cart-button-cart" data-bs-dismiss="modal">
+
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M19 12H5" stroke="#407CB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+											<path d="M12 5L5 12L12 19" stroke="#407CB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+										</svg>
+
+										{{ button_shopping }}
+									</button>
+								</div>
+							</div>
+						{% else %}
+							<div class="empty-popup-cart text-center" id="modalCartBody">
+								<img src="catalog/view/theme/oct_showcase/img/empty-cart.svg">
+								<div class="empty-popup-cart-text">{{ text_empty }}</div>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			//popup_cart_one_click
+			function showInput() {
+				$('#popup_cart_one_click').fadeOut(1);
+				$('.hidden-input-group').fadeIn(300).css('height', '44px');
+			}
+
+			// validate input value
+			function validate(input) {
+				$(input).val($(input).val().replace(/[^\d,]/g, ''));
+			}
+
+			// remove product from cart
+			function remove(target, status) {
+				product_key  = $(target).parent().find('input[name="product_key"]').val(),
+						url = null;
+				if (status == 'remove') {
+					url = 'index.php?route=octemplates/module/oct_popup_cart&isPopup=1&remove=' + product_key;
+				}
+				masked('body', true);
+				$.ajax({
+					url: url,
+					type: 'get',
+					dataType: 'html',
+					cache: false,
+					success: function(data) {
+
+						$.ajax({
+							url: 'index.php?route=octemplates/module/oct_popup_cart/status_cart',
+							type: 'get',
+							dataType: 'json',
+							cache: false,
+							success: function(json) {
+								masked('body', false);
+
+								if(data){
+
+									let cartIdsHolder = document.querySelector("[data-cart-ids]");
+
+									if (json.oct_cart_ids && cartIdsHolder) {
+										cartIdsHolder.dataset.cartIds = json.oct_cart_ids;
+										setCartBtnAdded(updateOk = true);
+									} else {
+										if (cartIdsHolder) {
+											cartIdsHolder.dataset.cartIds = '';
+										}
+										setCartBtnAdded(updateOk = true);
+									}
+
+									let parser = new DOMParser(),
+											dataParsed = parser.parseFromString(data, 'text/html'),
+											checkEmptyCart = dataParsed.querySelector('.empty-popup-cart'),
+											modalCartBottom = document.querySelector('.modal-cart-bottom');
+
+									const modalCartInner = document.getElementById('modalCartBody');
+									const dataParsedCartInner = dataParsed.getElementById('modalCartBody').outerHTML;
+
+									if (checkEmptyCart) {
+										modalCartBottom.classList.add('d-none');
+									}
+
+									modalCartInner.innerHTML = dataParsedCartInner;
+
+								}
+								// Need to set timeout otherwise it wont update the total
+								setTimeout(function () {
+									$('#cart .header-buttons-cart-quantity').html(json['total_products']);
+								}, 100);
+							}
+						});
+					}
+				});
+
+			}
+
+			// update quantity function
+			function update_manual(target, change, productID) {
+				let input_val = $(target).val(),
+						quantity  = parseInt(input_val),
+						changeQuantity;
+
+				// check quantity
+				if (quantity <= 0) {
+					quantity = $(target).val(1);
+				} else if (change === 'minus') {
+					changeQuantity = quantity-1;
+				} else if (change === 'plus') {
+					changeQuantity = quantity+1;
+				} else {
+					changeQuantity = quantity;
+				}
+				changeQuantity = (changeQuantity > 0) ? changeQuantity : 1;
+
+				// show loading mask
+				masked('body', true);
+
+				// check minimum
+				let minimum = '{{ product_minimum }}';
+				if(changeQuantity < minimum) changeQuantity = minimum;
+
+				// check stock order
+				let productStock = $('#product_stock_' + productID).val();
+				let productStockCheckout = '{{ product_stock_checkout }}';
+
+				if (productStockCheckout == false) {
+					if (changeQuantity > productStock) {
+						scNotify('danger', '{{ error_stock }}');
+						masked('body', false);
+						if(productStock != 0) quantity = $(target).val(productStock);
+						changeQuantity = productStock;
+					}
+				}
+
+				$.ajax({
+					url: 'index.php?route=octemplates/module/oct_popup_cart&isPopup=1&update=' + productID + '&quantity=' + changeQuantity,
+					type: 'get',
+					dataType: 'html',
+					cache: false,
+					success: function(data) {
+						$.ajax({
+							url: 'index.php?route=octemplates/module/oct_popup_cart/status_cart',
+							type: 'get',
+							dataType: 'json',
+							cache: false,
+							success: function(json) {
+								if(data){
+									let parser = new DOMParser(),
+											dataParsed = parser.parseFromString(data, 'text/html');
+
+									const modalCartInner = document.getElementById('modalCartBody');
+									const dataParsedCartInner = dataParsed.getElementById('modalCartBody').outerHTML;
+
+									modalCartInner.innerHTML = dataParsedCartInner;
+
+								}
+								// Need to set timeout otherwise it wont update the total
+								setTimeout(function () {
+									$('#cart .header-buttons-cart-quantity').html(json['total_products']);
+									masked('body', false);
+								}, 100);
+							}
+						});
+					}
+				});
+			}
+
+
+			function updatePopUpCart(){
+
+				var url = null;
+				url = 'index.php?route=octemplates/module/oct_popup_cart&isPopup=1';
+				$.ajax({
+					url: url,
+					type: 'get',
+					dataType: 'html',
+					cache: false,
+					success: function(data) {
+
+						$.ajax({
+							url: 'index.php?route=octemplates/module/oct_popup_cart/status_cart',
+							type: 'get',
+							dataType: 'json',
+							cache: false,
+							success: function(json) {
+								masked('body', false);
+
+								if(data){
+
+									let cartIdsHolder = document.querySelector("[data-cart-ids]");
+
+									if (json.oct_cart_ids && cartIdsHolder) {
+										cartIdsHolder.dataset.cartIds = json.oct_cart_ids;
+										setCartBtnAdded(updateOk = true);
+									} else {
+										if (cartIdsHolder) {
+											cartIdsHolder.dataset.cartIds = '';
+										}
+										setCartBtnAdded(updateOk = true);
+									}
+
+									let parser = new DOMParser(),
+											dataParsed = parser.parseFromString(data, 'text/html'),
+											checkEmptyCart = dataParsed.querySelector('.empty-popup-cart'),
+											modalCartBottom = document.querySelector('.modal-cart-bottom');
+
+									const modalCartInner = document.getElementById('modalCartBody');
+									const dataParsedCartInner = dataParsed.getElementById('modalCartBody').outerHTML;
+
+									if (checkEmptyCart) {
+										modalCartBottom.classList.add('d-none');
+									}
+
+									modalCartInner.innerHTML = dataParsedCartInner;
+
+								}
+								// Need to set timeout otherwise it wont update the total
+								setTimeout(function () {
+									$('#cart .header-buttons-cart-quantity').html(json['total_products']);
+								}, 100);
+							}
+						});
+					}
+				})
+			}
+
+
+			if($('#cartModal .km-category-products').length) {
+
+				setTimeout(function () {
+					$('#cartModal .km-category-products').slick({
+						autoplay: false,
+						dots: true,
+						centerMode: false,
+						arrows: true,
+						infinite: true,
+						// autoplaySpeed: 3500,
+						slidesToScroll: 2,
+						slidesToShow: 4,
+						prevArrow: '<button type="button" class="slick-custom-arrow slick-prev"><svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1L1 6L6 11" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>',
+						nextArrow: '<button type="button" class="slick-custom-arrow slick-next"><svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L6 6L1 11" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>',
+						responsive: [
+							{
+								breakpoint: 1441,
+								settings: {
+									slidesToScroll: 2,
+									slidesToShow: 4,
+								}
+							},
+							{
+								breakpoint: 1201,
+								settings: {
+									slidesToScroll: 2,
+									slidesToShow: 3,
+								}
+							}, {
+								breakpoint: 769,
+								settings: {
+									slidesToScroll: 3,
+									slidesToShow: 3,
+								}
+							},
+							{
+								breakpoint: 500,
+								settings: {
+									slidesToScroll: 2,
+									slidesToShow: 2,
+								}
+							},
+						]
+					});
+				}, 225);
+			}
+			$('.popup-cart-item-checkbox:checked').each(function(){
+				let product_id = $(this).attr('data-product-id');
+				console.log(productId)
+			});
+
+
+
+			function updateCheckedCart(){
+				$('#checked').text($('.popup-cart-item-checkbox:checked').length)
+			}
+
+
+			function deleteCheckedCartProducts(){
+				$('.popup-cart-item-checkbox:checked').each(function(){
+					console.log($(this))
+					$(this).closest('.popup-cart-item').find('.popup-cart-item-delete').click();
+				});
+			}
+
+			function addCheckedCartProductsWishlist(){
+				$('.popup-cart-item-checkbox:checked').each(function(){
+					console.log($(this))
+					$(this).closest('.popup-cart-item').find('.popup-cart-item-wish').click();
+				});
+			}
+
+			$(document).on('click', '.popup-cart-item-checkbox', function(){
+				updateCheckedCart()
+			});
+
+
+			$('.popup-cart-item-checkbox-all').click(function(){
+				if($(this).prop('checked')){
+					$('.popup-cart-item-checkbox').prop('checked', true);
+				}else{
+					$('.popup-cart-item-checkbox').prop('checked', false);
+				}
+				updateCheckedCart()
+			});
+
+		</script>
+	</div>
+{% endif %}
+

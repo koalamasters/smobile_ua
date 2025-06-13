@@ -1,0 +1,581 @@
+<footer class="sc-footer">
+	<div class="container container-md">
+		<div class="sc-footer-top row flex-column flex-md-row">
+
+
+			{# <div class="w-auto footer-logo">
+				<img src="/image/newui/white-logo.png" alt="Smobile">
+			</div> #}
+			
+			<div class="w-auto footer-logo">
+				{% if custom_logo_footer %}
+					<img src="{{ custom_logo_footer }}" alt="Smobile">
+				{% else %}
+					<img src="/image/newui/white-logo.png" alt="Smobile">
+				{% endif %}
+			</div>
+			
+
+			{#			{% if oct_contact_telephones is defined and oct_contact_telephones is not empty %}#}
+			{#			<div class="sc-footer-phones d-flex flex-column align-items-center align-items-md-start">#}
+			{#				<div class="sc-footer-title fw-500 text-uppercase d-flex align-items-center mb-3">#}
+			{#					<img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--footer-phones-title-icon" alt="" width="24" height="24" class="me-2">#}
+			{#					{{ oct_telephones }}#}
+			{#				</div>#}
+			{#				{% for oct_contact_telephone in oct_contact_telephones %}#}
+			{#				<a href="tel:{{ oct_contact_telephone|replace({" " : "", "-" : "", "(" : "", ")" : ""}) }}" class="fw-700">{{ oct_contact_telephone }}</a>#}
+			{#				{% endfor %}#}
+			{#			</div>#}
+			{#			{% endif %}#}
+
+
+			{% if oct_showcase_data.socials is defined and oct_showcase_data.socials is not empty %}
+				<div class="d-flex w-auto flex-align-center km-social-footer">
+					<div class="sc-footer-title fw-400 d-flex">
+						{{ oct_footer_social_tex }}
+					</div>
+					<div class="d-flex footer-icon-wrapper footer-social-km-modif">
+						<a rel="noopener noreferrer" href="https://www.facebook.com/profile.php?id=61557461977532" class=" sc-footer-socials-item sc-footer-socials-item-fa-facebook-f d-flex align-items-center justify-content-center" target="_blank">
+							<svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M3.15518 18.0055V10.0719H0.485352V6.97998H3.15518V4.6998C3.15518 2.05366 4.77135 0.612793 7.13189 0.612793C8.26261 0.612793 9.23441 0.696978 9.51761 0.734605V3.49997L7.88045 3.50071C6.59666 3.50071 6.34809 4.11075 6.34809 5.00594V6.97998H9.40981L9.01116 10.0719H6.34809V18.0055H3.15518Z" fill="white"/>
+							</svg>
+
+						</a>
+
+						<a rel="noopener noreferrer" href="https://www.instagram.com/smobile_ua" class="sc-footer-socials-item sc-footer-socials-item-fa-instagram d-flex align-items-center justify-content-center" target="_blank">
+							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M10.0007 2.06751C12.5845 2.06751 12.8905 2.07719 13.9113 2.12373C14.525 2.13124 15.1329 2.24393 15.7085 2.45691C16.1259 2.6179 16.505 2.86451 16.8214 3.18087C17.1378 3.49724 17.3844 3.87634 17.5454 4.29378C17.7583 4.8694 17.871 5.47729 17.8785 6.09101C17.9246 7.11175 17.9348 7.41774 17.9348 10.0016C17.9348 12.5855 17.9251 12.8915 17.8785 13.9122C17.871 14.5259 17.7583 15.1338 17.5454 15.7094C17.3844 16.1269 17.1378 16.506 16.8214 16.8223C16.505 17.1387 16.1259 17.3853 15.7085 17.5463C15.1329 17.7593 14.525 17.872 13.9113 17.8795C12.891 17.9256 12.585 17.9357 10.0007 17.9357C7.41633 17.9357 7.11034 17.926 6.09006 17.8795C5.47634 17.872 4.86846 17.7593 4.29283 17.5463C3.87539 17.3853 3.49629 17.1387 3.17992 16.8223C2.86356 16.506 2.61695 16.1269 2.45596 15.7094C2.24298 15.1338 2.13029 14.5259 2.12278 13.9122C2.0767 12.8915 2.06656 12.5855 2.06656 10.0016C2.06656 7.41774 2.07624 7.11175 2.12278 6.09101C2.13029 5.47729 2.24298 4.8694 2.45596 4.29378C2.61695 3.87634 2.86356 3.49724 3.17992 3.18087C3.49629 2.86451 3.87539 2.6179 4.29283 2.45691C4.86846 2.24393 5.47634 2.13124 6.09006 2.12373C7.1108 2.07765 7.41679 2.06751 10.0007 2.06751ZM10.0007 0.32373C7.37393 0.32373 7.04306 0.33479 6.0108 0.381795C5.2076 0.397771 4.41292 0.549851 3.66057 0.831565C3.01518 1.07473 2.43061 1.45579 1.94767 1.94815C1.45485 2.43128 1.07347 3.01617 0.830155 3.66198C0.54844 4.41433 0.396361 5.209 0.380385 6.01221C0.334302 7.04354 0.323242 7.37442 0.323242 10.0011C0.323242 12.6279 0.334302 12.9588 0.381307 13.991C0.397283 14.7942 0.549362 15.5889 0.831076 16.3412C1.07412 16.987 1.45519 17.5719 1.94767 18.0551C2.43088 18.5475 3.01577 18.9286 3.66149 19.1717C4.41384 19.4534 5.20852 19.6054 6.01172 19.6214C7.04398 19.6675 7.37347 19.6795 10.0016 19.6795C12.6297 19.6795 12.9592 19.6684 13.9914 19.6214C14.7946 19.6054 15.5893 19.4534 16.3417 19.1717C16.9843 18.9225 17.5679 18.5421 18.0552 18.0545C18.5424 17.567 18.9225 16.9831 19.1712 16.3403C19.4529 15.588 19.605 14.7933 19.6209 13.9901C19.667 12.9588 19.6781 12.6279 19.6781 10.0011C19.6781 7.37442 19.667 7.04354 19.62 6.01129C19.604 5.20808 19.452 4.41341 19.1702 3.66106C18.9272 3.01533 18.5461 2.43045 18.0537 1.94723C17.5704 1.45475 16.9856 1.07369 16.3398 0.830643C15.5875 0.548929 14.7928 0.396849 13.9896 0.380873C12.9583 0.33479 12.6274 0.32373 10.0007 0.32373Z" fill="#FAFAFA"/>
+								<path d="M10.0028 5.03345C9.0199 5.03345 8.05908 5.32491 7.24184 5.87097C6.42459 6.41704 5.78763 7.19318 5.41149 8.10125C5.03536 9.00933 4.93694 10.0085 5.12869 10.9725C5.32045 11.9366 5.79375 12.8221 6.48876 13.5171C7.18377 14.2121 8.06927 14.6854 9.03327 14.8771C9.99728 15.0689 10.9965 14.9705 11.9046 14.5943C12.8126 14.2182 13.5888 13.5812 14.1348 12.764C14.6809 11.9467 14.9724 10.9859 14.9724 10.003C14.9724 8.68502 14.4488 7.42098 13.5168 6.48901C12.5848 5.55703 11.3208 5.03345 10.0028 5.03345ZM10.0028 13.2288C9.36479 13.2288 8.74111 13.0396 8.21063 12.6852C7.68015 12.3307 7.26669 11.8269 7.02253 11.2375C6.77838 10.6481 6.7145 9.99945 6.83897 9.37371C6.96344 8.74796 7.27066 8.17318 7.7218 7.72204C8.17294 7.27091 8.74772 6.96368 9.37347 6.83921C9.99921 6.71474 10.6478 6.77862 11.2373 7.02278C11.8267 7.26693 12.3305 7.68039 12.685 8.21087C13.0394 8.74135 13.2286 9.36503 13.2286 10.003C13.2286 10.8586 12.8887 11.6791 12.2838 12.284C11.6788 12.889 10.8583 13.2288 10.0028 13.2288Z" fill="#FAFAFA"/>
+								<path d="M15.1671 5.99739C15.8085 5.99739 16.3284 5.47746 16.3284 4.83609C16.3284 4.19473 15.8085 3.6748 15.1671 3.6748C14.5258 3.6748 14.0059 4.19473 14.0059 4.83609C14.0059 5.47746 14.5258 5.99739 15.1671 5.99739Z" fill="#FAFAFA"/>
+							</svg>
+
+						</a>
+
+						{#						{% for social in oct_showcase_data.socials %}#}
+						{#						<a rel="noopener noreferrer" href="{{ (social.link == "#" or social.link is empty) ? 'javascript:;' : social.link }}" class="hover-gradient sc-footer-socials-item sc-footer-socials-item-{{ social.icone|replace({'fa ': "", "fab " : "", "far " : "", "fas " : ""}) }} d-flex align-items-center justify-content-center" target="_blank">#}
+						{#							<i class="{{ social.icone }}"></i>#}
+						{#							{{ social.link }}#}
+						{#						</a>#}
+						{#						{% endfor %}#}
+					</div>
+				</div>
+			{% endif %}
+			<hr class="d-none d-md-inline-block d-xl-none order-1 mt-4">
+		</div>
+
+
+		<div class="sc-footer-middle row">
+			<hr class="mb-md-4">
+			{#			{% if informations %}#}
+			{#				<div class="col-md-8 col-xl-3">#}
+			{#					<div class="sc-footer-list sc-footer-middle-list">#}
+			{#						<div class="sc-footer-title fsz-14 text-uppercase mb-md-3 active">{{ text_information }}</div>#}
+			{#						<ul class="list-unstyled fsz-12 sc-footer-middle-info">#}
+			{#							{% for information in informations %}#}
+			{#							<li>#}
+			{#								<a href="{{ information.href }}" title="{{ information.title }}">{{ information.title }}</a>#}
+			{#							</li>#}
+			{#							{% endfor %}#}
+			{#						</ul>#}
+			{#					</div>#}
+			{#				</div>#}
+			{#			{% endif %}#}
+
+			<div class="d-flex justify-content-between footer-layer-1">
+				<div class="layer-1-item-1">
+					<div class="sc-footer-list sc-footer-middle-list">
+						<div class="sc-footer-title fsz-14 text-uppercase mb-md-3 active">Smobile
+							{#						{{ text_information }}#}</div>
+						<ul class="list-unstyled fsz-12 sc-footer-middle-info">
+							{% for information in informations_1 %}
+								<li>
+									<a class="fsz-14 fw-300" href="{{ information.href }}" title="{{ information.title }}">{{ information.title }}</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+
+				<div class="layer-1-item-2">
+					<div class="sc-footer-list sc-footer-middle-list">
+						<div class="sc-footer-title fsz-14 text-uppercase mb-md-3 active">{{ text_information_2 }}</div>
+						<ul class="list-unstyled fsz-12 sc-footer-middle-info">
+							{% for information in informations_2 %}
+								<li>
+									<a class="fsz-14 fw-300" href="{{ information.href }}" title="{{ information.title }}">{{ information.title }}</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+
+				{% if categories is defined and categories %}
+					<div class="col-md-4 col-xl-4">
+						<div class="sc-footer-list sc-footer-middle-list">
+							<div class="sc-footer-title fsz-14 text-uppercase mb-md-3 active">{{ oct_footer_category }}</div>
+							<ul class="list-unstyled fsz-12 sc-footer-middle-info">
+								{% for category in categories %}
+									<li>
+										<a href="{{ category.href }}" title="{{ category.name }}">{{ category.name }}</a>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				{% endif %}
+
+				<div class="layer-1-item-3">
+					<div class="sc-footer-middle-list">
+						<div class="sc-footer-title fsz-14 text-uppercase mb-md-3 active">{{ oct_our_address }}</div>
+						<div class="sc-footer-middle-info">
+							{% if oct_showcase_data.contact_address[oct_lang_id] is defined and oct_showcase_data.contact_address[oct_lang_id] %}
+								<div class="sc-footer-address fsz-14">{{ oct_showcase_data.contact_address[oct_lang_id] }}</div>
+							{% endif %}
+							{% if oct_showcase_data.contact_email is defined and oct_showcase_data.contact_email %}
+								<a href="mailto:{{ oct_showcase_data.contact_email }}" class="sc-footer-email fsz-14">{{ oct_showcase_data.contact_email }}</a>
+							{% endif %}
+							{% if oct_contact_opens is defined and oct_contact_opens is not empty %}
+								<div class="sc-footer-shedule fsz-14">
+									{% for oct_contact_open in oct_contact_opens %}
+										{{ oct_contact_open }}<br>
+									{% endfor %}
+								</div>
+							{% endif %}
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="d-flex justify-content-between footer-layer-2 " style="margin-top: 50px;">
+				<div class="footer-layer-2-phone layer-2-item-1">
+					<div class="sc-footer-title fsz-14 text-uppercase mb-15">Телефон</div>
+					<a class="fsz-24 color-fafafa" href="tel:+380678088989">+38 (067) 808 89-89</a>
+				</div>
+				<div class="footer-layer-2-wite-us layer-2-item-2">
+
+					<div class="sc-footer-title fsz-14 text-uppercase mb-15">Написати нам</div>
+					<ul class="list-unstyled fsz-12 sc-footer-middle-info" style="flex-direction: row">
+
+						<li class="d-flex align-items-center mb-2">
+							<a rel="noopener noreferrer" href="https://t.me/+380678088989" target="_blank">
+								<svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M4.59184 10.2966C4.63223 10.3093 4.67342 10.3192 4.71513 10.3262C4.97937 10.9636 5.24213 11.6017 5.5034 12.2404C5.97319 13.3897 6.44672 14.5734 6.55039 14.9137C6.68022 15.3325 6.81658 15.6175 6.96601 15.8125C7.04353 15.9119 7.13226 15.9999 7.23687 16.0668C7.29179 16.1009 7.35001 16.1291 7.41059 16.151C7.70946 16.2657 7.98218 16.2179 8.1531 16.1596C8.25345 16.1247 8.34891 16.0765 8.43703 16.0162L8.4417 16.0142L11.0811 14.3295L14.1306 16.7218C14.1754 16.7568 14.224 16.7865 14.2763 16.8107C14.6424 16.9732 14.9973 17.0306 15.3317 16.9847C15.6642 16.9369 15.9285 16.7945 16.1255 16.6329C16.3516 16.446 16.532 16.2076 16.6523 15.9368L16.6607 15.9158L16.6635 15.9081L16.6654 15.9043V15.9024L16.6663 15.9014C16.6816 15.86 16.6941 15.8175 16.7037 15.7743L19.4869 1.40839C19.4946 1.36225 19.499 1.31559 19.5 1.2688C19.5 0.848098 19.345 0.447479 18.9816 0.205577C18.6697 -0.00190305 18.3232 -0.0114645 18.1037 0.00574588C17.8683 0.0248685 17.6498 0.0841486 17.5032 0.131955C17.4212 0.15904 17.3402 0.189017 17.2603 0.221832L17.25 0.226612L1.63954 6.49501L1.63767 6.49596C1.58473 6.51554 1.53269 6.53755 1.48169 6.56194C1.35786 6.61882 1.23911 6.68664 1.12678 6.76464C0.914768 6.91284 0.426298 7.32015 0.509422 7.99327C0.5748 8.5287 0.933448 8.85856 1.15293 9.01728C1.27248 9.10429 1.38643 9.16644 1.47049 9.20755C1.50784 9.22667 1.58817 9.25918 1.62272 9.27448L1.63206 9.27735L4.59184 10.2966ZM17.7964 1.54607H17.7946L17.7703 1.55659L2.14108 7.83359L2.1168 7.84315L2.10746 7.84602C2.07884 7.85735 2.05079 7.87011 2.0234 7.88427C2.04952 7.89928 2.07632 7.913 2.10372 7.92538L5.03828 8.93697C5.0901 8.95662 5.1401 8.98093 5.18772 9.00963L14.8796 3.20114L14.8889 3.19636C14.9268 3.17329 14.9654 3.15161 15.0048 3.13134C15.072 3.09596 15.1794 3.04433 15.3008 3.00609C15.3849 2.97931 15.6343 2.90378 15.9032 2.9927C16.0461 3.03834 16.1735 3.1244 16.2707 3.24096C16.3679 3.35752 16.4309 3.49983 16.4524 3.65147C16.4872 3.78414 16.4882 3.92372 16.4552 4.05687C16.3899 4.31981 16.2105 4.52442 16.0471 4.68123C15.907 4.81509 14.0895 6.60879 12.2972 8.37954L9.85668 10.789L9.42238 11.2193L14.9067 15.5238C14.9808 15.5554 15.0611 15.5685 15.1411 15.562C15.1814 15.5563 15.2193 15.5391 15.2504 15.5123C15.2882 15.4795 15.3207 15.4408 15.3466 15.3975L15.3485 15.3966L18.0477 1.46289C17.9628 1.48429 17.8794 1.51177 17.7983 1.54512L17.7964 1.54607ZM9.89403 13.3964L8.79941 12.5378L8.53416 14.2636L9.89403 13.3964ZM7.79539 10.8339L8.88347 9.75828L11.324 7.34692L12.2327 6.45007L6.14318 10.0996L6.17587 10.178C6.55993 11.1068 6.93975 12.0375 7.31532 12.9699L7.57964 11.2489C7.60377 11.0893 7.67978 10.9438 7.79539 10.8339Z" fill="#FAFAFA"/>
+								</svg>
+							</a>
+						</li>
+
+						<li class="d-flex align-items-center mb-2">
+
+							<a rel="noopener noreferrer" href="https://www.instagram.com/smobile_ua" target="_blank">
+								<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path d="M10.0007 2.06751C12.5845 2.06751 12.8905 2.07719 13.9113 2.12373C14.525 2.13124 15.1329 2.24393 15.7085 2.45691C16.1259 2.6179 16.505 2.86451 16.8214 3.18087C17.1378 3.49724 17.3844 3.87634 17.5454 4.29378C17.7583 4.8694 17.871 5.47729 17.8785 6.09101C17.9246 7.11175 17.9348 7.41774 17.9348 10.0016C17.9348 12.5855 17.9251 12.8915 17.8785 13.9122C17.871 14.5259 17.7583 15.1338 17.5454 15.7094C17.3844 16.1269 17.1378 16.506 16.8214 16.8223C16.505 17.1387 16.1259 17.3853 15.7085 17.5463C15.1329 17.7593 14.525 17.872 13.9113 17.8795C12.891 17.9256 12.585 17.9357 10.0007 17.9357C7.41633 17.9357 7.11034 17.926 6.09006 17.8795C5.47634 17.872 4.86846 17.7593 4.29283 17.5463C3.87539 17.3853 3.49629 17.1387 3.17992 16.8223C2.86356 16.506 2.61695 16.1269 2.45596 15.7094C2.24298 15.1338 2.13029 14.5259 2.12278 13.9122C2.0767 12.8915 2.06656 12.5855 2.06656 10.0016C2.06656 7.41774 2.07624 7.11175 2.12278 6.09101C2.13029 5.47729 2.24298 4.8694 2.45596 4.29378C2.61695 3.87634 2.86356 3.49724 3.17992 3.18087C3.49629 2.86451 3.87539 2.6179 4.29283 2.45691C4.86846 2.24393 5.47634 2.13124 6.09006 2.12373C7.1108 2.07765 7.41679 2.06751 10.0007 2.06751ZM10.0007 0.32373C7.37393 0.32373 7.04306 0.33479 6.0108 0.381795C5.2076 0.397771 4.41292 0.549851 3.66057 0.831565C3.01518 1.07473 2.43061 1.45579 1.94767 1.94815C1.45485 2.43128 1.07347 3.01617 0.830155 3.66198C0.54844 4.41433 0.396361 5.209 0.380385 6.01221C0.334302 7.04354 0.323242 7.37442 0.323242 10.0011C0.323242 12.6279 0.334302 12.9588 0.381307 13.991C0.397283 14.7942 0.549362 15.5889 0.831076 16.3412C1.07412 16.987 1.45519 17.5719 1.94767 18.0551C2.43088 18.5475 3.01577 18.9286 3.66149 19.1717C4.41384 19.4534 5.20852 19.6054 6.01172 19.6214C7.04398 19.6675 7.37347 19.6795 10.0016 19.6795C12.6297 19.6795 12.9592 19.6684 13.9914 19.6214C14.7946 19.6054 15.5893 19.4534 16.3417 19.1717C16.9843 18.9225 17.5679 18.5421 18.0552 18.0545C18.5424 17.567 18.9225 16.9831 19.1712 16.3403C19.4529 15.588 19.605 14.7933 19.6209 13.9901C19.667 12.9588 19.6781 12.6279 19.6781 10.0011C19.6781 7.37442 19.667 7.04354 19.62 6.01129C19.604 5.20808 19.452 4.41341 19.1702 3.66106C18.9272 3.01533 18.5461 2.43045 18.0537 1.94723C17.5704 1.45475 16.9856 1.07369 16.3398 0.830643C15.5875 0.548929 14.7928 0.396849 13.9896 0.380873C12.9583 0.33479 12.6274 0.32373 10.0007 0.32373Z" fill="#FAFAFA"/>
+									<path d="M10.0028 5.03345C9.0199 5.03345 8.05908 5.32491 7.24184 5.87097C6.42459 6.41704 5.78763 7.19318 5.41149 8.10125C5.03536 9.00933 4.93694 10.0085 5.12869 10.9725C5.32045 11.9366 5.79375 12.8221 6.48876 13.5171C7.18377 14.2121 8.06927 14.6854 9.03327 14.8771C9.99728 15.0689 10.9965 14.9705 11.9046 14.5943C12.8126 14.2182 13.5888 13.5812 14.1348 12.764C14.6809 11.9467 14.9724 10.9859 14.9724 10.003C14.9724 8.68502 14.4488 7.42098 13.5168 6.48901C12.5848 5.55703 11.3208 5.03345 10.0028 5.03345ZM10.0028 13.2288C9.36479 13.2288 8.74111 13.0396 8.21063 12.6852C7.68015 12.3307 7.26669 11.8269 7.02253 11.2375C6.77838 10.6481 6.7145 9.99945 6.83897 9.37371C6.96344 8.74796 7.27066 8.17318 7.7218 7.72204C8.17294 7.27091 8.74772 6.96368 9.37347 6.83921C9.99921 6.71474 10.6478 6.77862 11.2373 7.02278C11.8267 7.26693 12.3305 7.68039 12.685 8.21087C13.0394 8.74135 13.2286 9.36503 13.2286 10.003C13.2286 10.8586 12.8887 11.6791 12.2838 12.284C11.6788 12.889 10.8583 13.2288 10.0028 13.2288Z" fill="#FAFAFA"/>
+									<path d="M15.1671 5.99739C15.8085 5.99739 16.3284 5.47746 16.3284 4.83609C16.3284 4.19473 15.8085 3.6748 15.1671 3.6748C14.5258 3.6748 14.0059 4.19473 14.0059 4.83609C14.0059 5.47746 14.5258 5.99739 15.1671 5.99739Z" fill="#FAFAFA"/>
+								</svg>
+							</a>
+						</li>
+
+						<li class="d-flex align-items-center mb-2">
+							<a rel="noopener noreferrer" href="https://m.me/249656211569655" target="_blank">
+								<svg width="23" height="22" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path d="M6.5 13L8.495 10.605C9.132 9.842 9.45 9.46 9.833 9.46C10.216 9.46 10.535 9.842 11.171 10.605L11.829 11.395C12.465 12.158 12.783 12.54 13.167 12.54C13.55 12.54 13.868 12.158 14.505 11.395L16.5 9" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+									<path d="M11.5 21C17.023 21 21.5 16.523 21.5 11C21.5 5.477 17.023 1 11.5 1C5.977 1 1.5 5.477 1.5 11C1.5 12.379 1.78 13.693 2.284 14.888C2.563 15.548 2.702 15.878 2.72 16.128C2.737 16.378 2.663 16.652 2.516 17.201L1.5 21L5.299 19.984C5.848 19.837 6.122 19.764 6.372 19.78C6.622 19.798 6.952 19.937 7.612 20.216C8.84266 20.7343 10.1647 21.0009 11.5 21Z" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+
+							</a>
+						</li>
+
+					</ul>
+
+				</div>
+				<div class="footer-layer-2-subs layer-2-item-3">
+
+					{% if oct_subscribe is defined %}
+						{{ oct_subscribe }}
+					{% endif %}
+				</div>
+			</div>
+
+
+			<div class="col-md-4 col-xl-2 pt-md-4 pt-xl-0 d-none">
+				<div class="sc-footer-list sc-footer-middle-list">
+					<div class="sc-footer-title fsz-14 text-uppercase mb-md-3 active">{{ oct_footer_messengers_text }}</div>
+					<ul class="list-unstyled fsz-12 sc-footer-middle-info flex-row">
+
+						<li class="d-flex align-items-center mb-2">
+							<img class="me-2" width="20" height="20" src="catalog/view/theme/oct_showcase/img/sprite.svg#include--telegram-icon" alt="">
+							<a rel="noopener noreferrer" href="https://t.me/+380678088989" target="_blank">Telegram</a>
+						</li>
+
+						<li class="d-flex align-items-center mb-2">
+							<i class="fab fa-instagram fsz-20" style="margin-right: 11px;"></i>
+							<a rel="noopener noreferrer" href="https://www.instagram.com/m/smobile_ua" target="_blank">Instagram</a>
+						</li>
+
+						<li class="d-flex align-items-center mb-2">
+							<img class="me-2" width="20" height="20" src="catalog/view/theme/oct_showcase/img/sprite.svg#include--messenger-icon" alt="">
+							<a rel="noopener noreferrer" href="https://m.me/249656211569655" target="_blank">Messenger</a>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+			<hr class="mt-md-4 d-none d-md-inline-block">
+		</div>
+
+		<div class="sc-footer-credits sc-footer-credits-km">
+
+			<ul class="sc-footer-payments-list sc-footer-payments-list-km">
+				{% if oct_showcase_data.payments.privat24 is defined and oct_showcase_data.payments.privat24 %}
+					<li class="sc-footer-payments-item privat24"></li>
+				{% endif %}
+				{% if oct_showcase_data.payments.visa is defined and oct_showcase_data.payments.visa %}
+					<li class="sc-footer-payments-item visa"></li>
+				{% endif %}
+				{% if oct_showcase_data.payments.skrill is defined and oct_showcase_data.payments.skrill %}
+					<li class="sc-footer-payments-item skrill"></li>
+				{% endif %}
+				{% if oct_showcase_data.payments.lp is defined and oct_showcase_data.payments.lp %}
+					<li class="sc-footer-payments-item liqpay"></li>
+				{% endif %}
+				{% if oct_showcase_data.payments.pp is defined and oct_showcase_data.payments.pp %}
+					<li class="sc-footer-payments-item paypal"></li>
+				{% endif %}
+				{% if oct_showcase_data.payments.mc is defined and oct_showcase_data.payments.mc %}
+					<li class="sc-footer-payments-item mastercard"></li>
+				{% endif %}
+				{% if oct_showcase_data.payments.maestro is defined and oct_showcase_data.payments.maestro %}
+					<li class="sc-footer-payments-item maestro"></li>
+				{% endif %}
+				{% for payment_customer in oct_customer_payments %}
+					<li class="sc-footer-payments-item custom-payment"><img src="{{ payment_customer }}" alt=""></li>
+				{% endfor %}
+			</ul>
+			<div class="fsz-14">{{ powered }}</div>
+
+
+		</div>
+
+	</div>
+	{% if oct_feedback_data is defined and oct_feedback_data %}
+		<div id="sc_fixed_contact_substrate"></div>
+		<div id="sc_fixed_contact_button" class="d-flex align-items-center justify-content-center">
+			<div class="sc-fixed-contact-pulsation"></div>
+			<div class="sc-fixed-contact-icon text-center d-flex align-items-center justify-content-center">
+				<i class="fas fa-envelope"></i>
+				<span class="sc-fixed-contact-text d-none">{{ oct_feedback_text }}</span>
+			</div>
+			<div class="sc-fixed-contact-dropdown d-flex flex-column align-items-start">
+				{% if (oct_feedback_data.feedback_messenger is defined and oct_feedback_data.feedback_messenger) and (oct_showcase_data.contact_messenger is defined and oct_showcase_data.contact_messenger) %}
+					<a rel="noopener noreferrer" href="https://m.me/{{ oct_showcase_data.contact_messenger }}" target="_blank" class="sc-fixed-contact-item d-flex align-items-center"><span class="sc-fixed-contact-item-icon sc-fixed-contact-messenger d-flex align-items-center justify-content-center"><i class="fab fa-facebook-messenger"></i></span><span>Messenger</span></a>
+				{% endif %}
+
+				{% if (oct_feedback_data.feedback_viber is defined and oct_feedback_data.feedback_viber) and (oct_showcase_data.contact_viber is defined and oct_showcase_data.contact_viber) %}
+					<a rel="noopener noreferrer" href="viber://chat?number=+{{ oct_showcase_data.contact_viber }}" target="_blank" class="sc-fixed-contact-item d-none d-xl-flex align-items-center sc-fixed-contact-viber-desktop"><span class="sc-fixed-contact-item-icon sc-fixed-contact-viber d-flex align-items-center justify-content-center"><i class="fab fa-viber"></i></span><span>Viber</span></a>
+					<a rel="noopener noreferrer" href="viber://add?number={{ oct_showcase_data.contact_viber }}" target="_blank" class="sc-fixed-contact-item d-flex d-xl-none align-items-center sc-fixed-contact-viber-mobile"><span class="sc-fixed-contact-item-icon sc-fixed-contact-viber d-flex align-items-center justify-content-center"><i class="fab fa-viber"></i></span><span>Viber</span></a>
+				{% endif %}
+
+				{% if (oct_feedback_data.feedback_telegram is defined and oct_feedback_data.feedback_telegram) and (oct_showcase_data.contact_telegram is defined and oct_showcase_data.contact_telegram) %}
+					<a rel="noopener noreferrer" href="https://t.me/{{ oct_showcase_data.contact_telegram }}" target="_blank" class="sc-fixed-contact-item d-flex align-items-center"><span class="sc-fixed-contact-item-icon sc-fixed-contact-telegram d-flex align-items-center justify-content-center"><i class="fab fa-telegram"></i></span><span>Telegram</span></a>
+				{% endif %}
+
+				{% if (oct_feedback_data.feedback_skype is defined and oct_feedback_data.feedback_skype) and (oct_showcase_data.contact_skype is defined and oct_showcase_data.contact_skype) %}
+					<a rel="noopener noreferrer" href="skype:{{ oct_showcase_data.contact_skype }}?chat" class="sc-fixed-contact-item d-flex align-items-center"><span class="sc-fixed-contact-item-icon sc-fixed-contact-skype d-flex align-items-center justify-content-center"><i class="fab fa-skype"></i></span><span>Skype</span></a>
+				{% endif %}
+
+				{% if (oct_feedback_data.feedback_whatsapp is defined and oct_feedback_data.feedback_whatsapp) and (oct_showcase_data.contact_whatsapp is defined and oct_showcase_data.contact_whatsapp) %}
+					<a rel="noopener noreferrer" href="https://api.whatsapp.com/send?phone={{ oct_showcase_data.contact_whatsapp }}" target="_blank" class="sc-fixed-contact-item d-flex align-items-center"><span class="sc-fixed-contact-item-icon sc-fixed-contact-whatsapp d-flex align-items-center justify-content-center"><i class="fab fa-whatsapp"></i></span><span>WhatsApp</span></a>
+				{% endif %}
+
+				{% if (oct_feedback_data.feedback_email is defined and oct_feedback_data.feedback_email) and (oct_showcase_data.contact_email is defined and oct_showcase_data.contact_email) %}
+					<a rel="noopener noreferrer" href="mailto:{{ oct_showcase_data.contact_email }}" class="sc-fixed-contact-item d-flex align-items-center"><span class="sc-fixed-contact-item-icon sc-fixed-contact-email d-flex align-items-center justify-content-center"><i class="far fa-envelope"></i></span><span>{{ oct_showcase_data.contact_email }}</span></a>
+				{% endif %}
+
+				{% if (oct_feedback_data.feedback_callback is defined and oct_feedback_data.feedback_callback) and (oct_popup_call_phone_status is defined and oct_popup_call_phone_status) %}
+					<div id="uptocall-mini" onclick="octPopupCallPhone()" class="sc-fixed-contact-item d-flex align-items-center"><span class="sc-fixed-contact-item-icon sc-fixed-contact-call d-flex align-items-center justify-content-center"><i class="fas fa-phone"></i></span><span>{{ oct_call_phone }}</span></div>
+				{% endif %}
+
+				{% if oct_feedback_data.feedback_contact_link is defined and oct_feedback_data.feedback_contact_link %}
+					<a href="{{ contact }}" class="sc-fixed-contact-item d-flex align-items-center"><span class="sc-fixed-contact-item-icon sc-fixed-contact-contacts d-flex align-items-center justify-content-center"><i class="fas fa-address-book"></i></span><span>{{ oct_feedback_text }}</span></a>
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}
+</footer>
+
+
+
+{% if (show_discount_banner == 1) %}
+	<div id="hello-discount">
+		<div class="position-relative">
+			Ви перейшли по партнерському посиланні і отримуєте промокод на знижку {{ coupon_info.discount_round}}%
+			<div id="hello-discount-close">
+				<button type="button" class="btn-close modal-cart-close" ></button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function(){
+			setTimeout(() => {
+				$('#hello-discount').addClass('active');
+			},1000);
+		});
+
+		$('#hello-discount .modal-cart-close').click(function (){
+			$('#hello-discount').removeClass('active');
+			document.cookie = "dont_show_hello_discount=1; path=/; max-age=" + (60 * 60 * 24);
+		});
+	</script>
+
+
+{% endif %}
+
+{% if oct_showcase_data.footer_totop is defined and oct_showcase_data.footer_totop %}
+	<button id="back-top" class="br-6" type="button"><i class="fas fa-chevron-up"></i></button>
+	<script>
+		document.addEventListener("scroll", () => {
+			toTopButton();
+		});
+	</script>
+{% endif %}
+<div id="overlay"></div>
+{% if oct_subscribe_status is defined and oct_subscribe_status %}
+	<script>
+		$(function() {
+			if (getOCTCookie('oct_subscribe') == 'undefined') {
+				setTimeout(function(){
+					octPopupSubscribe();
+				}, {{ oct_subscribe_form_data.seconds ? oct_subscribe_form_data.seconds : '10000' }});
+
+				const date = new Date('{{ oct_subscribe_day_now }}'.replace(/-/g, "/"));
+				date.setTime(date.getTime() + ({{ oct_subscribe_form_data.expire ? oct_subscribe_form_data.expire : '1' }} * 24 * 60 * 60 * 1000));
+				document.cookie = 'oct_subscribe=1; path=/; expires=' + date.toUTCString();
+			}
+		});
+	</script>
+{% endif %}
+{% for script in scripts %}
+	<script src="{{ script }}"></script>
+{% endfor %}
+<div class="modal-holder"></div>
+{% if oct_isiOS is defined and oct_isiOS %}
+	<script>
+		let elementTypes = ['a', 'button', 'input', 'span'];
+
+		elementTypes.forEach(function(elementType) {
+			let elements = document.getElementsByTagName(elementType);
+			for(let i = 0; i < elements.length; i++){
+				elements[i].addEventListener('touchend', function(){});
+			}
+		});
+	</script>
+{% endif %}
+{% if (oct_analytics_targets is defined and oct_analytics_targets is not empty) %}
+	<script>
+		{% for target in oct_analytics_targets %}
+		$('body').on('click', '{{ target['atribute'] }}', function() {
+			{% if (target['google'] is defined and target['google']) %}
+			gtag('event', '{{ target['action'] }}', {
+				'event_category' : '{{ target['category'] }}'
+			});
+			{% endif %}
+		});
+		{% endfor %}
+	</script>
+{% endif %}
+{% if (oct_policy_value is defined and oct_policy_value is not empty and oct_policy_value) %}
+	<script>
+		function get_oct_policy() {
+			$.ajax({
+				url: "index.php?route=octemplates/main/oct_functions/getOctPolicy",
+				type: "post",
+				dataType: "json",
+				cache: false,
+				success: function(t) {
+					if (t['text_oct_policy']) {
+						var html = '<div id="oct-policy" class="fixed-bottom"><div class="container"><div class="row"><div class="col-lg-12"><div class="content-block-p24 d-flex align-items-center justify-content-between flex-column flex-md-row"><div class="oct-policy-text dark-text fsz-12 mb-3 mb-md-0">'+ t['text_oct_policy'] +'</div><button type="button" id="oct-policy-btn" class="sc-btn sc-btn-primary small br-4">'+ t['oct_policy_accept'] +'</button></div></div></div></div></div>';
+
+						$('body').append(html);
+
+						$('#oct-policy-btn').on('click', function () {
+							$('#oct-policy').addClass('hidden');
+							const date = new Date(t['oct_policy_day_now'].replace(/-/g, "/"));
+							date.setTime(date.getTime() + (t['oct_max_day'] * 24 * 60 * 60 * 1000));
+							document.cookie = t['oct_policy_value']+'=1; path=/; expires=' + date.toUTCString();
+						});
+					}
+				},
+				error: function(e, t, i) {
+					console.error("error get_oct_policy");
+				}
+			});
+		}
+
+		$(function() {
+			if (getOCTCookie('{{ oct_policy_value }}') == 'undefined') {
+				get_oct_policy();
+			}
+		});
+	</script>
+{% endif %}
+{% if oct_jscode is defined and oct_jscode %}
+	<script>
+		{{ oct_jscode }}
+	</script>
+{% endif %}
+
+
+<link rel="stylesheet" href="/catalog/view/vendor/contact-popup/contact-popup.css">
+
+<div class="contact-popup-bg"></div>
+<div class="contact-popup-wrapper">
+	<div class="contact-popup">
+		<div class="popup-question">
+			<div>
+				Маєте запитання?
+			</div>
+		</div>
+
+		<div class="contact-popup-items">
+			<a href="https://t.me/SmobileSupportBot" target="_blank" class="contact-popup-item metric-click-social">
+				<span class="contact-popup-item-text">
+					Telegram
+				</span>
+				<span class="contact-popup-item-icon">
+					<img src="/catalog/view/vendor/contact-popup/icons/telegram.svg" alt="Telegram">
+				</span>
+			</a>
+
+			<a href="https://ig.me/m/smobile_ua" target="_blank" class="contact-popup-item metric-click-social">
+				<span class="contact-popup-item-text">
+					Instagram
+				</span>
+				<span class="contact-popup-item-icon">
+					<img src="/catalog/view/vendor/contact-popup/icons/insta.png" alt="Instagram">
+				</span>
+			</a>
+
+			<a href="https://m.me/249656211569655" target="_blank" class="contact-popup-item metric-click-social">
+				<span class="contact-popup-item-text">
+					Facebook
+				</span>
+				<span class="contact-popup-item-icon">
+					<img src="/catalog/view/vendor/contact-popup/icons/Facebook_Messenger_logo_2020.svg" alt="Facebook">
+				</span>
+			</a>
+
+			<a href="mailto:hi@smobile.ua" class="contact-popup-item metric-click-social">
+				<span class="contact-popup-item-text">
+					E-mail
+				</span>
+				<span class="contact-popup-item-icon">
+					<img src="/catalog/view/vendor/contact-popup/icons/message-mail.svg" alt="E-mail">
+				</span>
+			</a>
+
+			<a href="tel:+380678088989" class="contact-popup-item metric-click-social">
+				<span class="contact-popup-item-text">
+					Зателефонувати
+				</span>
+				<span class="contact-popup-item-icon">
+					<img src="/catalog/view/vendor/contact-popup/icons/phone-call.png" alt="Телефонувати">
+				</span>
+			</a>
+
+			<a href="javascript:void(0);" id="share-copy" onclick="copyFromInput('copy-url')" class="contact-popup-item metric-click-social">
+				<span class="contact-popup-item-text">
+					+380678088989
+					<i class="success_copied">Скопійовано</i>
+				</span>
+
+				<span class="contact-popup-item-icon">
+					<img src="/catalog/view/vendor/contact-popup/icons/copy-icon2.svg" alt="Копіювати">
+				</span>
+			</a>
+			<input id="copy-url" type="text" class="hidden" value="+380678088989">
+		</div>
+		<div class="contact-popup-button">
+			<img class="main-btn" src="/catalog/view/vendor/contact-popup/icons/chat.svg" alt="">
+			<img class="close-btn" src="/catalog/view/vendor/contact-popup/icons/close.svg" alt="">
+		</div>
+	</div>
+</div>
+
+<script>
+	document.querySelectorAll('.sc-wishlist-btn').forEach((btn) => {
+		btn.addEventListener('click', function() {
+			if (!this.classList.contains('added')) {
+				fbq('track', 'AddToWishlist');
+				console.log('dsfsdfsd');
+			}
+		});
+	});
+</script>
+
+<script src="/catalog/view/vendor/contact-popup/contact-popup.js"></script>
+
+
+
+<script async src="catalog/view/theme/oct_showcase/js/oct-fonts.js"></script>
+<link rel="stylesheet" href="catalog/view/theme/oct_showcase/stylesheet/all.css"{% if oct_showcase_data.minify is defined %} media="print" onload="this.media='all'"{% else %} media="all"{% endif %}>
+<script src="/catalog/view/theme/oct_showcase/js/custom.js?v={{ 'now'|date('U') }}"></script>
+<script>
+	!function (t, e, c, n) {
+		var s = e.createElement(c);
+		s.async = 1, s.src = 'https://statics.esputnik.com/scripts/' + n + '.js';
+		var r = e.scripts[0];
+		r.parentNode.insertBefore(s, r);
+		var f = function () {
+			f.c(arguments);
+		};
+		f.q = [];
+		f.c = function () {
+			f.q.push(arguments);
+		};
+		t['eS'] = t['eS'] || f;
+	}(window, document, 'script', '72CE6F5F140E487D8C9D77D34B7F299B');
+</script><script>eS('init');</script>
+
+<script>
+	function clearCart() {
+		fetch('/index.php?route=octemplates/module/oct_popup_cart/clearcart', {
+			method: 'GET',
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'
+			}
+		})
+				.then(response => response.json())
+				.then(data => {
+					console.log(data);
+					scNotify('success', data.success);
+					updatePopUpCart();
+				})
+				.catch(error => {
+					console.error('Помилка запиту:', error);
+				});
+
+	}
+
+	function clearCartReload(){
+		clearCart();
+		setTimeout(function(){
+			window.location.reload()
+		}, 500);
+	}
+</script>
+
+<!-- BEGIN PLERDY CODE -->
+<script type="text/javascript" defer data-plerdy_code='1'>
+	var _protocol="https:"==document.location.protocol?"https://":"http://";
+	_site_hash_code = "4cd1e4877ce59907e63c47163adefff6",_suid=62122, plerdyScript=document.createElement("script");
+	plerdyScript.setAttribute("defer",""),plerdyScript.dataset.plerdymainscript="plerdymainscript",
+			plerdyScript.src="https://a.plerdy.com/public/js/click/main.js?v="+Math.random();
+	var plerdymainscript=document.querySelector("[data-plerdymainscript='plerdymainscript']");
+	plerdymainscript&&plerdymainscript.parentNode.removeChild(plerdymainscript);
+	try{document.head.appendChild(plerdyScript)}catch(t){console.log(t,"unable add script tag")}
+</script>
+<!-- END PLERDY CODE -->
+</body>
+</html>

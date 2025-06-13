@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>aop update hpmodel to hpmrr</name>
+  <code>aop update hpmodel to hpmrr</code>
+  <version>1</version>
+  <author>kj</author>
+  <link>cleanphp.pp.ua</link>
+<file path="admin/model/catalog/suppler.php">
+  <operation>
+      <search><![CDATA["UPDATE " . DB_PREFIX . "hpmodel_links SET `sort` = '" . $sort . "', `image` = '" . $this->db->escape($image) . "' WHERE `product_id` = '" . $product_id . "' AND `parent_id` = '" . $serie_id . "'"]]></search>
+      <add position="replace"><![CDATA["UPDATE " . DB_PREFIX . "hpmrr_links SET `sort` = '" . $sort . "' WHERE `product_id` = '" . $product_id . "' AND `parent_id` = '" . $serie_id . "'"]]></add>
+    </operation>
+  <operation>
+      <search><![CDATA["INSERT INTO " . DB_PREFIX . "hpmodel_links SET `product_id` = '" . $product_id . "', `parent_id` = '" . $serie_id . "', `sort` = '" . $sort . "', `image` = '" . $this->db->escape($image) . "'"]]></search>
+      <add position="replace"><![CDATA["INSERT INTO " . DB_PREFIX . "hpmrr_links SET `product_id` = '" . $product_id . "', `parent_id` = '" . $serie_id . "', `sort` = '" . $sort . "'"]]></add>
+    </operation>
+    <operation>
+      <search regex="true"><![CDATA[~(hpmodel_links)~]]></search>
+      <add position="replace"><![CDATA[hpmrr_links]]></add>
+    </operation>
+  </file>
+</modification>

@@ -1,0 +1,234 @@
+{{ header }}
+<div id="information-contact" class="container-fluid container-lg flex-grow-1 mobile-no-gutters">
+	<nav aria-label="breadcrumb">
+        <ul class="breadcrumb sc-breadcrumb fsz-12">
+        {% for breadcrumb in breadcrumbs %}
+            {% if loop.last %}
+                <li class="breadcrumb-item sc-breadcrumb-item">{{ breadcrumb.text }}</li>
+            {% else %}
+                <li class="breadcrumb-item sc-breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </nav>
+	<main class="main">
+		<div class="row">
+			<div class="col-12 sc-page-title pb-3">
+				<h1>{{ heading_title }}</h1>
+			</div>
+		</div>
+		<div class="content-top-box">{{ content_top }}</div>
+		<div class="row sc-contact-us">
+			<div id="content" class="col-xl-12 contact-page">
+				<div class="row g-0 gy-3 g-md-3">
+					<div class="col-xl-6 sc-contact-us-form-box">
+
+						<div class="top-contact-box ">
+
+							<div class="top-contact-item top-contact-item-dark">
+								<div class="top-contact-item-title fsz-14">Телефон</div>
+								<div class="top-contact-item-content">
+
+									<a href="tel:{{ telephone|replace({" " : "", "-" : "", "(" : "", ")" : ""}) }}" class="top-contact-item-phone fsz-24">
+										<svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path fill="#fff" fill-rule="evenodd" clip-rule="evenodd" d="M2.733 1.0433C3.95 -0.166703 5.954 0.0482968 6.973 1.4103L8.235 3.0943C9.065 4.2023 8.991 5.7503 8.006 6.7293L7.768 6.9673C7.74101 7.06721 7.73827 7.17211 7.76 7.2733C7.823 7.6813 8.164 8.5453 9.592 9.9653C11.02 11.3853 11.89 11.7253 12.304 11.7893C12.4083 11.8103 12.516 11.8072 12.619 11.7803L13.027 11.3743C13.903 10.5043 15.247 10.3413 16.331 10.9303L18.241 11.9703C19.878 12.8583 20.291 15.0823 18.951 16.4153L17.53 17.8273C17.082 18.2723 16.48 18.6433 15.746 18.7123C13.936 18.8813 9.719 18.6653 5.286 14.2583C1.149 10.1443 0.354996 6.5563 0.253996 4.7883C0.203996 3.8943 0.625997 3.1383 1.164 2.6043L2.733 1.0433ZM5.773 2.3093C5.266 1.6323 4.322 1.5783 3.79 2.1073L2.22 3.6673C1.89 3.9953 1.732 4.3573 1.752 4.7033C1.832 6.1083 2.472 9.3453 6.344 13.1953C10.406 17.2333 14.157 17.3543 15.607 17.2183C15.903 17.1913 16.197 17.0373 16.472 16.7643L17.892 15.3513C18.47 14.7773 18.343 13.7313 17.525 13.2873L15.615 12.2483C15.087 11.9623 14.469 12.0563 14.085 12.4383L13.63 12.8913L13.1 12.3593C13.63 12.8913 13.629 12.8923 13.628 12.8923L13.627 12.8943L13.624 12.8973L13.617 12.9033L13.602 12.9173C13.5598 12.9565 13.5143 12.9919 13.466 13.0233C13.386 13.0763 13.28 13.1353 13.147 13.1843C12.877 13.2853 12.519 13.3393 12.077 13.2713C11.21 13.1383 10.061 12.5473 8.534 11.0293C7.008 9.5113 6.412 8.3693 6.278 7.5033C6.209 7.0613 6.264 6.7033 6.366 6.4333C6.42213 6.28137 6.50251 6.13953 6.604 6.0133L6.636 5.9783L6.65 5.9633L6.656 5.9573L6.659 5.9543L6.661 5.9523L6.949 5.6663C7.377 5.2393 7.437 4.5323 7.034 3.9933L5.773 2.3093Z" />
+										</svg>
+										{{ telephone }}</a>
+
+								</div>
+							</div>
+
+							<div class="top-contact-item">
+								<div class="top-contact-item-title fsz-14">Написати нам</div>
+								<div class="top-contact-item-content">
+
+									<div class="op-contact-item-soc">
+										<div class="op-contact-item-soc-item">
+											<a href="https://t.me/+380678088989">
+												<svg width="19" height="17" viewBox="0 0 19 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path fill-rule="evenodd" clip-rule="evenodd" d="M4.09184 10.2966C4.13223 10.3093 4.17342 10.3192 4.21513 10.3262C4.47937 10.9636 4.74213 11.6017 5.0034 12.2404C5.47319 13.3897 5.94672 14.5734 6.05039 14.9137C6.18022 15.3325 6.31658 15.6175 6.46601 15.8125C6.54353 15.9119 6.63226 15.9999 6.73687 16.0668C6.79179 16.1009 6.85001 16.1291 6.91059 16.151C7.20946 16.2657 7.48218 16.2179 7.6531 16.1596C7.75345 16.1247 7.84891 16.0765 7.93703 16.0162L7.9417 16.0142L10.5811 14.3295L13.6306 16.7218C13.6754 16.7568 13.724 16.7865 13.7763 16.8107C14.1424 16.9732 14.4973 17.0306 14.8317 16.9847C15.1642 16.9369 15.4285 16.7945 15.6255 16.6329C15.8516 16.446 16.032 16.2076 16.1523 15.9368L16.1607 15.9158L16.1635 15.9081L16.1654 15.9043V15.9024L16.1663 15.9014C16.1816 15.86 16.1941 15.8175 16.2037 15.7743L18.9869 1.40839C18.9946 1.36225 18.999 1.31559 19 1.2688C19 0.848098 18.845 0.447479 18.4816 0.205577C18.1697 -0.00190305 17.8232 -0.0114645 17.6037 0.00574588C17.3683 0.0248685 17.1498 0.0841486 17.0032 0.131955C16.9212 0.15904 16.8402 0.189017 16.7603 0.221832L16.75 0.226612L1.13954 6.49501L1.13767 6.49596C1.08473 6.51554 1.03269 6.53755 0.981693 6.56194C0.857859 6.61882 0.739106 6.68664 0.626781 6.76464C0.414768 6.91284 -0.0737022 7.32015 0.00942189 7.99327C0.0748004 8.5287 0.433448 8.85856 0.652933 9.01728C0.772482 9.10429 0.886427 9.16644 0.970486 9.20755C1.00784 9.22667 1.08817 9.25918 1.12272 9.27448L1.13206 9.27735L4.09184 10.2966ZM17.2964 1.54607H17.2946L17.2703 1.55659L1.64108 7.83359L1.6168 7.84315L1.60746 7.84602C1.57884 7.85735 1.55079 7.87011 1.5234 7.88427C1.54952 7.89928 1.57632 7.913 1.60372 7.92538L4.53828 8.93697C4.5901 8.95662 4.6401 8.98093 4.68772 9.00963L14.3796 3.20114L14.3889 3.19636C14.4268 3.17329 14.4654 3.15161 14.5048 3.13134C14.572 3.09596 14.6794 3.04433 14.8008 3.00609C14.8849 2.97931 15.1343 2.90378 15.4032 2.9927C15.5461 3.03834 15.6735 3.1244 15.7707 3.24096C15.8679 3.35752 15.9309 3.49983 15.9524 3.65147C15.9872 3.78414 15.9882 3.92372 15.9552 4.05687C15.8899 4.31981 15.7105 4.52442 15.5471 4.68123C15.407 4.81509 13.5895 6.60879 11.7972 8.37954L9.35668 10.789L8.92238 11.2193L14.4067 15.5238C14.4808 15.5554 14.5611 15.5685 14.6411 15.562C14.6814 15.5563 14.7193 15.5391 14.7504 15.5123C14.7882 15.4795 14.8207 15.4408 14.8466 15.3975L14.8485 15.3966L17.5477 1.46289C17.4628 1.48429 17.3794 1.51177 17.2983 1.54512L17.2964 1.54607ZM9.39403 13.3964L8.29941 12.5378L8.03416 14.2636L9.39403 13.3964ZM7.29539 10.8339L8.38347 9.75828L10.824 7.34692L11.7327 6.45007L5.64318 10.0996L5.67587 10.178C6.05993 11.1068 6.43975 12.0375 6.81532 12.9699L7.07964 11.2489C7.10377 11.0893 7.17978 10.9438 7.29539 10.8339Z" fill="#001F3F"></path>
+												</svg>
+											</a>
+										</div>
+
+										<div class="op-contact-item-soc-item">
+											<a href="https://www.instagram.com/m/smobile_ua">
+												<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M9.91953 1.78732C12.568 1.78732 12.8817 1.79724 13.928 1.84494C14.557 1.85264 15.1801 1.96815 15.7702 2.18644C16.198 2.35145 16.5866 2.60422 16.9109 2.92848C17.2352 3.25275 17.488 3.64131 17.653 4.06918C17.8713 4.65918 17.9868 5.28224 17.9945 5.91129C18.0417 6.95751 18.0521 7.27114 18.0521 9.91953C18.0521 12.5679 18.0422 12.8815 17.9945 13.9278C17.9868 14.5568 17.8713 15.1799 17.653 15.7699C17.488 16.1977 17.2352 16.5863 16.9109 16.9106C16.5866 17.2348 16.198 17.4876 15.7702 17.6526C15.1801 17.8709 14.557 17.9864 13.928 17.9941C12.8822 18.0413 12.5685 18.0517 9.91953 18.0517C7.27054 18.0517 6.9569 18.0418 5.9111 17.9941C5.28202 17.9864 4.65893 17.8709 4.0689 17.6526C3.64102 17.4876 3.25243 17.2348 2.92815 16.9106C2.60387 16.5863 2.35109 16.1977 2.18608 15.7699C1.96777 15.1799 1.85226 14.5568 1.84456 13.9278C1.79732 12.8815 1.78693 12.5679 1.78693 9.91953C1.78693 7.27114 1.79685 6.95751 1.84456 5.91129C1.85226 5.28224 1.96777 4.65918 2.18608 4.06918C2.35109 3.64131 2.60387 3.25275 2.92815 2.92848C3.25243 2.60422 3.64102 2.35145 4.0689 2.18644C4.65893 1.96815 5.28202 1.85264 5.9111 1.84494C6.95737 1.79771 7.27102 1.78732 9.91953 1.78732ZM9.91953 0C7.22709 0 6.88793 0.011336 5.82985 0.0595143C5.00655 0.0758892 4.19199 0.231766 3.42082 0.520514C2.75928 0.76975 2.16009 1.16032 1.66506 1.66498C1.15992 2.16017 0.768997 2.75967 0.519594 3.4216C0.230832 4.19274 0.0749482 5.00726 0.0585725 5.83052C0.0113366 6.8876 0 7.22674 0 9.91906C0 12.6114 0.0113366 12.9505 0.0595171 14.0085C0.0758928 14.8318 0.231777 15.6463 0.520539 16.4175C0.769665 17.0793 1.16026 17.6788 1.66506 18.1741C2.16037 18.6789 2.75989 19.0694 3.42177 19.3185C4.19294 19.6073 5.0075 19.7632 5.83079 19.7795C6.88888 19.8268 7.22661 19.8391 9.92048 19.8391C12.6143 19.8391 12.9521 19.8277 14.0102 19.7795C14.8335 19.7632 15.648 19.6073 16.4192 19.3185C17.0779 19.0632 17.6761 18.6732 18.1755 18.1735C18.6749 17.6738 19.0646 17.0754 19.3195 16.4165C19.6082 15.6454 19.7641 14.8309 19.7805 14.0076C19.8277 12.9505 19.8391 12.6114 19.8391 9.91906C19.8391 7.22674 19.8277 6.8876 19.7795 5.82957C19.7632 5.00631 19.6073 4.19179 19.3185 3.42066C19.0694 2.75881 18.6788 2.15932 18.174 1.66404C17.6787 1.15926 17.0792 0.768683 16.4173 0.51957C15.6461 0.230821 14.8316 0.0749446 14.0083 0.0585697C12.9511 0.0113361 12.612 0 9.91953 0Z" fill="#001F3F"></path>
+													<path d="M9.92171 4.82812C8.91423 4.82812 7.92937 5.12686 7.09168 5.68656C6.25399 6.24626 5.60109 7.04179 5.21554 7.97253C4.83 8.90328 4.72912 9.92745 4.92567 10.9155C5.12222 11.9036 5.60737 12.8112 6.31977 13.5236C7.03216 14.2359 7.93981 14.7211 8.92793 14.9176C9.91606 15.1141 10.9403 15.0133 11.8711 14.6277C12.8019 14.2422 13.5974 13.5893 14.1571 12.7517C14.7169 11.914 15.0156 10.9292 15.0156 9.9218C15.0156 8.57087 14.4789 7.27528 13.5236 6.32003C12.5684 5.36478 11.2727 4.82812 9.92171 4.82812ZM9.92171 13.2282C9.26774 13.2282 8.62846 13.0342 8.08471 12.6709C7.54095 12.3076 7.11715 11.7912 6.86689 11.1871C6.61663 10.5829 6.55115 9.91813 6.67873 9.27676C6.80631 8.63539 7.12123 8.04626 7.58365 7.58385C8.04607 7.12145 8.63524 6.80655 9.27664 6.67898C9.91804 6.5514 10.5829 6.61688 11.1871 6.86713C11.7912 7.11738 12.3076 7.54116 12.671 8.08489C13.0343 8.62861 13.2282 9.26786 13.2282 9.9218C13.2282 10.7987 12.8799 11.6397 12.2598 12.2597C11.6397 12.8798 10.7986 13.2282 9.92171 13.2282Z" fill="#001F3F"></path>
+													<path d="M15.2164 5.81612C15.8738 5.81612 16.4068 5.28321 16.4068 4.62583C16.4068 3.96846 15.8738 3.43555 15.2164 3.43555C14.559 3.43555 14.0261 3.96846 14.0261 4.62583C14.0261 5.28321 14.559 5.81612 15.2164 5.81612Z" fill="#001F3F"></path>
+												</svg>
+											</a>
+										</div>
+										<div class="op-contact-item-soc-item">
+											<a href="https://m.me/249656211569655">
+												<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M6 13L7.995 10.605C8.632 9.842 8.95 9.46 9.333 9.46C9.716 9.46 10.035 9.842 10.671 10.605L11.329 11.395C11.965 12.158 12.283 12.54 12.667 12.54C13.05 12.54 13.368 12.158 14.005 11.395L16 9" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+													<path d="M11 21C16.523 21 21 16.523 21 11C21 5.477 16.523 1 11 1C5.477 1 1 5.477 1 11C1 12.379 1.28 13.693 1.784 14.888C2.063 15.548 2.202 15.878 2.22 16.128C2.237 16.378 2.163 16.652 2.016 17.201L1 21L4.799 19.984C5.348 19.837 5.622 19.764 5.872 19.78C6.122 19.798 6.452 19.937 7.112 20.216C8.34266 20.7343 9.66465 21.0009 11 21Z" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+												</svg>
+											</a>
+										</div>
+
+									</div>
+									
+								</div>
+							</div>
+						</div>
+						<div class="contact-form-wrapper">
+							<div class="contact-form-header">
+								<div class="h2 fw-500">{{ text_question_contact }}</div>
+							</div>
+							<form action="{{ action }}" method="post" enctype="multipart/form-data" class="row contact-form">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="inputContactsName" class="fsz-14 dark-text fw-500 pb-1"> {{ entry_name }}</label>
+										{% if (error_name) or (error_email) or (error_enquiry) or (error_oct_terms) %}
+											<script>
+												scNotify('danger', '{% if error_name %}{{ error_name }}{% endif %}{% if error_email %}<br />{{ error_email }}{% endif %}{% if error_enquiry %}<br />{{ error_enquiry }}{% endif %}{% if error_oct_terms %}<br />{{ error_oct_terms }}{% endif %}');
+											</script>
+										{% endif %}
+										<input type="text" name="name" value="{{ name }}" id="inputContactsName" class="form-control{% if error_name %} error_style{% endif %}" placeholder="{{ entry_name_placeholder }}" />
+									</div>
+								</div>
+								<div class="col-md-6 pt-3 pt-md-0">
+									<div class="form-group">
+										<label for="inputContactsEmail" class="fsz-14 dark-text fw-500 pb-1"> {{ entry_email }}</label>
+										<input type="email" name="email" value="{{ email }}" id="inputContactsEmail" class="form-control{% if error_email %} error_style{% endif %}" placeholder="{{ entry_email_placeholder }}" />
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group py-4">
+										<label for="inputContactsComment" class="fsz-14 dark-text fw-500 pb-1"> {{ entry_enquiry }}</label>
+										<textarea name="enquiry" rows="5" id="inputContactsComment" class="form-control{% if error_enquiry %} error_style{% endif %}" rows="7">{{ enquiry }}</textarea>
+									</div>
+									{{ captcha }}
+									{% if text_terms %}
+									<div class="form-check d-flex pb-4">
+										<input id="agreeCheaperCheck" type="checkbox" class="form-check-input{% if error_oct_terms %} error_style{% endif %}" name="scales"{% if scales_in is defined and scales_in %} checked{% endif %}>
+										<label class="form-check-label" for="agreeCheaperCheck">{{ text_terms }}</label>
+									</div>
+									{% endif %}
+									<button class="sc-btn sc-btn-primary br-4 contact-submit" type="submit">{{ button_submit }}</button>
+								</div>
+							</form>
+							<script>
+								$("#inputContactsName, #inputContactsEmail, #inputContactsComment, #agreeCheaperCheck").on("change paste keyup", function() {
+									$(this).removeClass('error_style');
+								});
+							</script>
+						</div>
+					</div>
+					{% if oct_contact_image is defined or contact_address is defined or contact_open is defined or contact_telephone is defined or contact_map is defined %}
+						<div class="col-xl-6">
+							<div class="sc-contact-us-item sc-contact-us-item-km p-3 p-md-4 mobile-no-radius h-100 overflow-hidden">
+								<div class="sc-contact-us-item-top d-flex justify-content-between">
+									<div class="sc-contact-us-item-info w-100">
+										<div class="sc-contact-us-item-title fw-500 fsz-24 dark-text">Магазин {{ store }}</div>
+										{% if contact_address is defined and contact_address %}
+											<div class="sc-contact-us-item-address light-text fsz-16 mb-15 d-flex gg-10">
+												<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M8.00008 0C3.58908 0 8.14446e-05 3.589 8.14446e-05 7.995C-0.0289186 14.44 7.69608 19.784 8.00008 20C8.00008 20 16.0291 14.44 16.0001 8C16.0001 3.589 12.4111 0 8.00008 0ZM8.00008 12C5.79008 12 4.00008 10.21 4.00008 8C4.00008 5.79 5.79008 4 8.00008 4C10.2101 4 12.0001 5.79 12.0001 8C12.0001 10.21 10.2101 12 8.00008 12Z" fill="#001F3F"/>
+												</svg>
+												{{ contact_address }}
+											</div>
+										{% endif %}
+										<div class="sc-contact-us-item-info-bottom row g-3 gx-5">
+											{% if contact_open is defined and contact_open %}
+												<div class="sc-contact-us-item-shedule">
+													<div class="sc-contact-us-item-subtitle d-flex">
+
+														<span class="fw-500 dark-text fsz-16 d-block mb-10">{{ oct_working_hours }}:</span>
+													</div>
+
+														{% for open in contact_open %}
+															<div class="fsz-16 fw-500">{{ open }}</div>
+														{% endfor %}
+
+												</div>
+											{% endif %}
+										</div>
+									</div>
+{#									{% if oct_contact_image is defined and oct_contact_image %}#}
+{#										<div class="sc-contact-us-item-img">#}
+{#											<img src="{{ oct_contact_image }}" alt="{{ store }}" class="br-2 img-fluid" width="330" height="170">#}
+{#										</div>#}
+{#									{% endif %}#}
+
+
+								</div>
+{#								{% if contact_map is defined %}#}
+									<div class="br-8 overflow-hidden">
+{#										{{ contact_map }}#}
+										<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2541.6100520493205!2d30.48459081573059!3d50.42973657947256!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4cec2753c602b%3A0x3ba90033b0443e98!2z0LLRg9C70LjRhtGPINCa0YPQtNGA0Y_RiNC-0LLQsCwgMjDQkCwg0L7RhNC40YEgMSwg0JrQuNC10LIsIDAzMDM1!5e0!3m2!1suk!2sua!4v1659270378642!5m2!1suk!2sua&maptype=roadmap&disableDefaultUI=true&fullscreenControl=false&streetViewControl=false"
+												width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+									</div>
+{#								{% endif %}#}
+							</div>
+						</div>
+					{% endif %}
+					{% if oct_locations %}
+						{% for location in oct_locations %}
+							<div class="col-xl-6">
+								<div class="sc-contact-us-item content-block p-3 p-md-4 mobile-no-radius h-100 overflow-hidden">
+									<div class="sc-contact-us-item-top d-flex justify-content-between">
+										<div class="sc-contact-us-item-info">
+											<div class="sc-contact-us-item-title fw-700 fsz-18 dark-text mb-2">{{ location.title }}</div>
+											{% if location.link is defined and location.link %}
+												<div class="fsz-14 fw-500 dark-text mb-2">{{ oct_text_contact_site }} <a href="{{ location.link }}" class="blue-link">{{ location.link|replace({"https://" : "", "http://" : ""}) }}</a></div>
+											{% endif %}
+											{% if location.address is defined and location.address %}
+												<div class="sc-contact-us-item-address light-text fsz-14 mb-4">{{ location.address }}</div>
+											{% endif %}
+											<div class="sc-contact-us-item-info-bottom row g-3 gx-5">
+												{% if location.open is defined and location.open %}
+													<div class="sc-contact-us-item-shedule col-6">
+														<div class="sc-contact-us-item-subtitle d-flex align-items-center mb-3">
+															<img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--contacts-shedule-icon" alt="" width="24" height="24">
+															<span class="fw-500 dark-text ps-2">{{ oct_working_hours }}:</span>
+														</div>
+														<ul class="list-unstyled ps-0">
+															{% for open in location.open %}
+																<li class="fsz-14 light-text">{{ open }}</li>
+															{% endfor %}
+														</ul>
+													</div>
+												{% endif %}
+												{% if location.phone is defined and location.phone %}
+													<div class="sc-contact-us-item-phones col-6">
+														<div class="sc-contact-us-item-subtitle d-flex align-items-center mb-3">
+															<img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--contacts-phone-icon" alt="" width="24" height="24">
+															<span class="fw-500 dark-text ps-2">{{ oct_telephones }}</span>
+														</div>
+														<ul class="list-unstyled ps-0">
+															{% for phone in location.phone %}
+																<li><a href="tel:{{ phone|replace({" " : "", "-" : "", "(" : "", ")" : ""}) }}" class="blue-link">{{ phone }}</a></li>
+															{% endfor %}
+														</ul>
+													</div>
+												{% endif %}
+											</div>
+										</div>
+										{% if location.thumb is defined and location.thumb %}
+											<div class="sc-contact-us-item-img">
+												<img src="{{ location.thumb }}" alt="{{ location.title }}"  class="br-2 img-fluid" width="330" height="170">
+											</div>
+										{% endif %}
+									</div>
+									{% if location.map is defined %}
+										<hr>
+										<div class="map-wrapper br-8 overflow-hidden">
+											{{ location.map }}
+										</div>
+									{% endif %}
+								</div>
+							</div>
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		{{ content_bottom }}
+	</main>
+</div>
+{{ footer }}

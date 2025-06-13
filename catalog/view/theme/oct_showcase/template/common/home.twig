@@ -1,0 +1,277 @@
+{{ header }}
+<div id="common-home" class="container-fluid container-lg">
+    {{ content_top }}
+    {{ content_bottom }}
+</div>
+{% if show_wishlist is defined and show_wishlist %}
+    <style>
+        #esputnik-modal-holder .modal-content {
+            background: #ffffff;
+        }
+        #esputnik-modal-holder .modal-header {
+            background: #ffffff;
+            border-bottom: none !important;
+        }
+
+        #esputnik-modal-holder .letter-image {
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+
+        #esputnik-modal-holder .animated-mail {
+            position: absolute;
+            height: 150px;
+            width: 200px;
+            -webkit-transition: .4s;
+            -moz-transition: .4s;
+            transition: .4s;
+        }
+
+        #esputnik-modal-holder .animated-mail .body {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 0 100px 200px;
+            border-color: transparent transparent #022a53 transparent;
+            z-index: 2;
+        }
+
+        #esputnik-modal-holder .animated-mail .top-fold {
+            position: absolute;
+            top: 50px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 50px 100px 0 100px;
+            -webkit-transform-origin: 50% 0%;
+            -webkit-transition: transform .4s .4s, z-index .2s .4s;
+            -moz-transform-origin: 50% 0%;
+            -moz-transition: transform .4s .4s, z-index .2s .4s;
+            transform-origin: 50% 0%;
+            transition: transform .4s .4s, z-index .2s .4s;
+            border-color: #001f3f transparent transparent transparent;
+            z-index: 2;
+        }
+
+        #esputnik-modal-holder .animated-mail .back-fold {
+            position: absolute;
+            bottom: 0;
+            width: 200px;
+            height: 100px;
+            background: #001f3f;
+            z-index: 0;
+        }
+
+        #esputnik-modal-holder .animated-mail .left-fold {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 50px 0 50px 100px;
+            border-color: transparent transparent transparent #03274d;
+            z-index: 2;
+        }
+
+        #esputnik-modal-holder .animated-mail .letter {
+            left: 20px;
+            bottom: 0px;
+            position: absolute;
+            width: 160px;
+            height: 60px;
+            background: #edf4ff;
+            z-index: 1;
+            overflow: hidden;
+            -webkit-transition: .4s .2s;
+            -moz-transition: .4s .2s;
+            transition: .4s .2s;
+
+            .letter-border {
+                height: 10px;
+                width: 100%;
+                background: repeating-linear-gradient(-45deg, #001f3f, #001f3f 8px, transparent 8px, transparent 18px);
+            }
+
+            .letter-title {
+                margin-top: 10px;
+                margin-left: 5px;
+                height: 10px;
+                width: 40%;
+                background: #001f3f;
+            }
+            .letter-context {
+                margin-top: 10px;
+                margin-left: 5px;
+                height: 10px;
+                width: 20%;
+                background: #001f3f;
+            }
+
+            .letter-stamp {
+                margin-top: 30px;
+                margin-left: 120px;
+                border-radius: 100%;
+                height: 30px;
+                width: 30px;
+                background: #083a6d;
+                opacity: 0.3;
+            }
+        }
+
+        #esputnik-modal-holder .mail-shadow {
+            position: absolute;
+            top: 200px;
+            left: 50%;
+            width: 400px;
+            height: 30px;
+            transition: .4s;
+            transform: translateX(-50%);
+            -webkit-transition: .4s;
+            -webkit-transform: translateX(-50%);
+            -moz-transition: .4s;
+            -moz-transform: translateX(-50%);
+
+            border-radius: 100%;
+            background: radial-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.0), rgba(0,0,0,0.0));
+        }
+
+        #esputnik-modal-holder .modal-content:hover .animated-mail {
+            transform: translateY(50px);
+            -webkit-transform: translateY(50px);
+            -moz-transform: translateY(50px);
+        }
+
+        #esputnik-modal-holder .modal-content:hover .animated-mail .top-fold {
+            transition: transform .4s, z-index .2s;
+            transform: rotateX(180deg);
+            -webkit-transition: transform .4s, z-index .2s;
+            -webkit-transform: rotateX(180deg);
+            -moz-transition: transform .4s, z-index .2s;
+            -moz-transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        #esputnik-modal-holder .modal-content:hover .animated-mail .letter {
+            height: 180px;
+        }
+
+        #esputnik-modal-holder .modal-content:hover .mail-shadow {
+            width: 250px;
+        }
+
+        #esputnik-modal-holder .esputnik-btn {
+            background: #001f3f;
+            margin: 0 auto;
+            margin: 25px auto;
+            min-height: 50px;
+            border-radius: 12px;
+            border: 0;
+            cursor: pointer;
+            transition: background .3s ease-out, color .3s ease-out, filter .3s ease-out, -webkit-filter .3s ease-out;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            font-size: .875rem;
+            font-weight: 300;
+            color: #FAFAFA;
+            padding: .985rem 2rem;
+            white-space: nowrap;
+            color: white;
+            border: 1px solid transparent;
+            -webkit-filter: drop-shadow(0 0 1px rgba(40, 41, 61, .08)) drop-shadow(0 .5px 2px rgba(96, 97, 112, .16));
+            filter: drop-shadow(0 0 1px rgba(40, 41, 61, .08)) drop-shadow(0 .5px 2px rgba(96, 97, 112, .16));
+            background: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23c0c0c0'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e) center / 1em auto no-repeat rgba(0, 0, 0, 0);
+        }
+
+        #esputnik-modal-holder .esputnik-btn:hover {
+            background: #002954;
+        }
+
+        #esputnik-modal-holder .esputnik-info-wrapper {
+            color: #001F3F;
+            font-weight: 500;
+            text-align: center;
+            padding-top: 270px;
+        }
+
+        @media (max-width: 768px) {
+            #esputnik-modal-holder .modal-content {
+                height: fit-content !important;
+                border-bottom-left-radius: 0.75rem !important;
+                border-bottom-right-radius: 0.75rem !important;
+            }
+        }
+    </style>
+    <div id="esputnik-modal-holder">
+        <div class="modal fade" id="esputnik-info-modal" tabindex="-1" aria-labelledby="esputnik-info-modal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" style="margin: 1.75rem auto;">
+                <div class="modal-content">
+                    <div class="modal-header p-4" style="display: flex; justify-content: flex-end;">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4" style="overflow: hidden;">
+                        <div class="letter-image">
+                            <div class="animated-mail">
+                                <div class="back-fold"></div>
+                                <div class="letter">
+                                    <div class="letter-border"></div>
+                                    <div class="letter-title"></div>
+                                    <div class="letter-context"></div>
+                                    <div class="letter-stamp">
+                                        <div class="letter-stamp-inner"></div>
+                                    </div>
+                                </div>
+                                <div class="top-fold"></div>
+                                <div class="body"></div>
+                                <div class="left-fold"></div>
+                            </div>
+                            <div class="mail-shadow"></div>
+                        </div>
+                        <div class="esputnik-info-wrapper">
+                            <p>Дякуємо! Ваша підписка підтверджена.</p>
+                            <p>Перевірте свою пошту – промокод вже чекає на вас!</p>
+                            <button type="button" class="esputnik-btn">
+                                <span class="sc-btn-text">Перейти до товарів</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            masked('body', true);
+            setTimeout(() => {
+                masked('body', false);
+                $('#esputnik-modal-holder #esputnik-info-modal').modal('show');
+            }, 500);
+        });
+
+        function closeModal() {
+            $('#esputnik-modal-holder #esputnik-info-modal').modal('hide');
+            window.history.pushState(null, '', '/');
+        }
+
+        $('#esputnik-modal-holder').find('.btn-close, button.esputnik-btn').on('click', function() {
+            closeModal();
+        });
+        $('#esputnik-modal-holder').find('#esputnik-info-modal').on('click', function(event) {
+            window.history.pushState(null, '', '/');
+        });
+    </script>
+{% endif %}
+{{ footer }}

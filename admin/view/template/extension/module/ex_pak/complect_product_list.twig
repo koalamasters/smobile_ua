@@ -1,0 +1,46 @@
+
+{% for product in products %}
+	<tr class="product product-{{ product.product_id }}">
+		<td style="width: 1px;" class="text-center">
+			<input type="checkbox" name="ex_pak[complects][{{ complect_row }}][products][{{ product.product_id }}][selected]" class="check"/>
+		</td>
+		<td>
+			<div class="product-name">
+				<img src="{{ product.image }}" class="img-thumbnail">
+				{{ product.name }}
+                <input type="hidden" name="ex_pak[complects][{{ complect_row }}][products][{{ product.product_id }}][product_id]" value="{{ product.product_id }}">
+			</div>
+		</td>
+		<td style="white-space: nowrap;">{{ product.model }}</td>
+		<td>
+			{% if product.special %}
+				<span style="text-decoration: line-through;">{{ product.price }}</span><br/>
+				<div class="text-danger" style="white-space: nowrap;">{{ product.special }}</div>
+			{% else %}
+				<div style="white-space: nowrap;">{{ product.price }}</div>
+			{% endif %}
+		</td>  
+
+		<td class="text-center">
+			<select name="ex_pak[complects][{{ complect_row }}][products][{{ product.product_id }}][complect_discount_type]" class="form-control calc-complect-discount discount-type" style="width:100px;">
+                <option value="procent" {% if product.complect_discount_type == 'procent' %} selected="selected"{% endif %}>{{ txt_percent }}</option>
+                <option value="sum" {% if product.complect_discount_type == 'sum' %} selected="selected"{% endif %}>{{ txt_sum }}</option>
+            </select>
+		</td>
+		<td class="text-center">
+			<input type="text" name="ex_pak[complects][{{ complect_row }}][products][{{ product.product_id }}][complect_discount_value]" value="{{ product.complect_discount_value }}" class="calc-complect-discount discount-value">
+		</td>
+		<td class="text-center">
+			<div class="result-price" data-price="{% if product.special_raw %}{{ product.special_raw }}{% else %}{{ product.price_raw }}{% endif %}"></div>
+		</td>
+		<td class="text-center">
+			<input type="text" name="ex_pak[complects][{{ complect_row }}][products][{{ product.product_id }}][complect_quantity]" value="{{ product.complect_quantity }}">
+		</td>
+		<td class="text-center">
+			<input type="text" name="ex_pak[complects][{{ complect_row }}][products][{{ product.product_id }}][complect_sort_order]" value="{{ product.complect_sort_order }}">
+		</td>
+		<td class="text-center">
+			<button type="button" class="btn-icon red button-product-remove"><svg class="ex-icon-red"><use xlink:href="#ex-icon-trash"></use></svg></button>
+		</td>
+	</tr>
+{% endfor %}

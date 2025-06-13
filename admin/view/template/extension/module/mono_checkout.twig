@@ -1,0 +1,392 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary">
+					<i class="fa fa-save"></i>
+				</button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default">
+					<i class="fa fa-reply"></i>
+				</a>
+			</div>
+
+			<h1>
+				{{ heading_title }}
+			</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li>
+						<a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible">
+				<i class="fa fa-exclamation-circle"></i>
+				{{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<i class="fa fa-pencil"></i>
+					{{ text_edit }}
+					<img src="view/image/mono_checkout/monocheckout_logo_black.svg" alt="monocheckout_logo_black">
+				</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-apikey">{{ entry_api }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="module_mono_checkout_token" value="{{ module_mono_checkout_token }}" placeholder="{{ entry_api }}" id="input-apikey" class="form-control"/>
+							{% if error_api %}
+								<div class="text-danger">{{ error_api }}</div>
+							{% endif %}
+							<p>{{ text_apikey }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">
+							<span data-toggle="tooltip" title="{{ help_payment }}">{{ entry_delivery }}</span>
+						</label>
+						<div class="col-sm-10">
+							<div class="well well-sm" style="overflow: auto;">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="module_mono_checkout_delivery[]" value="pickup" {% if "pickup" in deliveries %} checked="checked" {% endif %}/>
+										{{ delivery_pickup }}
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="module_mono_checkout_delivery[]" value="courier" {% if "courier" in deliveries %} checked="checked" {% endif %}/>
+										{{ delivery_courier }}
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="module_mono_checkout_delivery[]" value="np_brnm" {% if "np_brnm" in deliveries %} checked="checked" {% endif %}/>
+										{{ delivery_np_brnm }}
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="module_mono_checkout_delivery[]" value="np_box" {% if "np_box" in deliveries %} checked="checked" {% endif %}/>
+										{{ delivery_np_box }}
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+
+						<label class="col-sm-2 control-label">
+							<span data-toggle="tooltip" title="{{ help_payment }}">{{ entry_payment }}</span>
+						</label>
+						<div class="col-sm-10">
+							<div class="well well-sm" style="overflow: auto;">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="module_mono_checkout_payment[]" value="card" {% if "card" in payments %} checked="checked" {% endif %}/>
+										{{ payment_card }}
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="module_mono_checkout_payment[]" value="payment_on_delivery" {% if "payment_on_delivery" in payments %} checked="checked" {% endif %}/>
+										{{ payment_on_delivery }}
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="module_mono_checkout_payment[]" value="part_purchase" {% if "part_purchase" in payments %} checked="checked" {% endif %}/>
+										{{ payment_part_purchase }}
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-cart_elem">
+							<span data-toggle="tooltip" title="{{ help_payments_number }}">{{ entry_payments_number}}</span>
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="number" min="3" max="25" name="module_mono_checkout_payments_number" value="{{ module_mono_checkout_payments_number }}" placeholder="{{ entry_payments_number }}" id="input-payments_number" class="form-control"/>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_statuses }}</label>
+						<div class="col-sm-10">
+							<label class="radio">
+								<p>{{ text_status_success }}</p>
+								<select name="module_mono_checkout_status_success" class="form-control">
+									<option value="">{{ text_select }}</option>
+									{% for order_status in order_statuses %}
+										<option value="{{ order_status.order_status_id }}" {% if module_mono_checkout_status_success == order_status.order_status_id %} selected {% endif %}>{{ order_status.name }}</option>
+									{% endfor %}
+								</select>
+							</label>
+							<label class="radio">
+								<p>{{ text_status_payment_on_delivery }}</p>
+								<select name="module_mono_checkout_status_payment_on_delivery" class="form-control">
+									<option value="">{{ text_select }}</option>
+									{% for order_status in order_statuses %}
+										<option value="{{ order_status.order_status_id }}" {% if module_mono_checkout_status_payment_on_delivery == order_status.order_status_id %} selected {% endif %}>{{ order_status.name }}</option>
+									{% endfor %}
+								</select>
+							</label>
+							<label class="radio">
+								<p>{{ text_status_not_confirmed }}</p>
+								<select name="module_mono_checkout_status_not_confirmed" class="form-control">
+									<option value="">{{ text_select }}</option>
+									{% for order_status in order_statuses %}
+										<option value="{{ order_status.order_status_id }}" {% if module_mono_checkout_status_not_confirmed == order_status.order_status_id %} selected {% endif %}>{{ order_status.name }}</option>
+									{% endfor %}
+								</select>
+							</label>
+							<label class="radio">
+								<p>{{ text_status_not_authorized }}</p>
+								<select name="module_mono_checkout_status_not_authorized" class="form-control">
+									<option value="">{{ text_select }}</option>
+									{% for order_status in order_statuses %}
+										<option value="{{ order_status.order_status_id }}" {% if module_mono_checkout_status_not_authorized == order_status.order_status_id %} selected {% endif %}>{{ order_status.name }}</option>
+									{% endfor %}
+								</select>
+							</label>
+							<label class="radio">
+								<p>{{ text_status_fail }}</p>
+								<select name="module_mono_checkout_status_fail" class="form-control">
+									<option value="">{{ text_select }}</option>
+									{% for order_status in order_statuses %}
+										<option value="{{ order_status.order_status_id }}" {% if module_mono_checkout_status_fail == order_status.order_status_id %} selected {% endif %}>{{ order_status.name }}</option>
+									{% endfor %}
+								</select>
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_faq }}</label>
+						<div class="col-sm-10">
+							{{ text_faq }}
+						</div>
+					</div>
+					{# <div class="form-group">
+										                        <label class="col-sm-2 control-label" for="input-top"><span data-toggle="tooltip"
+										                                                                                    title="{{ help_merchant }}">{{ entry_merchant }}</span></label>
+										                        <div class="col-sm-10">
+										                            <div class="checkbox">
+										                                <label>
+										                                    {% if module_mono_checkout_merchant_user %}
+										                                        <input type="checkbox" name="module_mono_checkout_merchant_user" value="1"
+										                                               checked="checked"
+										                                               id="input-module_mono_merchant"/>
+										                                    {% else %}
+										                                        <input type="checkbox" name="module_mono_checkout_merchant_user" value="1"
+										                                               id="input-module_mono_merchant"/>
+										                                    {% endif %}
+										                                </label>
+										                            </div>
+										                        </div>
+										                    </div> #}
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-module_mono_cart_show">
+							<span data-toggle="tooltip" title="{{ help_cart_show }}">{{ entry_cart_show }}</span>
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									{% if module_mono_checkout_cart_show %}
+										<input type="checkbox" name="module_mono_checkout_cart_show" value="1" checked="checked" id="input-module_mono_cart_show"/>
+									{% else %}
+										<input type="checkbox" name="module_mono_checkout_cart_show" value="1" id="input-module_mono_cart_show"/>
+									{% endif %}
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-cart_elem">
+							<span data-toggle="tooltip" title="{{ help_elem }}">{{ entry_cart_elem}}</span>
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="text" name="module_mono_checkout_cart_elem" value="{{ module_mono_checkout_cart_elem }}" placeholder="{{ entry_cart_elem }}" id="input-cart_elem" class="form-control"/>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-cart_popup_elem">
+							<span data-toggle="tooltip" title="{{ help_elem }}">{{ entry_cart_popup_elem}}</span>
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="text" name="module_mono_checkout_cart_popup_elem" value="{{ module_mono_checkout_cart_popup_elem }}" placeholder="{{ entry_cart_popup_elem }}" id="input-cart_popup_elem" class="form-control"/>
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							{{ text_popup_faq }}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-cart_show_size_w">
+							{{ entry_cart_show_size_w }}
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="number" name="module_mono_checkout_cart_show_size_w" value="{{ module_mono_checkout_cart_show_size_w }}" placeholder="{{ entry_cart_show_size_w }}" id="input-cart_show_size_w" class="form-control"/>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-cart_show_size_h">
+							{{ entry_cart_show_size_h }}
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="number" name="module_mono_checkout_cart_show_size_h" value="{{ module_mono_checkout_cart_show_size_h }}" placeholder="{{ entry_cart_show_size_h }}" id="input-cart_show_size_h" class="form-control"/>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-cart_popup_show_size_w">
+							{{ entry_cart_popup_show_size_w }}
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="number" name="module_mono_checkout_cart_popup_show_size_w" value="{{ module_mono_checkout_cart_popup_show_size_w }}" placeholder="{{ entry_cart_popup_show_size_w }}" id="input-cart_popup_show_size_w" class="form-control"/>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-cart_popup_show_size_h">
+							{{ entry_cart_popup_show_size_h }}
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="number" name="module_mono_checkout_cart_popup_show_size_h" value="{{ module_mono_checkout_cart_popup_show_size_h }}" placeholder="{{ entry_cart_popup_show_size_h }}" id="input-cart_popup_show_size_h" class="form-control"/>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-module_mono_product_show">
+							<span data-toggle="tooltip" title="{{ help_product_show }}">{{ entry_product_show }}</span>
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									{% if module_mono_checkout_product_show %}
+										<input type="checkbox" name="module_mono_checkout_product_show" value="1" checked="checked" id="input-module_mono_product_show"/>
+									{% else %}
+										<input type="checkbox" name="module_mono_checkout_product_show" value="1" id="input-module_mono_product_show"/>
+									{% endif %}
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-product_elem">
+							<span data-toggle="tooltip" title="{{ help_elem }}">{{ entry_product_elem}}</span>
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="text" name="module_mono_checkout_product_elem" value="{{ module_mono_checkout_product_elem }}" placeholder="{{ entry_product_elem }}" id="input-product_elem" class="form-control"/>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-product_show_size_w">
+							{{ entry_product_show_size_w }}
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="number" name="module_mono_checkout_product_show_size_w" value="{{ module_mono_checkout_product_show_size_w }}" placeholder="{{ entry_product_show_size_w }}" id="input-product_show_size_w" class="form-control"/>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-product_show_size_h">
+							{{ entry_product_show_size_h }}
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								<label>
+									<input type="number" name="module_mono_checkout_product_show_size_h" value="{{ module_mono_checkout_product_show_size_h }}" placeholder="{{ entry_product_show_size_h }}" id="input-product_show_size_h" class="form-control"/>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_button }}</label>
+						<div class="col-sm-10">
+							<label class="radio">
+								<input type="radio" name="module_mono_checkout_button" value="black" {% if module_mono_checkout_button == 'black' or not module_mono_checkout_button %} checked="checked" {% endif %}/>
+								<img src="view/image/mono_checkout/monocheckout_button_black_normal.svg" alt="monocheckout_button_black_normal">
+							</label>
+							<label class="radio">
+								<input type="radio" name="module_mono_checkout_button" value="white" {% if module_mono_checkout_button == 'white' %} checked="checked" {% endif %}/>
+								<img src="view/image/mono_checkout/monocheckout_button_white_normal.svg" alt="monocheckout_button_white_normal">
+							</label>
+							<label class="radio">
+								<input type="radio" name="module_mono_checkout_button" value="black_short" {% if module_mono_checkout_button == 'black_short' %} checked="checked" {% endif %}/>
+								<img src="view/image/mono_checkout/monocheckout_button_black_short.svg" alt="monocheckout_button_black_short">
+							</label>
+							<label class="radio">
+								<input type="radio" name="module_mono_checkout_button" value="white_short" {% if module_mono_checkout_button == 'white_short' %} checked="checked" {% endif %}/>
+								<img src="view/image/mono_checkout/monocheckout_button_white_short.svg" alt="monocheckout_button_white_short">
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<select name="module_mono_checkout_status" id="input-status" class="form-control">
+								{% if module_mono_checkout_status %}
+									<option value="1" selected="selected">{{ text_enabled }}</option>
+									<option value="0">{{ text_disabled }}</option>
+								{% else %}
+									<option value="1">{{ text_enabled }}</option>
+									<option value="0" selected="selected">{{ text_disabled }}</option>
+								{% endif %}
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function () {
+		$('#input-payments_number').on('change', function () {
+			if($(this).val() < 3) $(this).val(3)
+			if($(this).val() > 25) $(this).val(25)
+		})
+	})
+</script>
+{{ footer }}

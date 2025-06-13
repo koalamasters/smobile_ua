@@ -1,0 +1,93 @@
+<script>
+var hpmrr_cat_config =
+{
+    redirect: {{ hpmrr_cat_redirect }},
+    item_selector: '.product-layout',
+    price_selector: '.price',
+    main_photo_selector: '.image img',
+    name_selector: '.caption h4 a',
+    change_href: '.caption h4 a, .image a',
+    cart_button: 'button[onclick ^= "cart.add"]',
+    wishlist_button: 'button[onclick ^= "wishlist.add"]',
+    compare_button: 'button[onclick ^= "compare.add"]',
+    fastbuy_button: 'button[onclick ^="fastbuy"]',
+    fastview_button: 'button[onclick ^="fastview"]',
+    stock_selector: '.stock',
+    model_selector: '.model',
+
+    // #1 start::  добавил из файла адаптации
+    item_selector: '.product-layout',
+    price_selector: '.sc-module-price-box',
+    main_photo_selector: '.sc-module-img img',
+    name_selector: '.sc-module-info a',
+    change_href: '.sc-module-info a, .sc-module-img a',
+    cart_button: 'button[onclick ^= "cart.add"]',
+    price_html: function(newprice)
+    {
+        return  '<span class="sc-module-price fw-800 dark-text mt-1">' + newprice + '</span>';
+    },
+    special_price_html: function(newprice, oldprice)
+    {
+        return '<span class="sc-module-price-old light-text fsz-14">' + oldprice + '</span><span class="sc-module-price fw-800 dark-text mt-1">' + newprice + '</span>';
+    },
+    // #1 finish::
+
+    replace_piece_cat: function($pinfo, $btn)
+    {
+        var $item = $btn.parents(this.item_selector);
+        var cartadd_onclick = "cart.add('" + $pinfo.product_id + "', '1');";
+        var wishlist_onclick = "wishlist.add('" + $pinfo.product_id + "');";
+        var compare_onclick = "compare.add('" + $pinfo.product_id + "');";
+        var fastbuy_onclick = "fastbuy('" + $pinfo.product_id + "');";
+        var fastview_onclick = "fastview('" + $pinfo.product_id + "');";
+        
+        if($pinfo.quantity <= 0)
+        {
+            $item.find(this.cart_button).addClass("disabled").attr('disabled','disabled');
+        }
+        else
+        {
+            $item.find(this.cart_button).removeClass("disabled").removeAttr('disabled');
+        }
+        
+        $item.find("input[name='product_id']").val($pinfo.product_id);
+        $item.find(".hpm-block-cat").replaceWith($pinfo.hpm);
+        $item.find(this.change_href).attr('href', $pinfo.href.replace(/&amp;/g, "&"));
+        $item.find(this.main_photo_selector).attr('src', $pinfo.thumb).attr('srcset', $pinfo.thumb);
+        $item.find(this.name_selector).html($pinfo.name);
+        
+        $item.find(this.cart_button).attr('onclick', cartadd_onclick);
+        $item.find(this.wishlist_button).attr('onclick', wishlist_onclick);
+        $item.find(this.compare_button).attr('onclick', compare_onclick);
+        $item.find(this.fastbuy_button).attr('onclick', fastbuy_onclick);
+        $item.find(this.fastview_button).attr('onclick', fastview_onclick);
+        
+        $item.find(this.stock_selector).html($pinfo.stock);
+        $item.find(this.model_selector).html($pinfo.model);
+
+        if($pinfo.special)
+            $item.find(this.price_selector).html(this.special_price_html($pinfo));
+        else
+            $item.find(this.price_selector).html(this.price_html($pinfo));
+
+        // #2 start:: добавил код ниже. el замкенил на pinfo
+        var octPopUpView_onclick = "octPopUpView('" + $pinfo.product_id + "');";
+        var link = "index.php?route=product/product&product_id=" + $pinfo.product_id;
+            
+       $item.find(".sc-module-btns button").eq(0).attr('onclick', octPopUpView_onclick);
+       $item.find(".sc-module-btns button").eq(1).attr('onclick', wishlist_onclick);
+       $item.find(".sc-module-btns button").eq(2).attr('onclick', compare_onclick);
+ 
+        $item.find("input[name='product_id']").val($pinfo.product_id);
+        $item.find(this.change_href).attr('href', link);
+        $item.find(this.main_photo_selector).attr('src', $pinfo.thumb);
+        $item.find(this.name_selector).html($pinfo.name);
+
+        if($pinfo.special)
+            $item.find(this.price_selector).html(this.special_price_html($pinfo.special, $pinfo.price));
+        else
+            $item.find(this.price_selector).html(this.price_html($pinfo.price));
+        // #2 finish::
+    }
+}
+</script>

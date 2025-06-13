@@ -1,0 +1,68 @@
+<script>
+var hpmrr_selector = '{{ hpmrr_selector }}';
+var hpmrr_pos = '{{ hpmrr_position }}';
+
+function hpmrr_setpos()
+{
+    if(hpmrr_pos == 'prepend' || hpmrr_pos == 'append')
+    {
+        $(hpmrr_selector).{{ hpmrr_position }}($('.hpm-block-prd'));
+    }
+    else if(hpmrr_pos == 'insertBefore' || hpmrr_pos == 'insertAfter')
+    {
+        $('.hpm-block-prd').{{ hpmrr_position }}(hpmrr_selector);
+    }
+    else
+    {
+        $('.hpm-block-prd').insertBefore(hpmrr_selector);
+    }
+}
+
+function hpmrr_start()
+{
+    hpmrr_setpos();
+    $('.hpm-block-prd').show();
+    {{ hpmrr_custom_js }}
+}
+
+$(document).ready(function() {
+    hpmrr_start();
+});
+
+var hpmrr_prd_config = 
+{
+    change_url: true,
+    refresh_price: false,
+    pr_opts: "#product input[type='text'], #product input[type='hidden'], #product input[type='radio']:checked, #product input[type='checkbox']:checked, #product select, #product textarea",
+    refresh_price_func: function(json) {
+        console.log(json);
+    },
+    redirect: {{ hpmrr_redirect }},
+    before_ajax : function(html) {},
+    after_ajax : function(html) {
+
+        $(".kjseries, #prd-sets").remove();
+        
+        if($(html).find(".kjseries").length)
+        {
+            $("body").append($(html).find(".kjseries"));
+            if(typeof kjs_start != "undefined")
+            {
+                kjs_start();
+            }
+        }
+
+        if($(html).find("#prd-sets").length)
+        {
+            $("body").append($(html).find("#prd-sets"));
+            if(typeof kjset_start != "undefined")
+            {
+                kjset_start();
+            }
+        }
+       
+    },
+    ajax_replace : [".hpm-block", "#content", "h1"],
+    refresh_kjseries : true
+};
+</script>

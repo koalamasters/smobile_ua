@@ -1,0 +1,832 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <div class="btn btn-success kit-mods"><i class="fa fa-puzzle-piece fa-fw"></i> {{ url_module }}</div>
+
+                <button type="submit" form="form-kjseries-add-type" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }}</h1>
+
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %} 
+        <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+        {% endif %} 
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3><i class="fa fa-pencil"></i> {{ name_series }}</h3>
+                <button form="help_modals" class="pull-right hm-help btn btn-primary btn-sm" data-toggle="modal" data-target="#Series_Modal">
+                    <i class="fa fa-info"></i> - HELPER
+                </button>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post"  id="form-kjseries-add-type" class="form-horizontal">
+                    <table class='table table-hover table-bordered table-responsive'>
+                        <thead>
+                            <tr>
+                                <td class="name-start">
+                                    <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ text_name_title }}">
+                                            {{ text_name }}
+                                        </span>
+                                    </label>
+                                </td>
+                                <td class="text-center edit-links">
+                                    <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ entry_links_title }}">
+                                            {{ entry_links }}
+                                        </span>
+                                    </label>
+                                </td>
+                                <td class="text-center status">
+                                    <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ entry_view_title }}">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                        </span>
+                                    </label>
+                                </td>
+                                <td class="text-center">
+                                    canonical
+                                </td>
+                                <td class="text-center">
+                                    sort by sort order
+                                </td>
+                                <td class="text-center">
+                                    мікророзмітка schema.org в карточці товару
+                                </td>
+                                <td>Показати цiни</td>
+
+                                <td>
+                                    <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ text_comment }}">
+                                            {{ text_comment }}
+                                        </span>
+                                    </label>
+                                </td>
+                                <td class="text-center status">
+                                    <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ button_on_off }}">
+                                            <i class="fa fa-power-off"></i>
+                                        </span>
+                                    </label>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="name-text">
+                                    <input type='hidden' name='id' value="{{ id }}" class='form-control'>
+                                    <input type="text" name="name" value="{{ type.name }}" class="form-control" />
+                                </td>
+                                <td class="text-center switcher-edit">
+                                    <div class="input-group pull-left">
+                                        <input class="bootstrap-switcher form-control" type="checkbox" value="1"
+                                               name="links" data-size="small" data-on-color="success"
+                                            {% if type.links %} checked {% endif %}
+                                               data-on-text="ALL" data-off-text="EDIT">
+                                    </div>
+                                    <button form="help_modals" class="hm-links btn btn-primary btn-md" data-toggle="modal" data-target="#Links_Form_Modal">
+                                        <i class="fa fa-indent" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                                <td class="text-center switcher-edits">
+                                    <div class="input-group pull-left">
+                                        <input class="bootstrap-switcher form-control" type="checkbox" value="1"
+                                               name="hidden_if_null" data-size="small" data-on-color="success"
+                                            {% if type.hidden_if_null %} checked {% endif %}
+                                               data-on-text="YES" data-off-text="NO">
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" name="canonical" {% if type.canonical %} checked {% endif %}>
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" name="sort_by_so" {% if type.sort_by_so %} checked {% endif %}>
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" name="schemaorg" {% if type.schemaorg %} checked {% endif %}>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" name="show_price_prdcard" {% if type.show_price_prdcard %} checked {% endif %}> Показувати цiну в картцi товару
+                                    </label>
+                                    </br>
+                                    <label>
+                                        <input type="checkbox" name="show_price_cat" {% if type.show_price_cat %} checked {% endif %}> Показувати цiну в категорії
+                                    </label>
+                                    </br>
+                                    <label>
+                                        <input type="checkbox" name="minmax_price_prdcard" {% if type.minmax_price_prdcard %} checked {% endif %}> Показувати [вiд 10грн до 1000грн] в картцi товару
+                                    </label>
+                                    </br>
+                                    <label>
+                                        <input type="checkbox" name="minmax_price_cat" {% if type.minmax_price_cat %} checked {% endif %}> Показувати [вiд 10грн до 1000грн] в категорії
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <textarea style="resize: vertical;" class='form-control' name='description'>{{ type['description'] }}</textarea>
+                                </td>
+                                <td class="text-center switcher-edits">
+                                    <input class="bootstrap-switcher form-control" type="checkbox" value="1"
+                                           name="status" data-size="small" data-on-color="success"
+                                           {% if (type['status']) %} {{ 'checked' }}{% endif %}
+                                           data-on-text="ON" data-off-text="OFF">
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot></tfoot>
+                    </table>
+                    
+                    <legend>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse-setting-cat">{{ kit_set_category }}</button>
+                        <button form="help_modals" class="pull-right hm-help btn btn-primary btn-sm" data-toggle="modal" data-target="#Type_Cat_Modal">
+                            <i class="fa fa-info" aria-hidden="true"></i> - {{ help_name }} 
+                        </button>
+                    </legend>
+
+                    <div class="collapse" id="collapse-setting-cat">
+                    <table class='table table-hover table-bordered table-responsive'>
+                        <thead>
+                        <tr>
+                            <td class="title-start">
+                                <label class="control-label">
+                                    <span data-toggle="tooltip" title="" data-original-title="{{ title_cat_html }}">
+                                        {{ title_name }}
+                                    </span>
+                                </label>
+                            </td>
+                            <td class="text-center status">
+                                <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ entry_status_name }}">
+                                           <i class="fa fa-low-vision"></i>
+                                        </span>
+                                </label>
+                            </td>
+                            <td class="edit-type">
+                                <label class="control-label">
+                                    <span data-toggle="tooltip" title="" data-original-title="{{ entry_sample_title }}">
+                                        {{ entry_types }}
+                                    </span>
+                                </label>
+                            </td>
+                            <td class="edit-links">
+                                <label class="control-label">
+                                    <span data-toggle="tooltip" title="" data-original-title="{{ entry_width_title }}">
+                                        {{ entry_width }}
+                                    </span>
+                                </label>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="name-text">
+                                  {% for language in languages %} 
+                                    <div class="input-group pull-left">
+                                        <span>{{ language['name'] }}</span>
+                                        <input type="text" name="category_title[{{ language['language_id'] }}]"
+                                               value="{{ type['category_title'][language['language_id']] is defined ? type['category_title'][language['language_id']] : '' }}" class="form-control" />
+                                    </div>
+                                {% endfor %} 
+                            </td>
+                            <td class="text-center switcher-edits">
+                                <input class="bootstrap-switcher form-control" type="checkbox" value="1"
+                                       name="category_name_as_title" data-size="small" data-on-color="success"
+                                    {% if (type['category_name_as_title']) %} {{ 'checked' }}{% endif %}
+                                       data-on-text="YES" data-off-text="NO">
+                            </td>
+
+                            <td class="edit-type">
+                                <select name="category_variant" class="form-control">
+                                    {% for sample_key,sample_value in array_samples %}
+                                        {% if (type['category_variant'] is defined and type['category_variant'] == sample_key) %} 
+                                            <option value="{{ sample_key }}" selected="selected">{{ sample_value }}</option>
+                                        {% else %} 
+                                            <option value="{{ sample_key }}" >{{ sample_value }}</option>
+                                        {% endif %} 
+                                    {% endfor %} 
+                                </select>
+                            </td>
+                            <td class="text-center">
+                                <div class="form-set">
+                                    <input class='form-control' type='text' value="{{ type['category_image_width'] }}" name='category_image_width'>
+                                </div>
+                                <div class="form-set">
+                                    <input class='form-control' type='text' value="{{ type['category_image_height'] }}" name='category_image_height'>
+                                </div>
+                            </td>
+                            
+                        </tr>
+                        </tbody>
+                        </table>
+                        <table class='table table-hover table-bordered table-responsive'>
+                        <tbody>
+                        <tr>
+                                {% set i=0 %}{% for i in i..5 %} 
+                                <td class="form-tables">
+                                    <select name="category_columns[{{ i }}][type]" class="form-control">
+                                        {% for columns_key,columns_value in array_columns_type %}
+                                            {% if (type['category_columns'][i] is defined and type['category_columns'][i]['type'] == columns_key) %} 
+                                                <option value="{{ columns_key }}" selected="selected" class="kit-select">{{ columns_value }}</option>
+                                            {% else %} 
+                                                <option value="{{ columns_key }}" class="kit-select">{{ columns_value }}</option>
+                                        {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </td>
+                                {% endfor %} 
+                            </tr>
+
+                            <tr>
+                                {% set i=0 %}{% for i in i..5 %} 
+                                <td class="form-tables">
+                                    <select name="category_columns[{{ i }}][key]" class="form-control">
+                                        {% for columns_key,columns_value in array_columns %}
+                        {% if (type['category_columns'][i] is defined and type['category_columns'][i]['key'] == columns_key) %} 
+                            <option value="{{ columns_key }}" selected="selected" class="kit-select">{{ columns_value }}</option>
+                        {% else %} 
+                                        <option value="{{ columns_key }}" class="kit-select">{{ columns_value }}</option>
+                                        {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </td>
+                                {% endfor %} 
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                
+                   <div class="kt-kit">
+                    <legend>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse-setting-prdcard">{{ kit_set_product }}</button>
+                        <button form="help_modals" class="pull-right hm-help btn btn-primary btn-sm" data-toggle="modal" data-target="#Type_Modal">
+                            <i class="fa fa-info" aria-hidden="true"></i> - {{ help_name }} 
+                        </button>
+                    </legend>
+
+                    <div class="collapse" id="collapse-setting-prdcard">
+                    <table class='table table-hover table-bordered table-responsive'>
+                        <thead>
+                        <tr>
+                            <td class="title-start">
+                                <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ title_prod_html }}">
+                                            {{ title_name }}
+                                        </span>
+                                </label>
+                            </td>
+                            <td class="text-center status">
+                                <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ entry_status_name }}">
+                                           <i class="fa fa-low-vision"></i>
+                                        </span>
+                                </label>
+                            </td>
+                            <td class="edit-links">
+                                <label class="control-label">
+                                    <span data-toggle="tooltip" title="" data-original-title="{{ entry_width_title }}">
+                                        {{ entry_width }}
+                                    </span>
+                                </label>
+                            </td>
+                            <td class="edit-type">
+                                <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ entry_position_title }}">
+                                            {{ entry_position }}
+                                        </span>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ entry_selector_title }}">
+                                            {{ entry_selector }}
+                                        </span>
+                                </label>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="name-text">
+                                {% for language in languages %} 
+                                    <div class="input-group pull-left">
+                                         <span>{{ language['name'] }}</span>
+                                        <input type="text" name="product_title[{{ language['language_id'] }}]"
+                                               value="{{ type['product_title'][language['language_id']] is defined ? type['product_title'][language['language_id']] : '' }}" class="form-control" />
+                                    </div>
+                                {% endfor %} 
+                            </td>
+
+                            <td class="text-center switcher-edits">
+                                <input class="bootstrap-switcher form-control" type="checkbox" value="1"
+                                       name="product_name_as_title" data-size="small" data-on-color="success"
+                                    {% if (type['product_name_as_title']) %} {{ 'checked' }}{% endif %}
+                                       data-on-text="YES" data-off-text="NO">
+                            </td>
+
+                            <td class="text-center">
+                                <div class="form-set">
+                                    <input class='form-control' type='text' value="{{ type['product_image_width'] }}" name='product_image_width'>
+                                </div>
+                                <div class="form-set">
+                                    <input class='form-control' type='text' value="{{ type['product_image_height'] }}" name='product_image_height'>
+                                </div>
+                            </td>
+                            <td class="edit-type">
+                                <select name="product_position" class="form-control">
+                                    {% for positions_key,positions_value in array_positions %}
+                                        {% if (type['product_position'] is defined and type['product_position'] == positions_key ) %} 
+                                            <option value="{{ positions_key }}" selected="selected">{{ positions_value }}</option>
+                                        {% else %} 
+                                            <option value="{{ positions_key }}" >{{ positions_value }}</option>
+                                        {% endif %} 
+                                    {% endfor %} 
+                                </select>
+                            </td>
+                            <td>
+                                <input class='form-control' type='text' value="{{ type['product_selector'] }}" name='product_selector'>
+                                <label class="control-label">Ваша тема</label>
+                                <select class="form-control" id="theme_select" onchange="$(this).prev().prev().val(this.value);">
+                                    <option value="#product">Обрати тему</option>
+                                    <option value="#product .ds-product-main-price">Deals</option>
+                                    <option value="#product .price">CyberStore</option>
+                                    <option value="#fix_right_block .price">LuxShop</option>
+                                    <option value="#product .rm-product-center-price">ReMarket</option>
+                                    <option value="#product .price-action-group">Chameleon</option>
+                                    <option value="#product .sc-product-actions-top">ShowCase</option>
+                                    <option value="#product .pr_price">Deluxe</option>
+                                    <option value="#product .fm-product-buttons">FeelMart</option>
+                                    <option value=".order-1 .us-price-block">UltraStore</option>
+                                </select>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                        </tbody></tbody>
+                    </table>
+                    <legend>
+                        {{ kit_column }} 
+                        <button form="help_modals" class="pull-right hm-help btn btn-primary btn-sm" data-toggle="modal" data-target="#Column_Modal">
+                            <i class="fa fa-info" aria-hidden="true"></i> - {{ help_name }} 
+                        </button>
+                    </legend>
+                    <table class='table table-hover table-bordered table-responsive'>
+                        <thead>
+                            <tr>
+                                {% set i=0 %}{% for i in i..5 %} 
+                                <td class="text-center">kit-class</td>
+                                {% endfor %} 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% set i=0 %}{% for i in i..5 %} 
+                                <td class="form-tables">
+                                    <select name="product_columns[{{ i }}][type]" class="form-control">
+                                         {% for columns_key,columns_value in array_columns_type %}
+                                            {% if (type['product_columns'][i] is defined and type['product_columns'][i]['type'] == columns_key) %} 
+                                                <option value="{{ columns_key }}" selected="selected" class="kit-select">{{ columns_value }}</option>
+                                            {% else %} 
+                                                <option value="{{ columns_key }}" class="kit-select">{{ columns_value }}</option>
+                                        {% endif %} 
+                                        {% endfor %} 
+
+                                    </select>
+                                </td>
+                                {% endfor %} 
+                            </tr>
+
+                            <tr>
+                                {% set i=0 %}{% for i in i..5 %} 
+                                <td class="form-tables">
+                                    <select name="product_columns[{{ i }}][key]" class="form-control">
+                                        {% for columns_key,columns_value in array_columns %}
+                        {% if (type['product_columns'][i] is defined and type['product_columns'][i]['key'] == columns_key) %} 
+                            <option value="{{ columns_key }}" selected="selected" class="kit-select">{{ columns_value }}</option>
+                        {% else %} 
+                                        <option value="{{ columns_key }}" class="kit-select">{{ columns_value }}</option>
+                                        {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </td>
+                                {% endfor %} 
+                            </tr>
+                        </tbody>
+                        <tfoot></tfoot>
+                    </table>
+                    </div>
+
+                   </div>
+                    <legend>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse-setting-cssjs">{{ kit_css }}</button>
+                        <button form="help_modals" class="pull-right hm-help btn btn-primary btn-sm" data-toggle="modal" data-target="#CSS_JS_Modal">
+                            <i class="fa fa-info" aria-hidden="true"></i> - {{ help_name }} 
+                        </button>
+                    </legend>
+
+                    <div class="collapse" id="collapse-setting-cssjs">
+                    <table class='table table-hover table-bordered table-responsive'>
+                        <thead>
+                            <tr>
+                                <td>JS</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <textarea class='form-control' name='custom_js'>{{ type['custom_js'] }}</textarea>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    
+                    <div class="modal fade" id="Links_Form_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    <h4 class="modal-title" id="myModalLabel"><i class="fa fa-cogs"></i> {{ help_name_links }}</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{ top_links_text }}</p>
+                                    <div class="links-table">
+                                        <table class='table table-bordered table-responsive'>
+                                            <thead>
+                                                <tr>
+
+                                                    <td>{{ entry_suppler }}</td>
+                                                    <td>{{ entry_brand }}</td>
+                                                    <td>{{ entry_category }}</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class='h5-scroll'>
+                                                            {% if (supplers) %} 
+
+                                                            {% for k,suppler in supplers %} 
+                                                            <input type="checkbox" name='suppler[]' value="{% set c=suppler['suppler_id'] %}{% if (c<10) %}{% set c='0'~c %}{% endif %}{{ c }}" {% if c in type['suppler'] %} checked {% endif %}> {{ suppler['name'] }}<br>
+                                                            {% endfor %} 
+
+                                                            {% else %} 
+                                                            - <input type='hidden' name='suppler' value=''>
+                                                            {% endif %} 
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        
+                                                            {% for m in manufacturers %} 
+                                                            <input type="checkbox" name='manufacturer[]' {% if m['manufacturer_id'] in type['manufacturer'] %} checked {% endif %} value="{{ m['manufacturer_id'] }}">
+                                                                   {{ m['name'] }}<br>
+                                                            {% endfor %} 
+
+                                                            </td>
+                                                            <td>
+                                                                
+
+                                                                {% for cat in categories %}
+                                                                    
+                                                                    <input type='checkbox' name='category[]' value='{{ cat.category_id }}' {% if cat.category_id in type['category'] %} checked {% endif %}/> {{ cat.name }} </br>
+                                                                {% endfor %}
+                                                                
+                                                            </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <hr>
+                                    <p>{{ bottom_links_text }}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal"> {{ help_ok }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{ footer }} 
+    </div>
+</div>
+<!-- Start Series Modal INFO -->
+<div class="modal fade" id="Series_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-cogs"></i> {{ name_series }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="help-text">{{ help_first_series }}</div>
+                <div class="text-center">{{ help_second_series }}</div>
+                <div class="help-text">{{ help_third_series }}</div>
+                <div class="text-center">{{ help_fourth_series }}</div>
+                <div class="help-text">{{ help_fifth_series }}</div>
+                <div class="text-center">{{ help_sixth_series }}</div>
+                <div class="help-text">{{ help_seventh_series }}</div>
+                <div class="text-center">{{ help_eighth_series }}</div>
+                <div class="help-text">{{ help_ninth_series }}</div>
+                <div class="text-center">{{ help_tenth_series }}</div>
+                <div class="help-text">{{ help_eleventh_series }}</div>
+                <div class="text-center">{{ help_twelfth_series }}</div>
+                <div class="help-text">{{ help_thirteenth_series }}</div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">{{ copy_label }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--// END Series Modal INFO -->
+<!-- Start Type_Cat_Modal -->
+<div class="modal fade" id="Type_Cat_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-cogs"></i> {{ help_name_type }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">{{ help_first_cat }}</div>
+                <div class="help-text">{{ help_second_cat }}</div>
+                <div class="text-center">{{ help_third_cat }}</div>
+                <div class="help-text">{{ help_fourth_cat }}</div>
+                <div class="text-center">{{ help_fifth_cat }}</div>
+                <div class="help-text">{{ help_sixth_cat }}</div>
+                <div class="text-center">{{ help_seventh_cat }}</div>
+                <div class="help-text">{{ help_eighth_cat }}</div>
+                <div class="text-center">{{ help_ninth_cat }}</div>
+                <div class="help-text">{{ help_tenth_cat }}</div>
+                <div class="text-center">{{ help_ninth_cat }}</div>
+                <div class="help-text">{{ help_tenth_cat }}</div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">{{ copy_label }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--// END Type_Cat_Modal -->
+<!-- Start Type_Product_Modal -->
+<div class="modal fade" id="Type_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-cogs"></i> {{ help_name_type }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">{{ help_first_type }}</div>
+                <div class="help-text">{{ help_second_type }}</div>
+                <div class="text-center">{{ help_third_type }}</div>
+                <div class="help-text">{{ help_fourth_type }}</div>
+                <div class="text-center">{{ help_fifth_type }}</div>
+                <div class="help-text">{{ help_sixth_type }}</div>
+                <div class="text-center">{{ help_seventh_type }}</div>
+                <div class="help-text">{{ help_eighth_type }}</div>
+                <div class="text-center">{{ help_ninth_type }}</div>
+                <div class="help-text">{{ help_tenth_type }}</div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">{{ copy_label }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--// END Type_Product__Modal -->
+<!-- Start Column_Modal -->
+<div class="modal fade" id="Column_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-cogs"></i> {{ help_name_column }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="help-text">{{ help_first_column }}</div>
+                <div class="text-center">{{ help_second_column }}</div>
+                <div class="help-text">{{ help_third_column }}</div>
+                <div class="hidden text-center">{{ help_fourth_column }}</div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">{{ copy_label }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--// END Column_Modal -->
+<!-- Start CSS_JS_Modal -->
+<div class="modal fade" id="CSS_JS_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-cogs"></i> {{ help_name_js }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">{{ help_first_js }}</div>
+                <div class="help-text">{{ help_second_js }}</div>
+                <div class="text-center">{{ help_third_js }}</div>
+                <div class="help-text">{{ help_fourth_js }}</div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">{{ copy_label }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('.bootstrap-switcher').bootstrapSwitch();
+
+    $(document).ready(function () {
+        $('body').addClass('kit-series kit-edit');
+    });
+
+    $(document).ready(function () 
+    {
+        $('#search-prd-hpmrr').autocomplete({'source': autocomplete_source_hpmrr2,'select': autocomplete_select_hpmrr2});
+        $('#search-sku-hpmrr').autocomplete({'source': autocomplete_source_hpmrr3,'select': autocomplete_select_hpmrr3});
+
+        $('#autocat').autocomplete({'source': autocomplete_source_cat,'select': autocomplete_select_cat});
+
+        $(document).on('click', '.remove-cat', function () {
+            $(this).parents('.cat').remove();
+            return false;
+        });
+
+        $('#hpmrr-prd-list').on('click', 'td .remove', function () { //Product group
+            $(this).parents('tr').remove();
+            return false;
+        });
+
+        $(document).on('click', '.remove-prd', function () { //Product group
+            $(this).parents('.prd').remove();
+            return false;
+        });
+
+        $("#search-prd-hpmrr").keydown(function(event) 
+        {
+            if (event.keyCode === 13) {
+                
+                event.preventDefault();
+                $.ajax({
+
+                    url: 'index.php?route=extension/module/hpmrr/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent($('#search-prd-hpmrr').val()),
+                    dataType: 'json',
+                    success: function (json) 
+                    {
+                        for (let i = 0; i < json.length; i++) 
+                        {
+                          addItemHPMrr(json[i]['product_id'], json[i]['name'], json[i]['sku'], json[i]['image']);
+                        }
+                    }
+                });
+
+                return false;
+            }
+        });
+
+        $("#search-sku-hpmrr").keydown(function(event) 
+        {
+            if (event.keyCode === 13) {
+                
+                event.preventDefault();
+                $.ajax({
+
+                    url: 'index.php?route=extension/module/hpmrr/autocomplete&user_token={{ user_token }}&filter_sku=' + encodeURIComponent($('#search-sku-hpmrr').val()),
+                    dataType: 'json',
+                    success: function (json) 
+                    {
+                        for (let i = 0; i < json.length; i++) 
+                        {
+                          addItemHPMrr(json[i]['product_id'], json[i]['name'], json[i]['sku'], json[i]['image']);
+                        }
+                    }
+                });
+
+                return false;
+            }
+        });
+
+        $("#save-hpmrr").on('click', '', function () { //Product group
+            var data = $("#hpmrr-prd-list").find('input').serialize(); //Product group
+            $.ajax({
+                url: 'index.php?route=extension/module/hpmrr/save&user_token={{ user_token }}',
+                method: 'POST',
+                data: data,
+                success: function (json) {
+
+                    if (json['error']) {
+                        $("#tab-hpmrr #ajax-response").html('<div class=\'alert alert-danger\'>' + json['error'] + '</div>')
+                    }
+                    else if (json['success']) {
+                        $("#tab-hpmrr #ajax-response").html('<div class=\'alert alert-success\'>' + json['success'] + '</div>')
+                    }
+                }
+            });
+            return false;
+        });
+    });
+
+    function autocomplete_source_cat(request, response) 
+    {
+        $.ajax({
+            url: 'index.php?route=extension/module/hpmrr/autocomplete_cat&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function (json) {
+                response($.map(json, function (item) {
+                    return {
+                        label: item['name'],
+                        value: item['category_id']
+                    }
+                }));
+            }
+        });
+    }
+
+    function autocomplete_select_cat(item) 
+    {
+
+        var html = "<div class='cat'><input type='hidden' name='category[]' value='"+item.value+"'/> <button type='button' class='btn btn-danger remove-cat pull-right'>x</button> "+item.label +"</div>";
+        $("#select_cats").append(html);
+    }
+
+
+    function autocomplete_source_hpmrr3(request, response) 
+    {
+        $.ajax({
+            url: 'index.php?route=extension/module/hpmrr/autocomplete&user_token={{ user_token }}&filter_sku=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function (json) {
+                response($.map(json, function (item) {
+                    return {
+                        label: item['sku'],
+                        value: item['product_id'],
+                        name: item['name'],
+                        sku: item['sku'],
+                        image: item['image']
+                    }
+                }));
+            }
+        });
+    }
+
+    function autocomplete_source_hpmrr2(request, response) 
+    {
+        $.ajax({
+            url: 'index.php?route=extension/module/hpmrr/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function (json) {
+                response($.map(json, function (item) {
+                    return {
+                        label: item['name'],
+                        value: item['product_id'],
+                        name: item['name'],
+                        sku: item['sku'],
+                        image: item['image']
+                    }
+                }));
+            }
+        });
+    }
+
+    function autocomplete_select_hpmrr3(item) 
+    {
+        addItemHPMrr(item['value'], item['name'], item['sku'], item['image']);
+    }
+
+    function autocomplete_select_hpmrr2(item) {
+        addItemHPMrr(item['value'], item['name'], item['sku'], item['image']);
+    }
+
+    function addItemHPMrr(pid, name, sku, image)
+    {
+        var html = "";
+        html += "<div class='prd'>"
+        html += "<input type='hidden' name='products[]' value='"+pid+"'/> <span class='remove-prd btn btn-danger'>x</span> "+name + " / " + sku;
+        html += "</div>";
+
+        $("#Links_Form_Modal .products").append(html);
+    }
+</script>
+<style>
+    .kit-series .cat
+    {
+        overflow: hidden;
+    }
+    .kit-series .cat .remove-cat
+    {
+        padding: 2px 4px;
+    }
+</style>

@@ -1,0 +1,176 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-clist" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1><i class="fa fa-text" aria-hidden="true"></i> {{ heading_title_catalogform }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-clist" class="form-horizontal">
+              <div class="form-group">
+                  <label class="col-sm-2 control-label" for="name">{{ entry_name }}</label> <div class="col-sm-10">
+                    <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="name" class="form-control" />
+                  </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-products">{{ entry_products }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="product" value="" placeholder="{{ entry_products }}" id="input-products" class="form-control" />
+                  <div id="products" class="well well-sm" style="height: 150px; overflow: auto;">
+                    {% for product in products %}
+                    <div id="product{{ product.product_id }}"><i class="fa fa-minus-circle"></i> {{ product.name }}
+                      <input type="hidden" name="products[]" value="{{ product.product_id }}" />
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-category">{{ entry_categories }}</label>
+                <div class="col-sm-4">
+                  <div class="position-relative">
+                    <input type="text" name="category" value="" placeholder="{{ entry_categories }}" id="input-category" class="form-control" />
+                    <div id="categories" class="well well-sm" style="height: 350px;">
+                      {% for category in categories %}
+                        <div id="category{{ category.category_id }}"><i class="fa fa-minus-circle"></i> {{ category.name }}
+                          <input type="hidden" name="categories[]" value="{{ category.category_id }}" />
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="tree">
+                    {% macro render_categories(categories, selected_ids) %}
+                      <ul style="list-style: none">
+                        {% for category in categories %}
+                          {% set checked = category.category_id in selected_ids ? 'checked' : '' %}
+                          <li class="cat-tree-item" data-fullname="{{ category.full_name }}" data-cat-id="{{ category.category_id }}">
+                            <label>
+                              <input type="checkbox" name="categories_tree[]" value="{{ category.category_id }}" {{ checked }}>
+                              {{ category.name }}
+                            </label>
+
+                            {% if category.children is not empty %}
+                              {{ _self.render_categories(category.children, selected_ids) }}
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endmacro %}
+
+                    {% import _self as macros %}
+                    {{ macros.render_categories(tree, selected_ids|default([])) }}
+                  </div>
+
+                  <script>
+                    $('.cat-tree-item input').change(function () {
+                      const checked = $(this).prop('checked');
+                      const categoryId = $(this).val();
+                      const categoryName = $(this).closest('li').attr('data-fullname').trim();
+                      const $container = $('#categories');
+
+                      const itemId = 'category' + categoryId;
+
+                      if (checked) {
+                        // Додати, якщо ще не існує
+                        if (!document.getElementById(itemId)) {
+                          const html = `
+        <div id="${itemId}">
+          <i class="fa fa-minus-circle"></i> ${categoryName}
+          <input type="hidden" name="categories[]" value="${categoryId}" />
+        </div>`;
+                          $container.append(html);
+                        }
+                      } else {
+                        // Видалити, якщо існує
+                        $('#' + itemId).remove();
+                      }
+                    });
+
+                  </script>
+                </div>
+              </div>
+             </form>
+      </div>
+    </div>
+  </div>
+{{ footer }}
+<script type="text/javascript">
+// Related
+$('input[name=\'product\']').autocomplete({
+  'source': function(request, response) {
+    $.ajax({
+      url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+      dataType: 'json',
+      success: function(json) {
+        response($.map(json, function(item) {
+          return {
+            label: item.name,
+            value: item.product_id
+          }
+        }));
+      }
+    });
+  },
+  'select': function(item) {
+    $('input[name=\'product\']').val('');
+
+    $('#product' + item.value).remove();
+
+    $('#products').append('<div id="product' + item.value + '"><i class="fa fa-minus-circle"></i> ' + item.label + '<input type="hidden" name="products[]" value="' + item.value + '" /></div>');
+  }
+});
+
+$('#products').delegate('.fa-minus-circle', 'click', function() {
+  $(this).parent().remove();
+});
+
+$('input[name=\'category\']').autocomplete({
+  'source': function(request, response) {
+    $.ajax({
+      url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+      dataType: 'json',
+      success: function(json) {
+        response($.map(json, function(item) {
+          return {
+            label: item.name,
+            value: item.category_id
+          }
+        }));
+      }
+    });
+  },
+  'select': function(item) {
+    $('input[name=\'category\']').val('');
+
+    $('#category' + item.value).remove();
+
+    $('#categories').append('<div id="category' + item.value + '"><i class="fa fa-minus-circle"></i> ' + item.label + '<input type="hidden" name="categories[]" value="' + item.value + '" /></div>');
+  }
+});
+
+$('#categories').delegate('.fa-minus-circle', 'click', function() {
+  $(this).parent().remove();
+});
+
+</script>

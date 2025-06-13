@@ -1,0 +1,261 @@
+<div class="sc-account-module p-0 overflow-hidden">
+
+    <div class="account-menu-button">
+        <span class="sc-btn-icon sc-btn-icon-menu"></span>
+        Меню
+    </div>
+
+    <script>
+        $('.account-menu-button').click(function(){
+            $('.account-menu').slideToggle()
+        });
+    </script>
+
+    <ul class="list-unstyled sc-column-categories fsz-14 p-0 br-8 bg-white account-menu">
+        {% if logged %}
+
+            <li class="sc-column-categories-item first-menu-item {% if is_account_page %}active-menu-item{% endif %}">
+                <a class="d-flex align-items-center" href="{{ account }}">
+                    <span class="sc-account-module-icon br-8">
+                        <img src="/image/icons/account/profile.svg" alt="" width="24" height="24">
+                    </span>
+                    <div>
+                        <div class="d-flex flex-column">
+                            <div class="fsz-14 fw-500 menu-item-user-name">{{ customer_info.firstname }} {{ customer_info.lastname }}</div>
+                            <div class="menu-item-user-email">{{ customer_info.email }}</div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            {#
+            <li class="sc-column-categories-item {% if is_address_page %}active-menu-item{% endif %}">
+                <a class="d-flex align-items-center" href="{{ address }}">
+                    <span class="sc-account-module-icon br-8">
+                        <img src="/image/icons/account/location.svg" alt="" width="24" height="24">
+                    </span>
+                    <span class="fw-500 km-text-dark">{{ text_address }}</span>
+
+                    <span class="menu-item-count">{{ count_of_addresses }}</span>
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g opacity="0.5">
+                            <path d="M9.5 6.5L14.5 11.5L9.5 16.5" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                    </svg>
+                </a>
+            </li>
+            #}
+
+            <li class="sc-column-categories-item  {% if is_order_page %}active-menu-item{% endif %}">
+                <a class="d-flex align-items-center" href="{{ order }}">
+                    <span class="sc-account-module-icon br-8">
+                        <img src="/image/icons/account/orders.svg" alt="" width="24" height="24">
+                    </span>
+                    <span class="fw-500 km-text-dark">{{ text_order }}</span>
+
+                    <span class="menu-item-count">{{ order_count }}</span>
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g opacity="0.5">
+                            <path d="M9.5 6.5L14.5 11.5L9.5 16.5" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                    </svg>
+                </a>
+            </li>
+
+            <li class="sc-column-categories-item   {% if is_wishlist_page %}active-menu-item{% endif %}">
+                <a class="d-flex align-items-center" href="{{ wishlist }}">
+                    <span class="sc-account-module-icon br-8">
+                        <img src="/image/icons/account/selected.svg" alt="" width="24" height="24">
+                    </span>
+                    <span class="fw-500 km-text-dark">{{ text_wishlist }}</span>
+
+                    <span class="menu-item-count">{{ wishlist_count }}</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g opacity="0.5">
+                            <path d="M9.5 6.5L14.5 11.5L9.5 16.5" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                    </svg>
+
+                </a>
+            </li>
+            {% if oct_stock_notifier_status is defined and oct_stock_notifier_status %}
+                <li class="sc-column-categories-item  {% if is_notif_page %}active-menu-item{% endif %}">
+                    <a class="d-flex align-items-center" href="{{ oct_stock_notifier }}">
+                        <span class="sc-account-module-icon br-8">
+                            <img src="/image/icons/account/notif_avail.svg" alt="" width="24" height="24">
+                        </span>
+                        <span class="fw-500 km-text-dark">{{ oct_stock_notifier_text }}</span>
+                        {#                        <span class="menu-item-count">{{ stock_notifier_count }}</span>#}
+
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g opacity="0.5">
+                                <path d="M9.5 6.5L14.5 11.5L9.5 16.5" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </g>
+                        </svg>
+
+                    </a>
+                </li>
+            {% endif %}
+            <li class="sc-column-categories-item {% if is_password_page %}active-menu-item{% endif %}">
+                <a class="d-flex align-items-center" href="{{ password }}">
+                    <span class="sc-account-module-icon br-8">
+                        <img src="/image/icons/account/pass.svg" alt="" width="24" height="24">
+                    </span>
+                    <span class="fw-500 km-text-dark">{{ text_password }}</span>
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g opacity="0.5">
+                            <path d="M9.5 6.5L14.5 11.5L9.5 16.5" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                    </svg>
+
+                </a>
+            </li>
+            <li class="sc-column-categories-item">
+                <a class="d-flex align-items-center" href="{{ logout }}">
+                    <span class="sc-account-module-icon br-8">
+                        <img src="/image/icons/account/exit.svg" alt="" width="24" height="24">
+                    </span>
+                    <span class="fw-500 km-text-dark km-text-red">{{ text_logout }}</span>
+                </a>
+            </li>
+
+
+
+            {#            <li class="sc-column-categories-item">#}
+            {#                <a class="d-flex align-items-center" href="{{ edit }}">#}
+            {#                    <span class="sc-account-module-icon br-8">#}
+            {#                        <img src="catalog/view/theme/oct_showcase/img/account/edit.svg" alt="" width="20" height="20">#}
+            {#                    </span>#}
+            {#                    <span>{{ text_edit }}</span>#}
+            {#                </a>#}
+            {#            </li>#}
+
+
+
+
+            {% if download_view is defined and download_view %}
+                <li class="sc-column-categories-item">
+                    <a class="d-flex align-items-center" href="{{ download }}">
+                        <span class="sc-account-module-icon br-8">
+                            <img src="catalog/view/theme/oct_showcase/img/account/files.svg" alt="" width="20" height="20">
+                        </span>
+                        <span>{{ text_download }}</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if recurring_view is defined and recurring_view %}
+                <li class="sc-column-categories-item">
+                    <a class="d-flex align-items-center" href="{{ recurring }}">
+                        <span class="sc-account-module-icon br-8">
+                            <img src="catalog/view/theme/oct_showcase/img/account/regular-payments.svg" alt="" width="20" height="20">
+                        </span>
+                        <span>{{ text_recurring }}</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if reward_view is defined and reward_view %}
+                <li class="sc-column-categories-item">
+                    <a class="d-flex align-items-center" href="{{ reward }}">
+                        <span class="sc-account-module-icon br-8">
+                            <img src="catalog/view/theme/oct_showcase/img/account/bonus.svg" alt="" width="20" height="20">
+                        </span>
+                        <span>{{ text_reward }}</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if return_view is defined and return_view %}
+                <li class="sc-column-categories-item">
+                    <a class="d-flex align-items-center" href="{{ return }}">
+                        <span class="sc-account-module-icon br-8">
+                            <img src="catalog/view/theme/oct_showcase/img/account/return.svg" alt="" width="20" height="20">
+                        </span>
+                        <span>{{ text_return }}</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if transaction_view is defined and transaction_view %}
+                <li class="sc-column-categories-item">
+                    <a class="d-flex align-items-center" href="{{ transaction }}">
+                        <span class="sc-account-module-icon br-8">
+                            <img src="catalog/view/theme/oct_showcase/img/account/payments.svg" alt="" width="20" height="20">
+                        </span>
+                        <span>{{ text_transaction }}</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if newsletter_view is defined and newsletter_view %}
+                <li class="sc-column-categories-item">
+                    <a class="d-flex align-items-center" href="{{ newsletter }}">
+                        <span class="sc-account-module-icon br-8">
+                            <img src="catalog/view/theme/oct_showcase/img/account/mail.svg" alt="" width="20" height="20">
+                        </span>
+                        <span>{{ text_newsletter }}</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if affiliate_view is defined and affiliate_view %}
+                {% if not tracking %}
+                    <li class="sc-column-categories-item">
+                        <a class="d-flex align-items-center" href="{{ affiliate }}">
+                            <span class="sc-account-module-icon br-8">
+                                <img src="catalog/view/theme/oct_showcase/img/account/affiliate.svg" alt="" width="20" height="20">
+                            </span>
+                            <span>{{ text_oct_affiliate }}</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="sc-column-categories-item">
+                        <a class="d-flex align-items-center" href="{{ affiliate }}">
+                            <span class="sc-account-module-icon br-8">
+                                <img src="catalog/view/theme/oct_showcase/img/account/affiliate.svg" alt="" width="20" height="20">
+                            </span>
+                            <span>{{ text_oct_affiliate }}</span>
+                        </a>
+                    </li>
+                    <li class="sc-column-categories-item">
+                        <a class="d-flex align-items-center" href="{{ tracking }}">
+                            <span class="sc-account-module-icon br-8">
+                                <i class="fas fa-code"></i>
+                            </span>
+                            <span>{{ text_oct_tracking }}</span>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        {% else %}
+
+
+            <li class="sc-column-categories-item">
+                <a class="d-flex align-items-center" href="{{ login }}">
+                    <span class="sc-account-module-icon br-8">
+                        <img src="/image/icons/account/profile.svg" alt="" width="24" height="24">
+                    </span>
+                    <span class="fw-500 km-text-dark ">{{ text_login }}</span>
+                </a>
+            </li>
+            <li class="sc-column-categories-item">
+                <a class="d-flex align-items-center" href="{{ register }}">
+                    <span class="sc-account-module-icon br-8">
+                        <img src="/image/icons/account/profile.svg" alt="" width="24" height="24">
+                    </span>
+                    <span class="fw-500 km-text-dark ">{{ text_register }}</span>
+                </a>
+            </li>
+            <li class="sc-column-categories-item">
+                <a class="d-flex align-items-center" href="{{ forgotten }}">
+                    <span class="sc-account-module-icon br-8">
+                        <img src="/image/icons/account/pass.svg" alt="" width="24" height="24">
+                    </span>
+                    <span class="fw-500 km-text-dark ">{{ text_forgotten }}</span>
+                </a>
+            </li>
+
+
+
+
+        {% endif %}
+    </ul>
+</div>

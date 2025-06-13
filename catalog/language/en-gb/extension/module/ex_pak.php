@@ -1,0 +1,24 @@
+<?php
+$_['ex_pak_all']                            = 'All';
+$_['ex_pak_popular']                        = 'Popular';
+$_['ex_pak_show_more']                      = 'Show more';
+$_['ex_pak_checkout_title']                 = 'Add accessories to products';
+$_['ex_pak_checkout_do']                    = ' to ';
+$_['ex_pak_more_products']                  = 'More accessories';
+$_['ex_pak_add_error']                      = 'Add main product first';
+$_['ex_pak_remove_product']                 = 'Product removed from cart';
+$_['ex_pak_product_info_close']             = 'Close';
+$_['ex_pak_product_info_to_cart']           = 'Buy';
+$_['ex_pak_product_info_to_description']    = 'Description';
+$_['ex_pak_product_to_cart']                = 'Go to product';
+$_['ex_pak_text_option']                    = 'Options';
+$_['ex_pak_show_product_sidebar']           = 'Select useful add-ons';
+$_['ex_pak_product_sidebar_to_product']     = 'Useful add-on to:';
+$_['ex_pak_product_sidebar_to_title']       = 'This may be needed:';
+$_['text_items']                            = 'Products: %s (%s)';
+$_['ex_pak_complect_discount']              = 'Discount on set:';
+$_['ex_pak_more_show']                      = 'Show more';
+$_['ex_pak_more_hide']                      = 'Hide';
+$_['ex_pak_to_cart']                        = 'Buy set';
+$_['ex_pak_in_cart_error']                  = 'Product already added';
+$_['ex_pak_button_add']                     = 'Order';

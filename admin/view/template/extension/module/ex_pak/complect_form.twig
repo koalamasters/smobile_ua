@@ -1,0 +1,137 @@
+<div class="modal complect-form" tabindex="-1" role="dialog" id="myModal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ txt_add_new_completes }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>   
+      <div class="modal-body">
+        <input type="hidden" name="ex_pak[complect_form][complect_row]" value="{{ complect_row }}">
+        <input type="hidden" name="ex_pak[complect_form][complect_id]" value="{{ complect_id }}">
+        <div class="form-group search-hide">
+            <label class="control-label">{{ txt_complect_name }}</label>
+            <div class="languages-list row">
+                {% for language in languages %}
+                    <div class="form-input col-sm-6">
+                        <input type="text" name="ex_pak[complect_form][description][{{ language.language_id }}][name]" value="{{ description[language.language_id].name }}" placeholder="{{ language.name }}"  class="form-control" />
+                        <div class="help">{{ txt_text_minimum_4_characters }}</div>
+                        {% if errors.description[language.language_id].name %}
+                          <div class="text-danger">{{ errors.description[language.language_id].name }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group search-hide">
+            <label class="control-label">{{ txt_date }}</label>
+            <div class="form-input">
+              <div class="dates">
+                <input type="text" name="ex_pak[complect_form][date_from]" value="{{ date_from }}" class="form-control date" data-date-format="DD.MM.YYYY" placeholder="{{ txt_date_start }}">
+                <span>-</span>
+                <input type="text" name="ex_pak[complect_form][date_to]" value="{{ date_to }}" class="form-control date" data-date-format="DD.MM.YYYY" placeholder="{{ txt_date_end }}">
+              </div>
+            </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">{{ txt_product_with_special }}</label>
+          <div class="form-input autocomplete">
+              <input type="text" name="ex_pak[complect_form][search]" value="{{ search }}" placeholder="{{ txt_product_name_model }}"  class="product-search form-control" />
+              <input type="hidden" name="ex_pak[complect_form][finded_product_id]" class="finded-product" />
+              <div class="dop-tovary-loader"></div>
+              <div class="result">
+                {% if search %}
+                  <div class="products">
+                    {% if autocomplete_products %}
+                      {% for product in autocomplete_products %}
+                        <div class="product" data-product-id="{{ product.product_id }}">
+                          <div class="image">
+                            <img src="{{ product.image }}">
+                          </div>
+                          <div class="info">
+                            <div class="name">{{ product.name }}</div>
+                           	<div class="sku">Код товару: {{ product.sku }}</div>
+                           	<div class="price">
+                              {% if product.special %}
+                                <span class="price-old">{{ product.price }}</span>
+                                <span class="price-new">{{ product.special }}</span>
+                              {% else %}
+                                <span class="price-common">{{ product.price }}</span>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    {% else %}
+                      <div class="not-found">{{ txt_not_fount }}</div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+          </div>
+        </div>
+        <div class="complect-products search-hide">
+          {% if products %}
+            {% for product_key,product in products %}
+              <div class="product">
+                <input type="hidden" name="ex_pak[complect_form][products][{{ product_key }}][product_id]" value="{{ product.product_id }}" class="form-control">
+                <div class="image">
+                  <img src="{{ product.image }}">
+                </div>
+                <div class="info">
+                  <div class="name">{{ product.name }}</div>
+                  <div class="sku">{{ txt_model }}: {{ product.sku }}</div>
+                  <div class="price">
+                    {% if product.special %}
+                      <span class="price-old">{{ product.price }}</span>
+                      <span class="price-new">{{ product.special }}</span>
+                    {% else  %}
+                      <span class="price-common">{{ product.price }}</span>
+                    {% endif %}
+                  </div> 
+                  <div class="setting">
+                    <div class="setting-block">
+                      <div class="form-group">
+                        <label class="control-label">{{ txt_special_type }}</label>
+                        <select name="ex_pak[complect_form][products][{{ product_key }}][complect_discount_type]" class="form-control calc-complect-discount discount-type">
+                          <option value="procent" {% if product.complect_discount_type == 'procent' %} selected="selected"{% endif %}>{{ txt_percent }}</option>
+                          <option value="sum" {% if product.complect_discount_type == 'sum' %} selected="selected"{% endif %}>{{ txt_sum }}</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label">{{ txt_count }}</label>
+                        <input type="text" name="ex_pak[complect_form][products][{{ product_key }}][complect_quantity]" value="{{ product.complect_quantity }}" placeholder="0" class="form-control">
+                      </div>
+                    </div>
+                    <div class="setting-block">
+                      <div class="form-group">
+                        <label class="control-label">{{ txt_special_value }}</label>
+                        <input type="text" name="ex_pak[complect_form][products][{{ product_key }}][complect_discount_value]" value="{{ product.complect_discount_value }}" placeholder="0" class="form-control calc-complect-discount discount-value">
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label">{{ txt_sort_order }}</label>
+                        <input type="text" name="ex_pak[complect_form][products][{{ product_key }}][complect_sort_order]" value="{{ product.complect_sort_order }}" placeholder="0" class="form-control">
+                      </div>
+                    </div>
+                    <div>
+                      <div class="form-group">
+                        <label class="control-label">{{ txt_price }}</label>
+                        <div class="result-price" data-price="{% if product.special_raw %}{{ product.special_raw }}{% else %}{{ product.price_raw }}{% endif %}"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="remove"><button type="button" class="btn-icon button-product-remove red"><svg class="ex-icon-red"><use xlink:href="#ex-icon-trash"></use></svg></button></div>
+              </div>
+            {% endfor  %}
+          {% endif  %}
+        </div>
+        <div class="text-right">
+            <button type="button" class="btn btn-secondary ex-gray-button" data-dismiss="modal">{{ txt_close }}</button>
+            <button type="button" class="btn btn-primary complect-form-save ex-green-button">{{ txt_save }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="fa fa-calendar"></i> {{ heading_title_commissiondetails }}</h3>
+  </div>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <td class="text-right">{{ column_commissionname }}</td>
+          <td>{{ column_amount }}</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key,value in results %}
+        <tr>
+          {% if value %}
+          <td class="text-right">{{ key }}</td>
+          <td>{{ value }}%</td>
+        {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>

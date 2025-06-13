@@ -1,0 +1,70 @@
+<div class="modal calculator" tabindex="-1" role="dialog" data-group-id="{{ group_id }}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ txt_calc_prom_prices_prod }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<div class="form-group">
+            <label class="control-label">{{ txt_calculation }}</label>
+            <div class="form-input">
+              <select name="ex_pak[calculator][price_type]" class="form-control formula-price">
+              	<option value="price" {% if price_type == 'price' %}selected="selected"{% endif %}>{{ txt_base_price }}</option>
+              	<option value="special" {% if price_type == 'special' %}selected="selected"{% endif %}>{{ txt_promotional_price }}</option>
+              </select>
+              <select name="ex_pak[calculator][opereation]" class="form-control formula-op">
+                <option value="minus" {% if opereation == 'minus' %}selected="selected"{% endif %}>-</option>
+                <option value="plus" {% if opereation == 'plus' %}selected="selected"{% endif %}>+</option>
+	            </select>
+              <input type="text" name="ex_pak[calculator][value]" value="{{ value }}" class="form-control formula-val" placeholder="0"/>
+              <select name="ex_pak[calculator][it]" class="form-control formula-it">
+		           <option value="procent" {% if it == 'procent' %}selected="selected"{% endif %}>%</option>
+		           <option value="currency" {% if it == 'currency' %}selected="selected"{% endif %}>грн</option>
+	           </select>
+            </div>
+      	</div>
+      	{% if error %}
+		      	<div class="alert alert-danger alert-dismissible"><i class="fa fa-check-circle"></i> {{ error}}</div>
+		    {% endif %}
+
+        <div class="form-group">
+          <label class="control-label">{{ txt_promotional_start_date }}</label>
+          <div class="form-input">
+            <div class="dates">
+              <input type="text" name="ex_pak[calculator][date_from]" value="{{ date_from }}" class="form-control date" data-date-format="DD.MM.YYYY" placeholder="{{ txt_date_start }}">
+              <span>-</span>
+              <input type="text" name="ex_pak[calculator][date_to]" value="{{ date_to }}" class="form-control date" data-date-format="DD.MM.YYYY" placeholder="{{ txt_date_end }}">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">{{ txt_price_rounding_accuracy }}</label>
+            <div>
+              <select name="ex_pak[calculator][round]" class="form-control calc-round">
+              	<option value="1" {% if round == '1' %}selected="selected"{% endif %}>1</option>
+              	<option value="0.1" {% if round == '0.1' %}selected="selected"{% endif %}>0.1</option>
+              	<option value="0.01" {% if round == '0.01' %}selected="selected"{% endif %}>0.01</option>
+              </select>
+            </div>
+      	</div>
+      </div>
+      <div class="modal-footer">
+        <label for="calc-only-selected"  class="calc-only-selected">
+          <input type="checkbox" id="calc-only-selected" name="ex_pak[calculator][only_selected]" {% if only_selected %}checked="checked"{% endif %}>
+          {{ txt_only_selected_products }}
+        </label>
+        <button type="button" class="btn btn-primary ex-green-button button-calculate" data-text-calculate="{{ txt_recalculate_price }}" data-text-date="{{ txt_edit_date }}">{{ txt_recalculate_prices }}</button>
+        <button type="button" class="btn btn-secondary ex-gray-button" data-dismiss="modal">{{ txt_close }}</button>
+      </div>
+      {% if success %}
+	      <div class="modal-body">
+		      <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

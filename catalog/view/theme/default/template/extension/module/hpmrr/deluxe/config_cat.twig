@@ -1,0 +1,63 @@
+<script>
+var hpmrr_pinfo = {{ pds_links }};
+var hpmrr_cat_config =
+{
+    item_selector: '.product-layout',
+    price_selector: '.price',
+    main_photo_selector: '.image img',
+    name_selector: '.product-name a',
+    change_href: '.product-name a, .image a',
+    cart_button: '.cart a',
+    price_html: function($item, $el)
+    {
+        var oldid = $item.find(".cat_quantity input").data("id");
+        var qty = parseInt($item.find(".cat_quantity input").val());
+        var total = $el.price_noformat * qty;
+        return  '<span class="price_no_format' + oldid + '" data-price="' + $el.price_noformat + '">' + total + 'грн.</span>';
+    },
+    special_price_html: function($item, $el)
+    {
+        return '<span class="price-new">' + newprice + '</span> <span class="price-old">' + oldprice + '</span>';
+    },
+    replace_piece_cat: function($el, $btn)
+    {
+        //system/aridius_auto_related_products.ocmod.xml 
+        // SELECT * FROM replace to SELECT p.product_id FROM
+        var $item = $btn.parents(this.item_selector);
+
+        var cartadd_onclick = "cart_category.add_category('" + $el.product_id + "', $(this).parent().parent().parent().parent().parent().parent().find('.quantity_input').val());";
+        var wishlist_onclick = "wishlist.add('" + $el.product_id + "');";
+        var compare_onclick = "compare.add('" + $el.product_id + "');";
+        var quickview_onclick = "quickview_open('" + $el.product_id + "');";
+        var fastOrder_onclick = "fastOrder('" + $el.product_id + "');"; 
+        var instock_onclick = "instock.add('" + $el.product_id + "');";
+        //var link = "index.php?route=product/product&product_id=" + $el.product_id;
+        var link = hpmrr_pinfo[$el.product_id]['link'];
+        $item.find(".additional-action a").eq(0).attr('onclick', wishlist_onclick);
+        $item.find(".additional-action a").eq(1).attr('onclick', compare_onclick);
+        $item.find(".additional-action a").eq(2).attr('onclick', quickview_onclick);
+        $item.find(".fastorder2").attr('onclick', fastOrder_onclick);
+        
+          $item.find(this.change_href).attr('href', link);
+        $item.find(this.main_photo_selector).attr('src', $el.thumb);
+        $item.find(this.name_selector).html($el.name);
+        
+        
+        if($el.quantity > 0)
+        {
+            $item.find(this.cart_button).attr('onclick', cartadd_onclick);
+            $item.find(".cart").removeClass("instockf ");
+        }
+        else
+        {
+            $item.find(this.cart_button).attr('onclick', instock_onclick);
+            $item.find(".cart").addClass("instockf ");
+        }
+ 
+        if($el.special)
+            $item.find(this.price_selector).html(this.special_price_html($item, $el));
+        else
+            $item.find(this.price_selector).html(this.price_html($item, $el));
+    }
+}
+</script>

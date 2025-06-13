@@ -1,0 +1,103 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <a href="{{ back }}" data-toggle="tooltip" title="{{ button_back }}" class="btn btn-success"><i class="fa fa-reply"></i> {{ button_back }}</a>
+       </div> 
+      <h1><i class="fa fa-user fa-fw" style="color:tomato;"></i> {{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-bar-chart"></i> {{ text_list }}</h3>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <td class="text-left">{{ entry_transactionid }}</td>
+                <td class="text-left">{{ column_orders }}</td>
+                <td class="text-left">{{ column_amount }}</td>
+                <td class="text-left">{{ column_name }}</td>
+                <td class="text-right">{{ column_dateadded }}</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% if (report_results) %} 
+              {% for order in report_results %} 
+              <tr>
+                <td class="text-left">{{ order['transaction_id'] }}</td>
+                <td class="text-left">{{ order['order_id'] }}</td>
+                <td class="text-left">{{ order['commissionamount'] }}</td>
+                <td class="text-left">{{ order['name'] }}</td>
+                <td class="text-right">{{ order['settleddate'] }} 
+                </td>
+              </tr>
+              {% endfor %} 
+              {% else %} 
+              <tr>
+                <td class="text-center" colspan="5">{{ text_no_results }}</td>
+              </tr>
+              {% endif %} 
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+  url = 'index.php?route=extension/report/salesagent/payouts&user_token={{ user_token }}';
+  
+  var filter_date_start = $('input[name=\'filter_date_start\']').val();
+  
+  if (filter_date_start) {
+    url += '&filter_date_start=' + encodeURIComponent(filter_date_start);
+  }
+
+  var filter_date_end = $('input[name=\'filter_date_end\']').val();
+  
+  if (filter_date_end) {
+    url += '&filter_date_end=' + encodeURIComponent(filter_date_end);
+  }
+    
+  var filter_salesagent = $('select[name=\'filter_salesagent\']').val();
+  
+  if (filter_salesagent) {
+    url += '&filter_salesagent=' + encodeURIComponent(filter_salesagent);
+  }
+
+  var filter_transactionid = $('select[name=\'filter_transactionid\']').val();
+  
+  if (filter_transactionid) {
+    url += '&filter_transactionid=' + encodeURIComponent(filter_transactionid);
+  }
+
+  var filter_amount = $('select[name=\'filter_amount\']').val();
+  
+  if (filter_amount) {
+    url += '&filter_amount=' + encodeURIComponent(filter_amount);
+  }
+  
+
+  location = url;
+});
+//--></script> 
+  <script type="text/javascript"><!--
+$('.date').datetimepicker({
+  pickTime: false
+});
+//--></script></div>
+{{ footer }}

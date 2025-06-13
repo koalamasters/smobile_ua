@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <code>HPMrr group in cat</code>
+    <name>HPMrr group in cat</name>
+    <version>1.5.0</version>
+    <author>kJlukOo</author>
+    <link>https://t.me/incell3</link>
+
+    <!-- category and search end -->
+
+    <!-- group products in cat and search start -->
+    <!-- 
+    <file path="catalog/model/journal3/filter.php">
+        <operation error="skip">
+            <search>
+                <![CDATA[p2s ON (p.product_id = p2s.product_id)]]>
+            </search>
+            <add position="replace">
+                <![CDATA[p2s ON (p.product_id = p2s.product_id) LEFT JOIN " . DB_PREFIX . "hpmrr_links hl ON (p.product_id = hl.product_id) ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search>
+                <![CDATA[$sql .= " GROUP BY p.product_id";]]>
+            </search>
+            <add position="replace">
+                <![CDATA[$sql .= " GROUP BY (IF(p.quantity > 0, 1, -1) * IF(hl.parent_id IS NOT NULL, hl.parent_id, p.product_id))";]]>
+            </add>
+        </operation>
+    </file>
+    hpmrr_grouping_stock
+    -->
+
+    <file path="catalog/model/catalog/product.php">
+        <operation error="skip">
+            <search>
+                <![CDATA[p.image,]]>
+            </search>
+            <add position="replace">
+                <![CDATA[p.image, p.quantity,]]>
+            </add>
+        </operation>
+        
+        <!-- getProducts() start -->
+        <operation error="skip">
+            <search>
+                <![CDATA[$sql = "SELECT p.product_id]]>
+            </search>
+            <add position="replace">
+                <![CDATA[$sql = "SELECT " . $this->kjhelper->hpmr_select_id("p") . "]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search>
+                <![CDATA[$sql = "SELECT DISTINCT ps.product_id]]>
+            </search>
+            <add position="replace">
+                <![CDATA[$sql = "SELECT DISTINCT " . $this->kjhelper->hpmr_select_id("ps") . "]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search>
+                <![CDATA[LEFT JOIN " . DB_PREFIX . "product_to_store ]]>
+            </search>
+            <add position="replace">
+                <![CDATA[LEFT JOIN (SELECT hl.*, p.status as parent_status FROM " . DB_PREFIX . "hpmrr_links hl LEFT JOIN " . DB_PREFIX . "product p ON hl.parent_id = p.product_id) hl ON (p.product_id = hl.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search>
+                <![CDATA[$sql .= " GROUP BY p.product_id";]]>
+            </search>
+            <add position="replace">
+                <![CDATA[$sql .= " GROUP BY " . $this->kjhelper->hpmr_group_by() . "";]]>
+            </add>
+        </operation>
+
+        <!-- getProductSpecials start -->
+        <operation error="skip">
+            <search>
+                <![CDATA[GROUP BY ps.product_id]]>
+            </search>
+            <add position="replace">
+                <![CDATA[GROUP BY " . $this->kjhelper->hpmr_group_by() . "]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search>
+                <![CDATA[COUNT(DISTINCT ps.product_id)]]>
+            </search>
+            <add position="replace">
+                <![CDATA[COUNT(DISTINCT " . $this->kjhelper->hpmr_group_by() . ")]]>
+            </add>
+        </operation>
+        <!-- getProductSpecials end -->
+
+        <!-- getTotalProducts start -->
+        <operation error="skip">
+            <search>
+                <![CDATA[$sql = "SELECT COUNT(DISTINCT p.product_id) AS total";]]>
+            </search>
+            <add position="replace">
+                <![CDATA[$sql = "SELECT COUNT(DISTINCT " . $this->kjhelper->hpmr_group_by() . ") as total";]]>
+            </add>
+        </operation>
+        <!-- getTotalProducts end -->
+    </file>
+    <!-- group products in cat and search end -->
+</modification>

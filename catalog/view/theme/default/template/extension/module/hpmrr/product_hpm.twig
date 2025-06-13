@@ -1,0 +1,132 @@
+<div class="hpm-block hpm-block-prd hpm-block-prd{{ serie_id }}">
+    {% if product_name_as_title and title_name %}
+        <h3>{{ title_name }}</h3>
+    {% endif %}
+
+     {% for column in product_columns %}
+        {% if res[column.key] is defined and res[column.key]|length > 0 %}
+
+            <div class="column-{{ column.key }}">
+                <h4>{{ column_names[column.key] }}</h4>
+                <div class="hpm-button-wrapper">
+                    {% if column.type == "color_circle" %}
+                        {% for button in res[column.key] %}
+                            
+                            {% if button.is_active %} 
+                                <span data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top" data-html="true" data-bs-html="true" title="{{ button.title }}" class="222222224 hpm-button {{ button.class }}">
+                            {% else %}
+                                <a href="{{ button.link }}" data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top"  data-html="true" data-bs-html="true" title="{{ button.title }}" class="2222223 hpm-button {{ button.class }}">
+                            {% endif %}
+
+                            {% if button.val starts with "<img" %}
+                                <span class="hpmcircle" style="width: {{ product_image_width }}px; height: {{ product_image_height }}px;" >
+                                    {{ button.val }}
+                                </span>
+                            {% else %}
+                                <span class="hpmcircle" style="width: {{ product_image_width }}px; height: {{ product_image_height }}px; background: {% if gradient_status %} radial-gradient(circle at 10px 10px, {{ button.val }}, {{ gradient_color }}) {% else %} {{ button.val }} {% endif %};" >
+                                </span>
+                            {% endif %}
+
+                            {% if button.is_active %} 
+                                </span>
+                            {% else %}
+                                </a>
+                            {% endif %}
+
+                        {% endfor %}
+                    {% elseif column.type == "button" %}
+                        {% for button in res[column.key] %}
+                            {% if button.is_active %} 
+                                <span data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top" data-html="true" data-bs-html="true"
+                                      {% if button.title != 'In Stock' %}
+                                          title="{{ button.title }}"
+                                      {% else %}
+                                          title="Out of stock"
+                                      {% endif %}
+
+                                      class="333333 hpm-button {{ button.class }}">{{ button.val }}</span>
+                            {% else %}
+                                <a href="{{ button.link }}" data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top"  data-html="true" data-bs-html="true"
+
+                                   {% if button.title != 'In Stock' %}
+                                    title="{{ button.title }}"
+                                   {% else %}
+                                    title="Out of stock"
+                                   {% endif %}
+
+                                   class="44444 hpm-button {{ button.class }}">{{ button.val }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% elseif column.type == "select_img" %}
+                        <div class="dropdown dropdown-select">
+                            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" data-bs-toggle="dropdown">
+                                {% for button in res[column.key] %}
+                                    {% if button.is_active %}
+                                        <img height="20" src="{{ button.img }}" class="select-img"/> {{ button.val }}
+                                    {% endif %}
+                                {% endfor %}
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% for button in res[column.key] %}
+                                    <li class="{{ button.class }}">
+                                        <a title="{{ button.name }}" href="{{ button.link }}">
+                                            <img height="20" src="{{ button.img }}" class="select-img"/> {{ button.val }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <select class="form-control">
+                            {% for button in res[column.key] %}
+                                <option title="{{ button.name }}" value="{{ button.link }}" class="{{ button.class }}" {% if button.is_active %} selected {% endif %} >{{ button.val }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                </div>
+            </div>
+
+        {% endif %}
+     {% endfor %}
+
+     {% if show_minmax %} <div class='minmax'>{{ min_max }}</div> {% endif %}
+ </div>
+
+{% if schemaorg and parent_info %}
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org/",
+        "@type": "ProductGroup",
+        "@id": "#{{ parent_info.product_id }}_parent",
+        "name": "{{ parent_info.name }}",
+        "description": "{{ parent_info.meta_description }}",
+        {% if parent_info.manufacturer %}
+        "brand": {
+          "@type": "Brand",
+          "name": "{{ parent_info.manufacturer }}"
+        },
+        {% endif %}
+        "productGroupID": "{{ parent_info.sku }}"
+      },
+      {% for child in childs_info %}
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "@id": "{{ child.href }}",
+        "isVariantOf": { "@id": "#{{ parent_info.product_id }}_parent" },
+        "sku": "{{ child.sku }}",
+        "image": "{{ child.thumb }}",
+        "name": "{{ child.name }}",
+        "description": "{{ child.meta_description }}",
+        "offers": {
+          "@type": "Offer",
+          "url": "{{ child.href }}",
+          "priceCurrency": "UAH",
+          "price": {% if child.special %} {{ child.special_noformat }} {% else %} {{ child.price_noformat }} {% endif %}
+        }
+      }{% if loop.last == false  %},{% endif%}
+      {% endfor %}
+    ]
+    </script>
+{% endif %}

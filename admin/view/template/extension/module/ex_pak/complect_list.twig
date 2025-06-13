@@ -1,0 +1,66 @@
+<tr class="group" data-complect-row="{{ complect_row }}">
+    <td class="column-name">
+        <span class="group-status{% if date.status %} active{% endif %}"></span>
+        {{ name }}
+        <input type="hidden" name="ex_pak[complects][{{ complect_row }}][complect_id]" value="{{ complect_id }}" >
+        <input type="hidden" name="ex_pak[complects][{{ complect_row }}][complect_row]" value="{{ complect_row }}" >
+        {% for language_id,description in description %}
+            <input type="hidden" name="ex_pak[complects][{{ complect_row }}][description][{{ language_id }}][name]" value="{{ description.name }}" >
+        {% endfor %}
+    </td>
+    <td>
+        {{ date.text }}
+        <input type="hidden" name="ex_pak[complects][{{ complect_row }}][date_from]" value="{{ date.date_from }}" >
+        <input type="hidden" name="ex_pak[complects][{{ complect_row }}][date_to]" value="{{ date.date_to }}" >
+    </td>
+    <td>
+        <input type="text" name="ex_pak[complects][{{ complect_row }}][sort_order]" value="{{ sort_order }}" class="form-control complect-sort-order" data-toggle="tooltip" title='{{ txt_sort_order }}'>
+    </td>
+    <td class="text-center">
+        <button type="button" class="btn-icon button-group-remove red"><svg class="ex-icon-red"><use xlink:href="#ex-icon-trash"></use></svg></button>
+        <button type="button" class="btn-icon button-group-open" data-toggle="tooltip" title="{{ txt_open }}"><svg class="ex-icon-green"><use xlink:href="#ex-icon-arrow-down"></use></svg></button>
+    </td>
+</tr>
+<tr class="group-setting" data-complect-row="{{ complect_row }}">
+    <td colspan="4">
+        <div class="group-controls">
+            <div class="toolbar">
+                <span class="count"></span> {{ txt_prod_or_select_all }} <button class="btn-icon uncheck-all"><i class="fa fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="buttons">
+                <button type="button" class="btn-icon button-products-remove red" data-toggle="tooltip" title="{{ txt_remove_selected_product }}"><svg class="ex-icon-red"><use xlink:href="#ex-icon-trash"></use></svg></button>
+            </div>
+        </div>
+        <div class="group-products">
+            <table class="table table-bordered{% if not product_html %} no-products{% endif %}">
+                <thead>
+                    <tr>
+                        <td class="text-center">
+                            <input type="checkbox" class="check-all"/>
+                        </td>
+                        <td style="white-space: nowrap;">{{ txt_product_name }}</td>
+                        <td style="white-space: nowrap;">{{ txt_model }}</td>
+                        <td>{{ txt_price }}</td>
+                        <td class="text-center" style="white-space: nowrap;">{{ txt_special_type }}</td>
+                        <td class="text-center" style="white-space: nowrap;">{{ txt_special_value }}</td>
+                        <td class="text-center" style="white-space: nowrap;">{{ txt_total_price }}</td>
+                        <td class="text-center">{{ txt_count }}</td>
+                        <td class="text-center">{{ txt_sorting }}</td>
+                        <td class="text-center">{{ txt_remove }}</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ product_html }}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="10" class="text-center">{{ txt_add_products }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="text-right">
+            <a class="btn btn-primary ex-green-button" onclick="ex_pak_complect.showForm('{{ complect_row }}');">{{ txt_edit_complect }}</a>
+        </div>
+    </td>
+</tr>

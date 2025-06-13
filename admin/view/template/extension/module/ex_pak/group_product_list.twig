@@ -1,0 +1,42 @@
+{% for product in products %}
+	<tr class="product product-{{ product.product_id }}">
+		<td style="width: 1px;" class="text-center">
+			<input type="checkbox" name="ex_pak[groups][{{ group_id }}][products][{{ product.product_id }}][selected]" class="check"/>
+		</td>
+		<td>
+			<div class="product-name">
+				<img src="{{ product.image }}" class="img-thumbnail">
+				{{ product.name }}
+				<input type="hidden" name="ex_pak[groups][{{ group_id }}][products][{{ product.product_id }}][product_id]" value="{{ product.product_id }}">
+			</div>
+		</td>
+		<td>{{ product.model }}</td>
+		<td>
+			{% if product.special %}
+				<span style="text-decoration: line-through;">{{ product.price }}</span><br/>
+				<div class="text-danger">{{ product.special }}</div>
+			{% else %}
+				{{ product.price }}
+			{% endif %}
+		</td>  
+		<td class="text-center">
+			<div class="product-date-text">{{ product.group_date.text }}</div>
+			<input type="hidden" name="ex_pak[groups][{{ group_id }}][products][{{ product.product_id }}][group_date_from]" value="{{ product.group_date.date_from }}" class="product-date-from">
+			<input type="hidden" name="ex_pak[groups][{{ group_id }}][products][{{ product.product_id }}][group_date_to]" value="{{ product.group_date.date_to }}" class="product-date-to">
+		</td>
+		<td class="text-center">
+			<input type="text" name="ex_pak[groups][{{ group_id }}][products][{{ product.product_id }}][group_price]" value="{{ product.group_price }}" class="form-control product-price">
+		</td>
+		<td class="text-center">
+			<input type="text" name="ex_pak[groups][{{ group_id }}][products][{{ product.product_id }}][group_sort_order]" value="{{ product.group_sort_order }}" class="form-control product-sort-order">
+		</td>
+		<td class="text-center col-show-in-checkout">
+			<label class="input-switch product-show-in-checkout">
+				<input type="checkbox" name="ex_pak[groups][{{ group_id }}][products][{{ product.product_id }}][group_show_in_checkout]" value="1" {% if product.group_show_in_checkout %}checked="checked"{% endif %}>
+			</label>
+		</td>
+		<td class="text-center">
+			<button type="button" class="btn-icon red button-product-remove"><svg class="ex-icon-red"><use xlink:href="#ex-icon-trash"></use></svg></button>
+		</td>
+	</tr>
+{% endfor %}

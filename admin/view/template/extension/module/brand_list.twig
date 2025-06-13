@@ -1,0 +1,170 @@
+{{ header }}
+{{ column_left }}
+<div id="content">
+    <div class="container">
+        <h1>{{ heading_title }}</h1>
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module">
+            {% if error_warning %}
+                <div class="alert alert-danger">{{ error_warning }}</div>
+            {% endif %}
+
+            <div class="form-group">
+                <label>Статус</label>
+                <select name="module_brand_list_status" class="form-control">
+                    <option value="1" {{ module_brand_list_status == '1' ? 'selected' : '' }}>{{ text_enabled }}</option>
+                    <option value="0" {{ module_brand_list_status == '0' ? 'selected' : '' }}>{{ text_disabled }}</option>
+                </select>
+            </div>
+
+            <hr>
+
+            <h3>Список брендів</h3>
+            <table class="table table-bordered" id="brand-list-table">
+                <thead>
+                <tr>
+                    <th style="width:60px">Сортування</th>
+                    <th>Зображення</th>
+                    <th>Посилання</th>
+                    <th>Код</th>
+                    <th>css class</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set sorted_items = module_brand_list_items|sort((a, b) => a.sort <=> b.sort) %}
+                {% set counter = 1 %}
+                {% for i, item in sorted_items %}
+
+                    <tr>
+                        <td>
+                            <input type="number" name="module_brand_list_items[{{ counter }}][sort]" value="{{ counter }}" class="form-control" />
+                        </td>
+                        <td>
+                            <input type="hidden" name="module_brand_list_items[{{ counter }}][image]" value="{{ item.image }}" id="image{{ counter }}">
+                            <img class="brand-list-image" src="{{ item.image ? item.image : '/image/cache/no_image-100x100.png' }}" id="thumb{{ counter }}" />
+                            <button type="button" class="btn btn-primary upload-btn" data-image="image{{ counter }}" data-thumb="thumb{{ counter }}">Завантажити</button>
+                        </td>
+                        <td>
+                            {% for language in languages %}
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                        </span>
+                                    </div>
+                                    <input type="text" name="module_brand_list_items[{{ counter }}][link][{{ language.code }}]" value="{{ item.link[language.code] ?? '' }}" class="form-control" />
+                                </div>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <input type="text" name="module_brand_list_items[{{ counter }}][code]" value="{{ item.code ?? '' }}" class="form-control" />
+                        </td>
+                        <td>
+                            <input type="text" name="module_brand_list_items[{{ counter }}][css]" value="{{ item.css ?? '' }}" class="form-control" />
+                        </td>
+                        <td><button type="button" onclick="this.closest('tr').remove()" class="btn btn-danger">✖</button></td>
+                    </tr>
+                    {% set counter = counter+1 %}
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="button" onclick="addItem()" class="btn btn-success">Додати елемент</button>
+
+            <div class="text-right mt-3">
+                <button type="submit" class="btn btn-primary">{{ button_save }}</button>
+                <a href="{{ cancel }}" class="btn btn-default">{{ button_cancel }}</a>
+            </div>
+        </form>
+    </div>
+</div>
+{{ footer }}
+
+<script>
+    const languages = Object.values({{ languages|json_encode|raw }});
+</script>
+
+<script type="text/javascript">
+    let itemIndex = {{ module_brand_list_items|length }};
+    function addItem() {
+        let html = `
+        <tr>
+            <td>
+                <input type="number" name="module_brand_list_items[${itemIndex+1}][sort]" value="${itemIndex + 1}" class="form-control" />
+            </td>
+            <td>
+                <input type="hidden" name="module_brand_list_items[${itemIndex+1}][image]" value="" id="image${itemIndex+1}">
+                <img class="brand-list-image" src="/image/cache/no_image-100x100.png" id="thumb${itemIndex+1}" />
+                <button type="button" class="btn btn-primary upload-btn" data-image="image${itemIndex+1}" data-thumb="thumb${itemIndex+1}">Завантажити</button>
+            </td>
+            <td>`;
+
+        languages.forEach(function(language) {
+            html += `
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <img src="language/${language.code}/${language.code}.png" title="${language.name}" />
+                        </span>
+                    </div>
+                    <input type="text" name="module_brand_list_items[${itemIndex+1}][link][${language.code}]" class="form-control" />
+                </div>`;
+        });
+
+        html += `</td>
+            <td>
+                <input type="text" name="module_brand_list_items[${itemIndex+1}][code]" class="form-control" />
+            </td>
+            <td><button type="button" onclick="this.closest('tr').remove()" class="btn btn-danger">✖</button></td>
+        </tr>`;
+
+        document.querySelector('#brand-list-table tbody').insertAdjacentHTML('beforeend', html);
+        itemIndex++;
+    }
+
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('upload-btn')) {
+            const image = e.target.dataset.image;
+            const thumb = e.target.dataset.thumb;
+            image_upload(image, thumb);
+        }
+    });
+</script>
+<script>
+    function image_upload(field, thumb) {
+        const element = document.getElementById(field);
+        const thumbElement = document.getElementById(thumb);
+
+
+        $('#modal-image').remove();
+
+        $.ajax({
+            url: 'index.php?route=common/filemanager&user_token={{ user_token }}&field=' + field,
+            dataType: 'html',
+            beforeSend: function () {
+                $('.upload-btn').prop('disabled', true).addClass('loading');
+            },
+            complete: function () {
+                $('.upload-btn').prop('disabled', false).removeClass('loading');
+            },
+            success: function (html) {
+                $('body').append('<div id="modal-image" class="modal">' + html + '</div>');
+                $('#modal-image').modal('show');
+
+                $('#modal-image').on('click', 'a.thumbnail', function (e) {
+                    e.preventDefault();
+
+                    console.log($(this).attr('href'))
+                    console.log('element', element)
+                    console.log('thumbElement', thumbElement)
+
+                    const image = $(this).attr('href');
+                    if (element) element.value = image;
+                    if (thumbElement) thumbElement.src = image;
+
+                    $('#modal-image').modal('hide');
+                });
+            }
+        });
+    }
+</script>

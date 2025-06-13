@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <code>HPMrr filter parents in admin</code>
+    <name>HPMrr filter parents in admin</name>
+    <version>1.5.0</version>
+    <author>k-A web systems</author>
+    <link>https://t.me/incell3</link>
+
+    <file path="admin/controller/catalog/product.php">
+        <operation error="skip">
+            <search index="0">
+                <![CDATA[$filter_data = array(]]>
+            </search>
+            <add position="replace">
+                <![CDATA[
+                    if (isset($this->request->get['filter_only_hpm_parent'])) {
+                        $filter_only_hpm_parent = $this->request->get['filter_only_hpm_parent'];
+                    } else {
+                        $filter_only_hpm_parent = null;
+                    }
+                    $data['filter_only_hpm_parent'] = $filter_only_hpm_parent;
+
+                    $filter_data = array(
+                        'filter_only_hpm_parent' => $filter_only_hpm_parent,
+                ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search>
+                <![CDATA[$url .= '&filter_status=' . $this->request->get['filter_status'];]]>
+            </search>
+            <add position="before" offset="1">
+                <![CDATA[
+                    if (isset($this->request->get['filter_only_hpm_parent'])) {
+                        $url .= '&filter_only_hpm_parent=' . $this->request->get['filter_only_hpm_parent'];
+                    }
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/model/catalog/product.php">
+        <operation error="skip">
+            <search>
+                <![CDATA[if (!empty($data['filter_name'])) {]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                if (!empty($data['filter_only_hpm_parent']))
+                {
+                    $sql = str_replace("WHERE", " LEFT JOIN " . DB_PREFIX . "hpmrr_links hl 
+                    ON hl.parent_id = p.product_id 
+                    WHERE hl.parent_id IS NOT NULL AND", $sql);
+                }
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+        <file path="admin/view/template/catalog/product_list.tpl">
+        <operation error="skip">
+            <search index="4">
+                <![CDATA[<div class="form-group">]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+
+          <div class="form-group">
+                <label class="control-label" for="input-onlyparents">only parents KIT SERIES</label>
+                <select name="filter_only_hpm_parent" id="input-onlyparents" class="form-control">
+                  <option value="*"></option>
+                  <?php if ($filter_only_hpm_parent) { ?>
+                  <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                  <?php } else { ?>
+                  <option value="1"><?php echo $text_enabled; ?></option>
+                  <?php } ?>
+
+                  <?php if (!$filter_only_hpm_parent && !is_null($filter_only_hpm_parent)) { ?>
+                  <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+                  <?php } else { ?>
+                  <option value="0"><?php echo $text_disabled; ?></option>
+                  <?php } ?>
+
+                </select>
+              </div>
+                ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search>
+                <![CDATA[var filter_status = $('select[name=\'filter_status\']').val();]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                 var filter_only_hpm_parent = $('select[name=\'filter_only_hpm_parent\']').val();
+
+                  if (filter_only_hpm_parent != '*') {
+                    url += '&filter_only_hpm_parent=' + encodeURIComponent(filter_only_hpm_parent);
+                  }
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/catalog/product_list.twig">
+        <operation error="skip">
+            <search index="7">
+                <![CDATA[<div class="form-group">]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                <div class="form-group">
+              <label class="control-label" for="input-onlyparents">only parents KIT SERIES</label>
+              <select name="filter_only_hpm_parent" id="input-onlyparents" class="form-control">
+                <option value=""></option>
+                    {% if filter_only_hpm_parent == '1' %}
+                        <option value="1" selected="selected">{{ text_enabled }}</option>
+                    {% else %}
+                        <option value="1">{{ text_enabled }}</option>
+                    {% endif %}
+                    
+                    {% if filter_only_hpm_parent == '0' %}
+                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% else %}
+                        <option value="0">{{ text_disabled }}</option>
+                    {% endif %}
+              </select>
+          </div>
+                ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search>
+                <![CDATA[var filter_status = $('select[name=\'filter_status\']').val();]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                 var filter_only_hpm_parent = $('select[name=\'filter_only_hpm_parent\']').val();
+
+                  if (filter_only_hpm_parent !== '') {
+                    url += '&filter_only_hpm_parent=' + encodeURIComponent(filter_only_hpm_parent);
+                  }
+                ]]>
+            </add>
+        </operation>
+    </file>
+</modification>

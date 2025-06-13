@@ -1,0 +1,22 @@
+<?php
+//Этот файл - кастомный код модуля UniXML, Импорт id: 663
+//info: https://unixml.pro
+
+if(in_array($product['product_id'], $data['not_update'])){
+  $product['continue'] = true;
+}
+
+$product['sort_order'] = 1;
+if($product['product_xml_id'] == $product['product_id']){
+  $product['sort_order'] = 3; //новий товар
+}
+
+if(in_array($product['product_id'], $data['yes_update'])){
+  $product['sort_order'] = 1;
+  $product['status'] = 1;
+}
+
+$data['fields_p']['sort_order'] = 'sort_order';
+$product['stock_status_id'] = 5;
+$data['fields_p']['stock_status_id'] = 'stock_status_id';
+$data['fields_pd']['meta_title'] = 'name';

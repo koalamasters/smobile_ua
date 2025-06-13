@@ -1,0 +1,121 @@
+<form action="{{ action }}" method="post" enctype="multipart/form-data" id="content">
+    <div class="sc-cart-items">
+        {% for product in products %}
+            <div class="popup-cart-item">
+                <div class="d-flex">
+
+                    {#										<div class="popup-cart-checkbox-item">#}
+                    {#											<input type="checkbox" name="popup-cart-item-checkbox" class="popup-cart-item-checkbox" value="{{ product.product_id }}" data-product-id="{{ product.product_id }}">#}
+                    {#										</div>#}
+
+                    <div class="popup-cart-image-wrapper d-flex flex-column">
+                        {% if product.thumb %}
+                            <img class="popup-cart-image" src="{{ product.thumb }}" alt="{{ product.name }}"/>
+                        {% endif %}
+                    </div>
+                    <div class="sidebar-cart-item-right fsz-12 ps-3 flex-grow-1">
+                        <div class="sidebar-cart-info">
+                            <div class="sidebar-cart-item-title fw-500 fsz-14">
+                                <a href="{{ product.href }}">{{ product.name }}</a>
+                                <div class="popup-cart-product-model">Код товару: {{ product.model }}</div>
+
+                                {#															<div class="popup-cart-product-model">{{ product.total }}</div>#}
+
+                                {% if product.special > 0 %}
+                                    <div class="sc-module-price-km">
+                                        <div class="sc-module-price-km-prices">
+                                            <div class="km-price-linethrow">{{ product.price_text }}</div>
+                                            <div class="km-price-special">{{ product.special_text }}</div>
+                                        </div>
+                                        <div class="sc-module-price-km-usdt">
+                                            {{ product.usdt }} usdt
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="sc-module-price-km">
+                                        <div class="sc-module-price-km-prices">
+                                            <div class="km-price-regular fw-500">{{ product.price_text }}</div>
+                                        </div>
+                                        <div class="sc-module-price-km-usdt">
+                                            {{ product.usdt }} usdt
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+
+                                {% if not product.stock %}
+                                    <span class="required">***</span>
+                                {% endif %}
+                            </div>
+
+                            {% if product.option %}
+                                {% for option in product.option %}
+                                    <div class="sidebar-cart-item-option"><span class="dark-text">{{ option.name }}:</span> {{ option.value }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="sidebar-cart-item-buttons d-flex align-items-center justify-content-between flex-grow-1 pt-3 mt-auto">
+                            <div class="sidebar-cart-item-buttons d-flex align-items-center">
+                                <div class="sc-module-quantity d-flex align-items-center justify-content-center py-1 me-3 br-12">
+
+                                    {% if product.quantity < 2 %}
+                                        <button type="button" aria-label="Minus" class="{% if product.quantity < 2 %} product-quanitity-1 {% endif%} sc-module-quantity-btn d-flex align-items-center justify-content-center" onclick="cart.remove('{{ product.cart_id }}');" >
+                                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" x="0" y="0" viewBox="0 0 48 48" style="enable-background:new 0 0 512 512;width: 20px;height: 18px;" xml:space="preserve" class="hover-red" plerdy-tracking-id="31152739201"><g><g data-name="Recycle Bin"><path d="M39 6h-9V5a3 3 0 0 0-3-3h-7a3 3 0 0 0-3 3v1H9a3 3 0 0 0-3 3v2a3 3 0 0 0 2.025 2.824l.854 27.332a4.977 4.977 0 0 0 5 4.844h20.244a4.977 4.977 0 0 0 5-4.844l.854-27.332A3 3 0 0 0 42 11V9a3 3 0 0 0-3-3zM19 5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v1h-9zm18.122 36.094a2.987 2.987 0 0 1-3 2.906H13.877a2.987 2.987 0 0 1-3-2.906L10.032 14h27.936zM40 11a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h30a1 1 0 0 1 1 1z" fill="#c0c0c0" opacity="1" data-original="#000000" class=""></path><path d="M24 19a1 1 0 0 0-1 1v18a1 1 0 0 0 2 0V20a1 1 0 0 0-1-1zM31.028 19a.972.972 0 0 0-1.028.972l-.5 18A1 1 0 0 0 30.472 39h.028a1 1 0 0 0 1-.972l.5-18A1 1 0 0 0 31.028 19zM16.972 19A1 1 0 0 0 16 20.028l.5 18a1 1 0 0 0 1 .972h.028a1 1 0 0 0 .972-1.028l-.5-18A1 1 0 0 0 16.972 19z" fill="#c0c0c0" opacity="1" data-original="#000000" class=""></path></g></g></svg>
+                                        </button>
+                                    {% else %}
+                                        <button type="button" aria-label="Minus" class="{% if product.quantity < 2 %} product-quanitity-1 {% endif%} sc-module-quantity-btn d-flex align-items-center justify-content-center" onclick="$('#input-quantity-{{ product.cart_id }}').val(~~$('#input-quantity-{{ product.cart_id }}').val()-1);">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" plerdy-tracking-id="34908615552">
+                                                <path d="M18 12.498H6C5.86739 12.498 5.74022 12.4454 5.64645 12.3516C5.55268 12.2578 5.5 12.1307 5.5 11.998C5.5 11.8654 5.55268 11.7383 5.64645 11.6445C5.74022 11.5507 5.86739 11.498 6 11.498H18C18.1326 11.498 18.2598 11.5507 18.3536 11.6445C18.4473 11.7383 18.5 11.8654 18.5 11.998C18.5 12.1307 18.4473 12.2578 18.3536 12.3516C18.2598 12.4454 18.1326 12.498 18 12.498Z" fill="#407CB2" stroke="#407CB2"></path>
+                                            </svg>
+                                        </button>
+                                    {% endif %}
+
+
+
+                                    <input type="text" id="input-quantity-{{ product.cart_id }}" readonly class="form-control cart-quanitity-input" name="quantity[{{ product.cart_id }}]" value="{{ product.quantity }}" aria-label="Quantity" inputmode="numeric" min="1">
+
+                                    <button type="button" aria-label="Plus" class="sc-module-quantity-btn d-flex align-items-center justify-content-center" onclick="$('#input-quantity-{{ product.cart_id }}').val(~~$('#input-quantity-{{ product.cart_id }}').val()+1);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" plerdy-tracking-id="34908615505">
+                                            <path d="M13 12.498H12.5V12.998V17.998C12.5 18.1307 12.4473 18.2578 12.3536 18.3516C12.2598 18.4454 12.1326 18.498 12 18.498C11.8674 18.498 11.7402 18.4454 11.6464 18.3516C11.5527 18.2578 11.5 18.1307 11.5 17.998V12.998V12.498H11H6C5.86739 12.498 5.74022 12.4454 5.64645 12.3516C5.55268 12.2578 5.5 12.1307 5.5 11.998C5.5 11.8654 5.55268 11.7383 5.64645 11.6445C5.74022 11.5507 5.86739 11.498 6 11.498H11H11.5V10.998V5.99805C11.5 5.86544 11.5527 5.73826 11.6464 5.64449C11.7402 5.55073 11.8674 5.49805 12 5.49805C12.1326 5.49805 12.2598 5.55073 12.3536 5.64449C12.4473 5.73826 12.5 5.86544 12.5 5.99805V10.998V11.498H13H18C18.1326 11.498 18.2598 11.5507 18.3536 11.6445C18.4473 11.7383 18.5 11.8654 18.5 11.998C18.5 12.1307 18.4473 12.2578 18.3536 12.3516C18.2598 12.4454 18.1326 12.498 18 12.498H13Z" fill="#407CB2" stroke="#407CB2"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <button type="submit" class="hidden sc-btn sc-btn-secondary sc-btn-with-icon br-4 ms-auto me-2 update-cart-ajax-btn" title="{{ button_update }}">
+                                    <span class="sc-btn-icon sc-btn-icon-showmore"></span>
+                                </button>
+                                <button type="button" class="hidden sc-btn sc-btn-danger sc-btn-with-icon br-4" onclick="cart.remove('{{ product.cart_id }}');">
+                                    <span class="sc-btn-icon sc-btn-icon-del"></span>
+                                </button>
+
+                            </div>
+                            <input name="product_key" value="{{ product.key }}" style="display: none;" hidden />
+                            <input name="product_id_q" value="{{ product.product_id }}" style="display: none;" hidden />
+
+                            <div class="d-flex cart-actions-wrapper">
+                                <button type="button" aria-label="Wishlist" class="sc-wishlist-btn" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+                                    <span class="sc-btn-icon sc-btn-icon-wishlist"></span>
+                                </button>
+
+                                <div  class="popup-cart-item-delete d-none" data-product-id="{{ product.cart_id }}" onclick="cart.remove('{{ product.cart_id }}');">
+                                    {{ text_delete }}
+                                </div>
+                            </div>
+
+
+                            <span class="popup-cart-item-wish" onclick="wishlist.add('{{ product.product_id }}');"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% for voucher in vouchers %}
+            <div class="sc-cart-item content-block p-2 p-md-3">
+                <div class="d-flex align-items-center">
+                    <button type="button" class="sc-btn sc-btn-danger sc-btn-with-icon br-4" onclick="voucher.remove('{{ voucher.key }}');"><span class="sc-btn-icon sc-btn-icon-del"></span></button>
+                    <div class="dark-text fw-500 ms-2 ms-md-3">{{ voucher.description }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</form>

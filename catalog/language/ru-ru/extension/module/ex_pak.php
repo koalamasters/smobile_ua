@@ -1,0 +1,24 @@
+<?php
+$_['ex_pak_all']                            = 'Все';
+$_['ex_pak_popular']                        = 'Популярное';
+$_['ex_pak_show_more']                      = 'Показать больше';
+$_['ex_pak_checkout_title']                 = 'Добавьте аксессуары для товаров';
+$_['ex_pak_checkout_do']                    = ' до ';
+$_['ex_pak_more_products']                  = 'Больше аксессуаров';
+$_['ex_pak_add_error']                      = 'Сначала добавьте основной товар';
+$_['ex_pak_remove_product']                 = 'Товар удален из корзины';
+$_['ex_pak_product_info_close']             = 'Закрыть';
+$_['ex_pak_product_info_to_cart']           = 'Купить';
+$_['ex_pak_product_info_to_description']    = 'Описание';
+$_['ex_pak_product_to_cart']                = 'Перейти к товару';
+$_['ex_pak_text_option']                    = 'Опции';
+$_['ex_pak_show_product_sidebar']           = 'Выбрать полезные дополнения';
+$_['ex_pak_product_sidebar_to_product']     = 'Полезное дополнение к:';
+$_['ex_pak_product_sidebar_to_title']       = 'Это может потребоваться:';
+$_['text_items']                            = 'Товаров: %s (%s)';
+$_['ex_pak_complect_discount']              = 'Скидка на комплект:';
+$_['ex_pak_more_show']                      = 'Показать еще';
+$_['ex_pak_more_hide']                      = 'Скрыть';
+$_['ex_pak_to_cart']                        = 'Купить комплект';
+$_['ex_pak_in_cart_error']                  = 'Товар уже добавлен';
+$_['ex_pak_button_add']                     = 'Заказать';

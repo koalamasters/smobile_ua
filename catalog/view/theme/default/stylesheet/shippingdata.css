@@ -1,0 +1,32 @@
+ul.dropdown-address {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 10px 30px -10px #000000;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute !important;
+  z-index: 1000;
+  width: calc(100% - 23px);
+}
+.dropdown-address li {
+  list-style-type: none;
+  transition: .15s;
+}
+.dropdown-address li:hover {
+  background-color: #1e448a;
+}
+
+.dropdown-address li a {
+  color: black;
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  transition: .15s;
+}
+.dropdown-address li:hover a {
+  color: white;
+}
+
+

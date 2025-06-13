@@ -1,0 +1,30 @@
+{% if custom_css %}
+    <style>{{ custom_css }}</style>
+{% endif %}
+<script>
+{{ custom_js }}
+function successCartAddTemplateDefault(json) 
+{
+    {{ custom_cart_add }}
+}
+$(document).ready(function () {
+    {% if position == 'prepend' or position == 'append' %}
+        $('{{ selector }}').{{ position }}($('.kjseries'));
+    {% else %} 
+        $('.kjseries').{{ position }}('{{ selector }}');
+    {% endif %}
+    
+    $('.kjseries').show();
+});
+let config_kjproduct = 
+{
+    change_url: true,
+    before_ajax : function(html) {},
+    after_ajax : function(html) {
+        octProductTabs();
+        //eval($(html).find("script").text());
+    },
+    ajax_replace : ["#content", "h1"],
+    refresh_kjseries : true
+};
+</script>

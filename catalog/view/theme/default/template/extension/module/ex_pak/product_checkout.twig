@@ -1,0 +1,33 @@
+{% if products %}
+	<div class="dop-product-main">
+        <div class="group group-checkout-products">
+            <div class="group-title">{{ ex_pak_checkout_title }}</div>
+            <div class="products-swiper-slider">
+                <div class="dop-product-product-list dop-product-small-products swiper ">
+                    <div class="swiper-wrapper dop-product-mobile-infinity">
+                        {% for product in products %}
+                            {{ product.html }}
+                        {% endfor %}
+                        {% if show_more %}
+                            <div class="product show-more swiper-slide">
+                                <div class="product-wrap">
+                                    <a class="dop-product-show-product-sidebar">{{ ex_pak_show_more }}<span><img src="catalog/view/javascript/ex_pak/images/show-more-icon.svg" alt="" width="8" height="8"></span></a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="product-checkout-products-swiper-button-next swiper-button swiper-button-next">
+                    <span class="chevron-wrap">
+                        <img src="image/dop_group/chevron-product-icon.svg" alt="" width="8" height="8" style="transform:rotate(180deg);">
+                    </span>
+                </div>
+                <div class="product-checkout-products-swiper-button-prev swiper-button swiper-button-prev">
+                    <span class="chevron-wrap">
+                        <img src="image/dop_group/chevron-product-icon.svg" alt="" width="8" height="8" style="transform:rotate(180deg);">
+                    </span>
+                </div>
+            </div>
+        </div>
+	</div>
+{% endif %}

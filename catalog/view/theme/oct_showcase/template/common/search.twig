@@ -1,0 +1,104 @@
+<div class="header-search flex-grow-1 d-none d-md-block search-block-wrapper">
+	<form id="search" autocomplete="off" action="{{ action }}" class="search position-relative">
+		<div class="mobile-back-btn">
+			<img src="/image/icons/arrow-left.png" alt="">
+		</div>
+		<input id="input_search" type="text" name="search" value="{{ search }}" placeholder="{{ search_input_header_text }}" class="input_search form-control py-2 px-3">
+		<button type="button" aria-label="Search" id="sc-search-button" class="sc-search-button sc-btn sc-btn-outline sc-btn-outline-secondary sc-btn-with-icon">
+			<span class="sc-btn-icon sc-btn-icon-search"></span>
+		</button>
+		<div id="sc_livesearch_close" onclick="clearLiveSearch();" class="sc_livesearch_close sc-livesearch-close d-flex align-items-center justify-content-center">
+			<span></span>
+		</div>
+		<input type="hidden" name="route" value="product/search">
+		<div id="sc_livesearch" class="sc_livesearch sc-livesearch"></div>
+	</form>
+</div>
+
+{% if oct_live_search_status %}
+	<script>
+		function clearLiveSearch() {
+			$('.sc_livesearch_close').removeClass('visible');
+			$('#overlay').removeClass('active');
+			$('#overlay').removeClass('transparent');
+			$('.sc_livesearch').removeClass('expanded');
+			$('.sc_livesearch').html('');
+			$('.input_search').val('').removeClass('active');
+		}
+
+		$(document).ready(function() {
+			let timer, delay = {{ delay_setting }};
+
+
+			$('.input_search').keyup(function(event) {
+				let wrapper = $(this).closest('.search-block-wrapper');
+				console.log('wrapper',wrapper)
+				switch(event.keyCode) {
+					case 37:
+					case 39:
+					case 38:
+					case 40:
+						return;
+					case 27:
+						clearLiveSearch();
+						return;
+				}
+
+				clearTimeout(timer);
+
+				timer = setTimeout(function() {
+					let value = $(wrapper).find('input[name=\'search\']').val();
+					console.log(value)
+					const overlay = document.getElementById('overlay');
+
+					if (value.length >= {{ count_symbol }}) {
+						let key = encodeURIComponent(value);
+						octsearch.search(key, 'desktop', $(event.target));
+					} else if (value.length === 0) {
+						clearLiveSearch();
+					}
+
+					overlay.addEventListener('click', (e) => {
+						const target = e.target;
+
+						target.classList.remove('active');
+
+						clearLiveSearch();
+					});
+
+				}, delay );
+			});
+		});
+
+		var octsearch = {
+			'search': function(key, type, searchInput) {
+				let wrapper = $(searchInput).closest('.search-block-wrapper');
+				console.log(wrapper)
+				$.ajax({
+					url: 'index.php?route=octemplates/module/oct_live_search',
+					type: 'post',
+					data: 'key=' + key,
+					dataType: 'html',
+					cache: false,
+					success: function(data) {
+						$('.sc_livesearch').html(data).addClass('expanded');
+
+
+						if(data = data.match(/livesearch/g)) {
+							$('.sc_livesearch_close').addClass('visible');
+							$('.input_search').addClass('active');
+							$('#overlay').addClass('active');
+							$('#overlay').addClass('transparent');
+
+						} else {
+							$('.sc_livesearch_close').removeClass('visible');
+							$('.input_search').removeClass('active');
+							$('#overlay').removeClass('active');
+							$('#overlay').removeClass('transparent');
+						}
+					}
+				});
+			}
+		}
+	</script>
+{% endif %}

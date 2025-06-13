@@ -1,0 +1,394 @@
+<div class="tab-pane kit-series kit-list" id="tab-hpmrr">
+    <legend>
+        Працює під <a target="_blank" href='{{ module_link }}'>серією</a> <select id='serieid' name='serieid'>
+             <option>Авто</option>
+             {% for serie in series %} 
+                <option {% if serie_id == serie.id %} selected {% endif %} value="{{ serie.id }}">{{ serie.name }}</option>
+             {% endfor %}
+        </select>
+    </legend>
+    <table class='table table-hover table-bordered table-responsive' id='kit-search'>
+        <thead>
+            <tr>
+                <div id='ajax-response'></div>
+                <td>
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="Пошук по моделi">
+                            Пошук по моделi
+                        </span>
+                    </label>
+                </td>
+                <td>
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="{{ col_sku_search }}">
+                            {{ col_sku_search }}
+                        </span>
+                    </label>
+                </td>
+                <td>
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="{{ col_name_search }}">
+                            {{ col_name_search }}
+                        </span>
+                    </label>
+                </td>
+                <td class="text-center status">
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="{{ col_add }}">
+                            <i class="fa fa-save" aria-hidden="true"></i>
+                        </span>
+                    </label>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type='text' id='search-model-hpmrr' placeholder="Введіть MODEL товару, натисніть Enter для масового додавання" class='form-control'></td>
+                <td><input type='text' id='search-sku-hpmrr' placeholder="{{ add_sku_product }}" class='form-control'></td>
+                <td><input type='text' id='search-prd-hpmrr' placeholder="{{ add_name_product }}" class='form-control'>
+                </td>
+                <td class="text-center"><button id='save-hpmrr' class='pulse' data-toggle="tooltip" title="" data-original-title="{{ col_add }}"><i class='fa fa-save'></i></button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class='table table-hover table-bordered table-responsive' id='hpmrr-prd-list'>
+        <thead>
+            <tr>
+                <td class="text-center">
+                    <label class="control-label">
+                        PARENT
+                    </label>
+                </td>
+                <td class="text-center kit-list-sku">
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="model">
+                            MODEL
+                        </span>
+                    </label>
+                </td>
+                <td class="text-center kit-list-sku">
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="{{ sku }}">
+                            SKU
+                        </span>
+                    </label>
+                </td>
+                <td class="text-center ">
+                    <label class="control-label">
+                       custom image
+                    </label>
+                </td>
+
+                <td class="text-center">
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="{{ image }}">
+                            <i class="fa fa-picture-o"></i>
+                        </span>
+                    </label>
+                </td>
+                <td>
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="{{ name }}">
+                            {{ name }}
+                        </span>
+                    </label>
+                </td>
+                <td class="text-center">
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="">
+                            sort <i class='fa fa-sort fa-1x'></i>
+                        </span>
+                    </label>
+                </td>
+                <td class="text-center grsort">
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="">
+                            custom group <i class='fa fa-sort fa-1x'></i>
+                        </span>
+                    </label>
+                </td>
+                <td class="text-center status">
+                    <label class="control-label">
+                        <span data-toggle="tooltip" title="" data-original-title="{{ button_remove }}">
+                            <i class='fa fa-trash-o fa-1x'></i>
+                        </span>
+                    </label>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <input type="hidden" name="product_id" value="{{ product_id }}">
+
+            {% for product in childs %} 
+            <tr>
+                <td class="text-center">
+                    <input type="radio" {% if parent_id == product.id %} checked {% endif %} name="hpmrr_parent_id" value="{{ product.id }}">
+                </td>
+                <td class="text-center">
+                    <a href='index.php?route=catalog/product/edit&product_id={{ product.id }}&user_token={{ user_token }}'>{{ product.model }}</a>
+                </td>
+                <td class="text-center">
+                    <a href='index.php?route=catalog/product/edit&product_id={{ product.id }}&user_token={{ user_token }}'>{{ product.sku }}</a>
+                </td>
+                <td class="text-center">
+                    <a href="" id="thumb-image{{ 5000 + product.id }}" data-toggle="image" class="img-thumbnail">
+                        <img src="{{ product.image2 }}" alt="" title="" data-placeholder="{{ placeholder }}" class="img-responsive" />
+                    </a>
+                    <input type="hidden" name="hpmrr_products[{{ product.id }}][image]" value="{{ product.image2_path }}" id="input-image{{ 5000 + product.id }}" />
+                </td>
+
+                <td class="text-center">
+                    <img src="{{ product.image }}" class="img-thumbnail"/>
+                </td>
+
+                <td>
+                    <input type='hidden' name='hpmrr_products[{{ product.id }}][id]' value='{{ product.id }}'>
+                    <a href='index.php?route=catalog/product/edit&product_id={{ product.id }}&user_token={{ user_token }}'>{{ product.name }}</a>
+                </td>
+
+                <td class='sort'>
+                    <input type='number' name='hpmrr_products[{{ product.id }}][sort]' value="{{ product.sort }}" class='form-control'>
+                </td>
+
+                <td class='sort grsort'>
+                    <input type='number' name='hpmrr_products[{{ product.id }}][grsort]' value="{{ product.grsort }}" class='form-control'>
+                </td>
+
+                <td class="text-center"><button type="button" class='btn btn-danger remove' data-toggle="tooltip" title="" data-original-title="{{ button_remove }}"><i class='fa fa-trash-o'></i></button></td>
+            </tr>
+            {% endfor %} 
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () 
+    {
+        $("#serieid").change(function(){
+            savehpmrr();
+        });
+
+        $('#search-prd-hpmrr').autocomplete({'source': autocomplete_source_hpmrr2,'select': autocomplete_select_hpmrr2});
+        
+        $('#search-sku-hpmrr').autocomplete({'source': autocomplete_source_hpmrr3,'select': autocomplete_select_hpmrr3});
+
+        $('#search-model-hpmrr').autocomplete({'source': autocomplete_source_hpmrr4,'select': autocomplete_select_hpmrr4});
+
+        $('#hpmrr-prd-list').on('click', 'td .remove', function () { //Product group
+            $(this).parents('tr').remove();
+            return false;
+        });
+
+        $("#search-prd-hpmrr").keydown(function(event) 
+        {
+            if (event.keyCode === 13) {
+                
+                event.preventDefault();
+                $.ajax({
+
+                    url: 'index.php?route=extension/module/hpmrr/autocomplete&limit=50&user_token={{ user_token }}&filter_name=' + encodeURIComponent($('#search-prd-hpmrr').val()),
+                    dataType: 'json',
+                    success: function (json) 
+                    {
+                        for (let i = 0; i < json.length; i++) 
+                        {
+                          addItemHPMrr(json[i]['product_id'], json[i]['name'], json[i]['sku'], json[i]['model'], json[i]['image']);
+                        }
+                    }
+                });
+
+                return false;
+            }
+        });
+
+        $("#search-sku-hpmrr").keydown(function(event) 
+        {
+            if (event.keyCode === 13) {
+                
+                event.preventDefault();
+                $.ajax({
+
+                    url: 'index.php?route=extension/module/hpmrr/autocomplete&limit=50&user_token={{ user_token }}&filter_sku=' + encodeURIComponent($('#search-sku-hpmrr').val()),
+                    dataType: 'json',
+                    success: function (json) 
+                    {
+                        for (let i = 0; i < json.length; i++) 
+                        {
+                          addItemHPMrr(json[i]['product_id'], json[i]['name'], json[i]['sku'], json[i]['model'], json[i]['image']);
+                        }
+                    }
+                });
+
+                return false;
+            }
+        });
+
+        $("#search-model-hpmrr").keydown(function(event) 
+        {
+            if (event.keyCode === 13) {
+                
+                event.preventDefault();
+                $.ajax({
+
+                    url: 'index.php?route=extension/module/hpmrr/autocomplete&limit=50&user_token={{ user_token }}&filter_model=' + encodeURIComponent($('#search-model-hpmrr').val()),
+                    dataType: 'json',
+                    success: function (json) 
+                    {
+                        for (let i = 0; i < json.length; i++) 
+                        {
+                          addItemHPMrr(json[i]['product_id'], json[i]['name'], json[i]['sku'], json[i]['model'], json[i]['image']);
+                        }
+                    }
+                });
+
+                return false;
+            }
+        });
+
+        $("#save-hpmrr").on('click', '', function () { //Product group
+            savehpmrr();
+            return false;
+        });
+    });
+
+    function savehpmrr()
+    {
+        var data = $("#hpmrr-prd-list input, #serieid").serialize(); //Product group
+            $.ajax({
+                url: 'index.php?route=extension/module/hpmrr/save&user_token={{ user_token }}',
+                method: 'POST',
+                data: data,
+                success: function (json) {
+
+                    if (json['error']) {
+                        $("#tab-hpmrr #ajax-response").html('<div class=\'alert alert-danger\'>' + json['error'] + '</div>')
+                    }
+                    else if (json['success']) {
+                        $("#tab-hpmrr #ajax-response").html('<div class=\'alert alert-success\'>' + json['success'] + '</div>')
+                    }
+                }
+            });
+    }
+
+    function autocomplete_source_hpmrr2(request, response) 
+    {
+        $.ajax({
+            url: 'index.php?route=extension/module/hpmrr/autocomplete&limit=50&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function (json) {
+                response($.map(json, function (item) {
+                    return {
+                        label: item['name'],
+                        value: item['product_id'],
+                        name: item['name'],
+                        sku: item['sku'],
+                        model: item['model'],
+                        image: item['image']
+                    }
+                }));
+            }
+        });
+    }
+
+    function autocomplete_source_hpmrr3(request, response) 
+    {
+        $.ajax({
+            url: 'index.php?route=extension/module/hpmrr/autocomplete&limit=50&user_token={{ user_token }}&filter_sku=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function (json) {
+                response($.map(json, function (item) {
+                    return {
+                        label: item['sku'],
+                        value: item['product_id'],
+                        name: item['name'],
+                        sku: item['sku'],
+                        model: item['model'],
+                        image: item['image']
+                    }
+                }));
+            }
+        });
+    }
+
+    function autocomplete_source_hpmrr4(request, response) 
+    {
+        $.ajax({
+            url: 'index.php?route=extension/module/hpmrr/autocomplete&limit=50&user_token={{ user_token }}&filter_model=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function (json) {
+                response($.map(json, function (item) {
+                    return {
+                        label: item['model'],
+                        value: item['product_id'],
+                        name: item['name'],
+                        sku: item['sku'],
+                        model: item['model'],
+                        image: item['image']
+                    }
+                }));
+            }
+        });
+    }
+
+    function autocomplete_select_hpmrr3(item) 
+    {
+        addItemHPMrr(item['value'], item['name'], item['sku'], item['model'], item['image']);
+    }
+
+    function autocomplete_select_hpmrr2(item) 
+    {
+        addItemHPMrr(item['value'], item['name'], item['sku'], item['model'], item['image']);
+    }
+
+    function autocomplete_select_hpmrr4(item) 
+    {
+        addItemHPMrr(item['value'], item['name'], item['sku'], item['model'], item['image']);
+    }
+
+    function addItemHPMrr(pid, name, sku, model, image)
+    {
+        var token = '{{ user_token }}';
+        var href = 'index.php?route=catalog/product/edit&product_id=' + pid + '&user_token=' + token;
+        var html_image = '';
+        if(image)
+            html_image = "<div class='thumbnails'><img src=" + image + " ></div>";
+
+        var html = "";
+        html += "<tr>";
+        html += "<td class='text-center'><input type='radio' name='hpmrr_parent_id' value=" + pid + "></td>";
+        html += "<td class='text-center'><a href='" + href + "'>" + model + "</a></td>";
+        html += "<td class='text-center'><a href='" + href + "'>" + sku + "</a></td>";
+
+        //
+        html += "<td class='text-center'>";
+        html += "<a href='' id='thumb-image" + (pid + 5000) + "' data-toggle='image' class='img-thumbnail'>";
+        html += "<img src='{{ placeholder }}' alt='' title='' data-placeholder='{{ placeholder }}' class='img-responsive' />";
+        html += "</a>";
+        html += "<input type='hidden' name='hpmrr_products[" + pid + "][image]' value='' id='input-image" + (pid + 5000) + "' /></td>";
+
+        html += "<td class='text-center'>" + html_image + "</td>";
+        
+        html += "<td>";
+            html += "<input type='hidden' name='hpmrr_products[" + pid + "][id]' value='" + pid + "' />";
+            html += "<a href='" + href + "'>" + name + "</a>";
+        html += "</td>";
+
+        html += "<td class='sort'>";
+            html += "<input type='number' name='hpmrr_products[" + pid + "][sort]' value='1' class='form-control'>";
+        html += "</td>";
+
+        html += "<td class='sort grsort'>";
+            html += "<input type='number' name='hpmrr_products[" + pid + "][grsort]' value='1' class='form-control'>";
+        html += "</td>";
+        
+        html +="<td class='text-center'>";
+            html += "<button type='button' class='btn btn-danger remove'>";
+                html += "<i class='fa fa-trash-o'></i>";
+            html += "</button>";
+        html += "</td>";
+
+        html += "</tr>";
+
+        $("#hpmrr-prd-list tbody").append(html);
+    }
+</script>

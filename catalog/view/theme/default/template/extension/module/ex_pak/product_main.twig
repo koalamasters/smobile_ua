@@ -1,0 +1,64 @@
+{% if tabs %}
+	<div class="dop-product-main">
+		{% for tab in tabs %}
+			<div class="group group-{{ tab.group_id }}">
+				<div class="group-title">{{ tab.name }}</div>
+				<div class="products-swiper-slider">
+					<div class="dop-product-product-list dop-product-small-products{% if tab.show_description %} dop-product-description-products{% endif%} swiper ">
+						<div class="swiper-wrapper dop-product-mobile-infinity">
+							{% for product in tab.products %}
+								{{ product.html }}
+							{% endfor %}
+							{% if tab.show_more %}
+								<div class="product show-more swiper-slide">
+									<div class="product-wrap">
+										<a onclick="$('.nav.nav-tabs .nav-dop-product-{{ tab.group_id }}').trigger('click');$('html, body').animate({ scrollTop: $('.nav-dop-product-{{ tab.group_id }}').offset().top }, 800);">{{ ex_pak_show_more }}<span><img src="catalog/view/javascript/ex_pak/images/show-more-icon.svg" alt="" width="8" height="8"></span></a>
+									</div>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="product-{{ tab.group_id }}-swiper-button-next swiper-button swiper-button-next">
+						<span class="chevron-wrap">
+							<img src="image/dop_group/chevron-product-icon.svg" alt="" width="8" height="8" style="transform:rotate(180deg);">
+						</span>
+					</div>
+		      		<div class="product-{{ tab.group_id }}-swiper-button-prev swiper-button swiper-button-prev">
+						<span class="chevron-wrap">
+							<img src="image/dop_group/chevron-product-icon.svg" alt="" width="8" height="8" style="transform:rotate(180deg);">
+						</span>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	
+	<script>
+	if($(window).width() > 991){
+		{% for tab in tabs %}		
+			setting = {
+				slidesPerView: 3,
+				navigation: {
+					prevEl: '.product-{{ tab.group_id }}-swiper-button-prev',
+					nextEl: '.product-{{ tab.group_id }}-swiper-button-next',
+				},
+				
+			}
+			{% if tab.show_description %}
+				setting['slidesPerView'] = 2;
+				setting['breakpoints'] = {
+					1200: { slidesPerView: 1 },
+					1600: { slidesPerView: 2 },
+				};
+			{% else %}
+				setting['slidesPerView'] = 3;
+				setting['breakpoints'] = {
+					1200: { slidesPerView: 2 },
+					1600: { slidesPerView: 3 },
+				};
+			{% endif %}
+			ex_pak.setSlider('.group-{{ tab.group_id }}', setting);
+		{% endfor %}
+	}
+	</script>
+{% endif %}

@@ -1,0 +1,708 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a target="_blank" class="btn btn-success" href='https://opencartforum.com/ua/files/developer/709744-kjlukoo/'>модулi вiд kJlukOo</a>
+                
+                <div class="btn btn-success kit-mods"><i class="fa fa-puzzle-piece fa-fw"></i> {{ url_module }}</div>
+                
+                <button type="submit" form="form-kjseries-add-type" data-toggle="tooltip" class="btn btn-info"><i class="fa fa-save"></i></button>
+                
+                <a  target="_blank" class='btn btn-success hidden' data-toggle="tooltip" title="індексація за всіма категоріями" href="{{ constant('HTTP_CATALOG') }}index.php?route=extension/module/hpmrr_automatic/index_products&key={{ module_hpmrr_key }}"><i class="fa fa-info-circle"></i></a>
+
+                <a  target="_blank" class='btn btn-warning hidden' data-toggle="tooltip" title="індексація за головною категорією" href="{{ constant('HTTP_CATALOG') }}index.php?route=extension/module/hpmrr_automatic/index_products&main_cat=yes&key={{ module_hpmrr_key }}"><i class="fa fa-info-circle"></i></a>
+
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse-setting-hpmrr">{{ button_setting }}</button>
+
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse-automat-hpmrr">{{ button_automat }}</button>      
+
+                      
+                
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+                </div>
+                <h1>{{ heading_title }}</h1>
+                <ul class="breadcrumb">
+                    {% for breadcrumb in breadcrumbs %} 
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                    {% endfor %} 
+                </ul>
+            </div>
+        </div>
+        <div class="container-fluid">
+            {% if (error_warning) %} 
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+            {% endif %} 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ name_kit_series }}</h3>
+                    <button form="help_modals" class="pull-right hm-help btn btn-primary btn-sm" data-toggle="modal" data-target="#Kit_Series_Modal">
+                        <i class="fa fa-info"></i> <b>- INFO</b>
+                    </button>
+
+                </div>
+                <div class="panel-body">
+                    <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-kjseries-add-type" class="form-horizontal">
+
+                        <div class="key col-sm-12 {% if lincense %} alert-success {% else %} alert-danger {% endif %}">
+                            <div class="row">
+                                <label class="control-label col-sm-6">
+                                    LICENSE KEY
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type='text' name='module_hpmrr_key' value='{{ module_hpmrr_key }}' placeholder="{{ name_key }}" class='form-control'>
+                                </div>
+                            </div>
+                        </div>
+
+                          <div class="collapse" id="collapse-setting-hpmrr">
+                            <div class="key col-sm-12">
+                                <div class="row">
+                                    <label class="control-label col-sm-6">
+                                        {{ entry_media_path }}
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <textarea placeholder="catalog/view/javascript/font-awesome/css/font-awesome.min.css" name='module_hpmrr_include_media' class='form-control'>{{ module_hpmrr_include_media }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                            <label class="control-label col-sm-6">
+                                        AJAX у категорії
+                                    </label>
+                                    <div class="col-sm-6">
+                                        
+                                         <select name='module_hpmrr_cat_ajax' class='form-control'>
+                                                <option value="0" {% if '0' == module_hpmrr_cat_ajax %} selected {% endif %} >NO</option>
+                                                <option value="1" {% if '1' == module_hpmrr_cat_ajax %} selected {% endif %} >YES</option>
+                                            </select>
+                                    </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                            <label class="control-label col-sm-6">
+                                        AJAX у картці товару
+                                    </label>
+                                    <div class="col-sm-6">
+                                        
+                                         <select name='module_hpmrr_ajax' class='form-control'>
+                                                <option value="0" {% if '0' == module_hpmrr_ajax %} selected {% endif %} >NO</option>
+                                                <option value="1" {% if '1' == module_hpmrr_ajax %} selected {% endif %} >YES</option>
+                                            </select>
+                                    </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                            <label class="control-label col-sm-6">
+                                        Attribute Text Select by Vier
+                                    </label>
+                                    <div class="col-sm-6">
+                                        
+                                         <select name='module_hpmrr_oat_enabled' class='form-control'>
+                                                <option value="0" {% if '0' == module_hpmrr_oat_enabled %} selected {% endif %} >NO</option>
+                                                <option value="1" {% if '1' == module_hpmrr_oat_enabled %} selected {% endif %} >YES</option>
+                                            </select>
+                                    </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                            <label class="control-label col-sm-6">
+                                        Показувати зображення при наведеннi
+                                    </label>
+                                    <div class="col-sm-6">
+                                        
+                                         <select name='module_hpmrr_hover_img' class='form-control'>
+                                                <option value="0" {% if '0' == module_hpmrr_hover_img %} selected {% endif %} > найменування</option>
+                                                <option value="1" {% if '1' == module_hpmrr_hover_img %} selected {% endif %} > фото + найменування</option>
+                                                <option value="2" {% if '2' == module_hpmrr_hover_img %} selected {% endif %} > нiчого </option>
+                                            </select>
+                                    </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                                <div class="row">
+                                    <label class="control-label col-sm-6">
+                                        Сортування значень(new)
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <textarea placeholder="s&#10;m&#10;xl" name='module_hpmrr_sort_vals' class='form-control'>{{ module_hpmrr_sort_vals }}</textarea>
+                                        {% if module_hpmrr_sort_offset is empty %} {% set module_hpmrr_sort_offset = 900 %} {% endif %}
+                                        <input type="number" class='hidden' name="module_hpmrr_sort_offset" value="{{ module_hpmrr_sort_offset }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                                <div class="row">
+                                    <label class="control-label col-sm-6">
+                                        {{ text_color_matching }}
+                                        <br/>
+                                        <a target="_blank" href='https://youtu.be/k0XpY_Vhtck'>Вiдео - обучалка</a>
+                                    </label>
+                                    <div class="col-sm-6">
+                                     
+
+                                        <textarea placeholder="{{ text_color_array_placeholder }}" name='module_hpmrr_colors_array' id="color-array" class='form-control'>{{ module_hpmrr_colors_array }}</textarea>
+
+                                           <select id="attr" class="form-control" name="module_hpmrr_colors_attr">
+                                {% for attribute in attributes %} 
+                                     <option value="{{ attribute.id }}" {% if module_hpmrr_colors_attr ==  attribute.id %} selected {% endif %}>{{ attribute.name }}</option>
+                                {% endfor %}
+                              
+                               </select>
+                                
+                               
+                                <button type="button" id="get-attr-vals" class='btn btn-success'>{{ button_get_all_attr_vals }}</button>
+                                
+                                        <button type="button" class='btn btn-success' id="set-isbn">{{ button_set_isbn }}</button>
+                                        <input type="color" id="color" value="#000000" class="btn"/>
+
+                                    </div>
+                                </div> 
+                            </div>
+
+                            <div class="key col-sm-12">
+                                <div class="row">
+                                    <label class="control-label col-sm-6">
+                                        Градiенту для кружечкiв
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <select name='module_hpmrr_gradient_status' class='form-control' style="width: auto; display: inline;">
+                                            <option value="0" {% if '0' == module_hpmrr_gradient_status %} selected {% endif %}>OFF</option>
+                                            <option value="1" {% if '1' == module_hpmrr_gradient_status %} selected {% endif %}>ON</option>
+                                        </select>
+
+                                        <input type="color" name="module_hpmrr_gradient" value="{{ module_hpmrr_gradient }}" class='form-control' style="width: 100px; display: inline;"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                                <div class="row">
+                                    <label class="control-label col-sm-6">
+                                        Вiдповiднiсть текстур 
+                                    </label>
+                                    <div class="col-sm-6">
+                                     
+
+                                        <textarea placeholder="{{ text_texture_array_placeholder }}" name='module_hpmrr_texture_array' id="texture-array" class='form-control'>{{ module_hpmrr_texture_array }}</textarea>
+
+                                           <select id="attr2" class="form-control" name="module_hpmrr_texture_attr">
+                                {% for attribute in attributes %} 
+                                     <option value="{{ attribute.id }}" {% if module_hpmrr_texture_attr ==  attribute.id %} selected {% endif %}>{{ attribute.name }}</option>
+                                {% endfor %}
+                              
+                               </select>
+                                
+                               
+                                <button type="button" id="get-attr2-vals" class='btn btn-success'>{{ button_get_all_attr_vals }}</button>
+                                
+                                <button type="button" class='btn btn-success' id="set-custom-img">set custom image</button>
+                                       
+                                <a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img height="30" src="/image/cache/catalog/demo/apple_cinema_30-100x100.jpg" alt="" title="" data-placeholder="/image/cache/no_image-100x100.png" /></a>
+                                <input type="hidden" name="image" value="catalog/demo/apple_cinema_30.jpg" id="input-image" />
+
+                                    </div>
+                                </div> 
+                                
+
+                            </div>
+
+                            <div class="key col-sm-12 hidden">
+                                <div class="row">
+                                    <label class="control-label col-sm-6">
+                                        {{ text_exclude_pr_grouping }}
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <textarea placeholder="extension/feed/google_base&#10;extension/feed/test" name='module_hpmrr_grouping_exclude_route' class='form-control'>{{ module_hpmrr_grouping_exclude_route }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                                <div class="row">
+                                    <label class="control-label col-sm-6">
+                                        {{ text_hook_for_module_output_in_cat }}
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <input type="hidden" id="change_ocmod_line" value="244">
+                                        <input type="hidden" id="change_ocmod_file" value="hpmrr_main.ocmod.xml">
+                                        <input type="text" class='form-control' id="change_ocmod_text" value='<div class="class'>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" id="theme_select" onchange='$("#change_ocmod_text").val("<div class=\""+this.value);'>
+                                            <option value="class">Обрати тему</option>
+                                            <option value="ds-module-price">Deals</option>
+                                            <option value="list-right-block">CyberStore</option>
+                                            <option vlaue="price-actions-box">LuxShop</option>
+                                            <option value="rm-module-price-box">ReMarket</option>
+                                            <option value="price-actions-box">Chameleon</option>
+                                            <option value="sc-module-price-box">ShowCase</option>
+                                            <option value="box_flex2">Deluxe</option>
+                                            <option value="fm-module-price">FeelMart</option>
+                                            <option value="us-module-price">UltraStore</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class='btn btn-dafult' type="button" id="change_ocmod_button">{{ button_apply }}</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                                <div class="row">
+                                    <label class="control-label col-sm-3">
+                                        {{ text_split_attrs }}
+                                    </label>
+                                    <div class="col-sm-3">
+                                            <select name='module_hpmrr_split_attr_enable' class='form-control'>
+                                                <option value="0" {% if '0' == module_hpmrr_split_attr_enable %} selected {% endif %} >OFF</option>
+                                                <option value="1" {% if '1' == module_hpmrr_split_attr_enable %} selected {% endif %} >ON</option>
+                                            </select>
+                                    </div>
+                                    <label class="control-label col-sm-3">
+                                        {{ text_split_delim }}
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <input type="text" placeholder="{{ text_hpmrr_split_attr_delim_placeholder }}" class='form-control' name="module_hpmrr_split_attr_delim" value='{{ module_hpmrr_split_attr_delim }}'>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="key col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-6 text-right">
+                                        {% if group_in_cat_exist_file %}
+                                            {% if group_in_cat_status %} 
+                                                <a title='{{ text_after_refresh_modif }}' class='btn btn-danger' href='{{ constant('HTTP_CATALOG') }}admin/index.php?route=extension/module/hpmrr/toggle_group_in_cat&user_token={{ user_token }}'>
+                                                {{ text_disable_grouping_in_cat }}
+                                                </a>
+                                            {% else %}
+                                                <a title='{{ text_after_refresh_modif }}' class='btn btn-success' href='{{ constant('HTTP_CATALOG') }}admin/index.php?route=extension/module/hpmrr/toggle_group_in_cat&user_token={{ user_token }}'>
+                                                {{ text_enable_grouping_in_cat }}
+                                                </a> 
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+
+                                    <label class="control-label col-sm-2 hidden">
+                                        Роздiлити по наявностi
+                                    </label>
+                                    <div class="col-sm-1 hidden">
+                                        
+                                         <select name='module_hpmrr_grouping_stock' class='form-control'>
+                                                <option value="0" {% if '0' == module_hpmrr_grouping_stock %} selected {% endif %} >NO</option>
+                                                <option value="1" {% if '1' == module_hpmrr_grouping_stock %} selected {% endif %} >YES</option>
+                                            </select>
+                                    </div>
+
+                                    <label class="control-label col-sm-3">
+                                        {{ text_type_grounping_in_cat }}
+                                    </label>
+                                        
+                                    <div class="col-sm-3">
+                                        <select name='module_hpmrr_grouping_type' class='form-control'>
+                                        {% set grouping_types = {
+                                            "type 1" : text_gr_type_1, 
+                                            "type 3" : text_gr_type_3
+                                        } %}
+                                        {% for key,val in grouping_types %}
+                                            <option value="{{ key }}" {% if key == module_hpmrr_grouping_type %} selected {% endif %} >{{ val }}</option>
+                                        {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                        
+                        <table class='table table-hover table-bordered table-responsive'>
+                            <thead>
+                                <tr>
+                                    <td class="name-start">
+                                        <label class="control-label">
+                                            <span data-toggle="tooltip" title="" data-original-title="{{ text_name }}">
+                                                {{ text_name }}
+                                            </span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label class="control-label">
+                                            <span data-toggle="tooltip" title="" data-original-title="{{ text_comment }}">
+                                                {{ text_comment }}
+                                            </span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center status">
+                                        <label class="control-label">
+                                            <span data-toggle="tooltip" title="" data-original-title="{{ text_edit }}">
+                                                <i class="fa fa-pencil"></i>
+                                            </span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center status">
+                                        <label class="control-label">
+                                            <span data-toggle="tooltip" title="" data-original-title="{{ button_on_off }}">
+                                                <i class="fa fa-power-off"></i>
+                                            </span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center status">
+                                        <label class="control-label">
+                                            <span data-toggle="tooltip" title="" data-original-title="{{ button_add_remove }}">
+                                                <b style="line-height: 0; font-size: 18px;">±</b>
+                                            </span>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for type in types %} 
+                                <tr>
+                                    <td>
+                                        {{ type['name'] }} 
+                                    </td>
+                                    <td>{{ type['description'] }}</td>
+                                    <td class="text-center"><a  class='btn btn-primary' href="{{ link_del_type }}{{ type['id'] }}"><i class="fa fa-pencil"></i></a></td>
+                                    <td class="text-center switcher-edits">
+                                        <!-- Тут включение выключение Типа - ели выключено то нет и в карточке товара -->
+                                        <input disabled class="bootstrap-switcher" type="checkbox" value="1" name="accumulative_discount[{# echo $accumulative_discounts_counter; #}][status]" data-size="small" data-on-color="success"
+                                        {% if (type['status']) %} {{ 'checked' }}{% endif %} >
+
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a  class='btn btn-danger' href="{{ link_edit_type }}{{ type['id'] }}"><i class="fa fa-remove"></i></a></td>
+                                </tr>
+                                {% endfor %} 
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan='5'>
+                                        <a class='pulse pull-right' href='{{ link_add_new_series }}'><i class="fa fa-plus"></i></a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+
+                        {% if (perm) %} 
+                            <div class="collapse" id="collapse-automat-hpmrr">
+            <table class='table table-bordered ajax-link'>
+                <tbody>
+                     <tr>
+                     <td colspan="3">
+                        <h3>{{ text_automat_links }}</h3>
+                     </td>
+                    </tr>
+                    <tr>
+                        <td style="width:33.333%;">
+                            <a href="{{ constant('HTTP_CATALOG') }}admin/index.php?route=extension/module/hpmrr/autolinks_by_part_of_name&user_token={{ user_token }}">
+                                {{ text_links_by_part_name }}
+                            </a>
+                        </td>
+                        <td style="width:33.333%;">
+                            
+                            <form method="GET" action="{{ constant('HTTP_CATALOG') }}index.php">
+                            
+                                <input type="hidden" name="route" value="extension/module/hpmrr_automatic/links_by_model">
+                                <input type="hidden" name="key" value="{{ module_hpmrr_key }}">
+                                
+                                
+                                {{ text_links_by }}
+                                <select name='by'>
+                                    <option value="model">model</option>
+                                    <option value="name">name</option>
+                                    <option value="sku">sku</option>
+                                    <option value="upc">upc</option>
+                                    <option value="ean">ean</option>
+                                    <option value="jan">jan</option>
+                                    <option value="isbn">isbn</option>
+                                    <option value="mpn">mpn</option>
+                                </select>
+                                <br/>
+                                
+                                <input type="checkbox" name="explode" value="true">
+                                {{ text_split_by_for_sku }}
+                                <br/>
+                                
+                                 <input type="checkbox" name="remove" value="stop" checked>
+                                {{ text_not_delete_links_first }}
+                                <br/>
+
+                                <input class='btn btn-success' type="submit" value="Сгенерировать связи">
+                                </form>
+                        </td>
+                        <td style="width:33.333%;">
+                            <form method="GET" action="{{ constant('HTTP_CATALOG') }}index.php">
+
+                            <input type="hidden" name="route" value="extension/module/hpmrr_automatic/links_by_attr">
+                            <input type="hidden" name="key" value="{{ module_hpmrr_key }}">
+
+                            {{ text_by_attr }}
+                            <select name = "attribute_id">
+                                {% for attribute in attributes %} 
+                                    <option value="{{ attribute.id }}">{{ attribute.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <br/>
+                            
+                            <input type="checkbox" name="cat" value="true">
+                            {{ text_consider_main_cat }}
+                            <br/>
+                            
+                                <input type="checkbox" name="remove" value="stop" checked>
+                                {{ text_not_delete_links_first }}
+                                <br/>
+
+                                <input class='btn btn-success' type="submit" value="{{ button_gen_links }}">
+
+                            </form>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="width:33.333%;">
+                            <h3>авто группування по атрибуту</h3>
+                            <form method="GET" action="{{ constant('HTTP_CATALOG') }}index.php">
+
+                            <input type="hidden" name="route" value="extension/module/hpmrr_automatic/auto_grsort">
+                            <input type="hidden" name="key" value="{{ module_hpmrr_key }}">
+
+                            {{ text_by_attr }}
+                            <select name = "attribute_id">
+                                {% for attribute in attributes %} 
+                                    <option value="{{ attribute.id }}">{{ attribute.name }}</option>
+                                {% endfor %}
+                            </select>
+                            
+                            
+                            <input class='btn btn-success' type="submit" value="go">
+
+                            </form>
+                        </td>
+                 </tr>   
+
+                    <tr>
+                     <td colspan="3">
+                        <h3>{{ text_useful_links }}</h3>
+                     </td>
+                 </tr>    
+                    <tr class=''>
+                        <td>
+                            <a href="{{ constant('HTTP_CATALOG') }}index.php?route=extension/module/hpmrr_automatic/reviews_cache&key={{ module_hpmrr_key }}">
+                                {{ text_cache_review_num_and_rating }}
+                            </a>
+                            </br></br>
+                            <a href="{{ constant('HTTP_CATALOG') }}index.php?route=extension/module/hpmrr_automatic/add_parents&key={{ module_hpmrr_key }}">
+                                прив'язати батьків до себе (фікс для старих версій)
+                            </a>
+                        </td>
+                        <td>
+                            <a href="index.php?route=extension/module/hpmrr/update133&user_token={{ user_token }}">
+                                update tables
+                            </a>
+                        </td>
+                        <td>
+                            <a style = 'color: red;' href="{{ constant('HTTP_CATALOG') }}index.php?route=extension/module/hpmrr_automatic/clear_links&key={{ module_hpmrr_key }}">
+                                {{ text_remove_all_product_links }}
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            example curl:<br>
+                            45 * * * * curl -s https://domain.com
+                        </td>
+                        <td>
+                            <a style = 'color: red;' href="{{ constant('HTTP_CATALOG') }}index.php?route=extension/module/hpmrr_automatic/remove_death_links&key={{ module_hpmrr_key }}">
+                                Видалити пошкодженi зв'язки
+                            </a>
+                        </td>
+                        <td>
+                            <a style = 'color: red;' href="{{ uninstall }}">
+                                {{ text_remove_all_tables }}
+                            </a>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            </div>
+            {% endif %} 
+                </div>
+            </div>
+
+            
+
+
+            {{ footer }} 
+        </div>
+    </div>
+    <!-- Start Series Modal INFO -->
+    <div class="modal fade" id="Kit_Series_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <h4 class="modal-title" id="myModalLabel"><i class="fa fa-cogs"></i> {{ name_kit_series }}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="help-text">{{ help_first_kit_series }}</div>
+                    <div class="text-center">{{ help_second_kit_series }}</div>
+                    <div class="help-text">{{ help_third_kit_series }}</div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">{{ copy_label }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--// END Series Modal INFO -->
+    <!-- Start Modal Authors -->
+    <div class="modal fade" id="Authors_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <h4 class="modal-title" id="myModalLabel"><i class="fa fa-copyright"></i> {{ desc_author }}</h4>
+                </div>
+                <div class="modal-body authors">
+                    <legend class="text-center">{{ desc_copy }}</legend>
+                    <div class="text-center">{{ desc_author_copy }}</div>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">{{ copy_label }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Modal Authors -->
+   <script type="text/javascript">
+
+
+    var originalValFn = jQuery.fn.val;
+
+    jQuery.fn.val = function() 
+    {
+        if(arguments.length > 0)
+        {
+            this.trigger('change');
+        }
+        return originalValFn.apply( this, arguments );
+    }
+
+
+        $(document).ready(function () {
+
+            $("#set-isbn").click(function(){
+                let url = '{{ constant('HTTP_CATALOG') }}';
+                url += 'index.php?route=extension/module/hpmrr_automatic/set_isbn';
+                url += '&key={{ module_hpmrr_key }}';
+                url += '&attribute_id='+$('#attr').val();
+                window.open(url, '_blank').focus();
+            });
+
+
+            $("#set-custom-img").click(function(){
+                let url = '{{ constant('HTTP_CATALOG') }}';
+                url += 'index.php?route=extension/module/hpmrr_automatic/set_texture';
+                url += '&key={{ module_hpmrr_key }}';
+                url += '&attribute_id='+$('#attr2').val();
+                window.open(url, '_blank').focus();
+            });
+
+            $("#get-attr-vals").click(function(){
+
+                $.ajax({
+                    type: "GET",
+                    url: "{{ constant('HTTP_CATALOG') }}index.php?route=extension/module/hpmrr_automatic/get_color&key={{ module_hpmrr_key }}&attribute_id="+$("#attr").val(),
+                    success: function (msg) {
+                        $("#color-array").text(msg);
+                    }
+                });
+            });
+
+
+            $("#get-attr2-vals").click(function(){
+                $.ajax({
+                    type: "GET",
+                    url: "{{ constant('HTTP_CATALOG') }}index.php?route=extension/module/hpmrr_automatic/get_texture&key={{ module_hpmrr_key }}&attribute_id="+$("#attr2").val(),
+                    success: function (msg) {
+                        $("#texture-array").val(msg);
+                    }
+                });
+            });
+
+            $("#input-image").change(function(){
+                var tempTextarea = $('<textarea>');
+                $('body').append(tempTextarea);
+                tempTextarea.val($(this).val()).select();
+                document.execCommand('copy');
+                tempTextarea.remove();
+            });
+
+            $("#color").change(function(){
+                var tempTextarea = $('<textarea>');
+                $('body').append(tempTextarea);
+                tempTextarea.val($(this).val().substring(1)).select();
+                document.execCommand('copy');
+                tempTextarea.remove();
+            });
+
+
+            $('body').addClass('kit-series kit-one');
+            $('.bootstrap-switcher').bootstrapSwitch();
+
+
+            $("#change_ocmod_button").click(function(){
+                $.ajax({
+                    type: "POST",
+                    url: 'index.php?route=extension/module/hpmrr/replace_line_ocmod&user_token={{ user_token }}',
+                    data: {
+                        replace : "<![CDATA[" + $("#change_ocmod_text").val() + "]]>",
+                        line : $("#change_ocmod_line").val(), 
+                        filename : $("#change_ocmod_file").val(),
+                    },
+                    success: function (msg) {
+                        $("#change_ocmod_button").html(msg);
+                    }
+                });
+            });
+
+
+            $(".ajax-link button").click(function (e) {
+
+                e.preventDefault();
+
+                var btn = $(this);
+                var old_html = $(this).html();
+                var link = $(this).parents('tr').find('a').attr('href');
+                $.ajax({
+                    type: "GET",
+                    url: link,
+                    beforeSend: function () {
+                        $(btn).html('<i class="fa fa-refresh fa-spin"></i>');
+                    },
+                    success: function (msg) {
+                        $(btn).html(old_html);
+                    }
+                });
+
+                return false;
+
+            });
+        });
+</script>
+<style>
+    select { height: auto!important; }
+    h3 { font-size: 24px; font-weight:bold; }
+</style>

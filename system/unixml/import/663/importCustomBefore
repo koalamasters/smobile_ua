@@ -1,0 +1,18 @@
+<?php
+//Этот файл - кастомный код модуля UniXML, Импорт id: 663
+//info: https://unixml.pro
+
+//Якщо немає в фіді то quantity = 0 sort_order = 4 якщо sort_order != 2
+$this->db->query("UPDATE " . DB_PREFIX . "product SET quantity = 0, sort_order = 4 WHERE sort_order NOT IN(2,5)");
+
+$data['not_update'] = array();
+$not_update_query = $this->db->query("SELECT product_id FROM " . DB_PREFIX . "product WHERE sort_order = 2");
+foreach($not_update_query->rows as $row_product){
+  $data['not_update'][] = $row_product['product_id'];
+}
+
+$data['yes_update'] = array();
+$yes_update_query = $this->db->query("SELECT product_id FROM " . DB_PREFIX . "product WHERE sort_order != 2");
+foreach($yes_update_query->rows as $row_product){
+  $data['yes_update'][] = $row_product['product_id'];
+}

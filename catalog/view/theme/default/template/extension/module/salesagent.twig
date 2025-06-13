@@ -1,0 +1,22 @@
+{% if saleagents %}
+ <fieldset id="salesagent">
+<legend>{{ text_salesagent }}</legend>
+ <div class="form-group">
+  <label class="control-label" for="input-salesagent">{{ entry_salesagent }}</label>
+  {% if salesagent_selecttype %}
+    <input type="text" name="uniqueid" id="input-salesagent" class="form-control" placeholder="{{ entry_salesagent }}" value="{{ uniqueid }}">
+  {% else %}
+  <select name="salesagent_id" id="input-salesagent" class="form-control">
+    <option value="">{{ text_select }}</option>
+    {% for saleagent in saleagents %}
+      {% if saleagent.salesagent_id == salesagent_id %}
+        <option value="{{ saleagent.salesagent_id }}" selected="selected">{{ saleagent.name }}</option>
+      {% else %}
+        <option value="{{ saleagent.salesagent_id }}">{{ saleagent.name }}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+  {% endif %}
+  </div>
+</fieldset>
+{% endif %}

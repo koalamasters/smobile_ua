@@ -1,0 +1,8 @@
+<?php
+    
+require_once DIR_APPLICATION . 'controller/extension/module/hpmrr.php';
+
+class ControllerModuleHpmrr extends ControllerExtensionModuleHpmrr
+{
+
+}

@@ -1,0 +1,186 @@
+<input type="hidden" name="ex_pak[product_id]" value="{{ product_id }}">
+<input type="hidden" name="ex_pak[submit]" value="1">
+<div class="group-add">
+	<div class="input-group">
+		<select name="ex_pak[tab_id]" class="form-control">
+			{% for tab_id, name in tabs %}
+				<option value="{{ tab_id }}" >{{ name }}</option>
+			{% endfor %}
+		</select>
+		<span class="input-group-addon">
+			<button type="button" data-toggle="tooltip" title="{{ txt_add_group }}" class="btn-icon add-group" onclick="ex_pak.addGroup();"><svg class="ex-icon-green"><use xlink:href="#ex-icon-plus"></use></svg></button>
+		</span>
+	</div> 
+	{% if errors.add_group %}
+		<div class="alert alert-danger alert-dismissible">
+			<i class="fa fa-exclamation-circle"></i> {{ errors.add_group }}
+		</div>
+	{% endif %}
+</div>
+
+<div class="group-list table-responsive">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<td>{{ txt_group_name }}</td>
+				<td>{{ txt_period_action }}</td>
+				<td class="column-sort">{{ txt_sorting }}</td>
+				<td class="column-action"></td>
+			</tr>
+		</thead>
+		<tbody>
+			{% if groups %}
+				{% for group in groups %}
+					<tr class="group{% if group.active%} active{% endif %}" data-group-id="{{ group.group_id }}">
+						<td class="column-name">
+							<span class="group-status{% if group.date.status %} active{% endif %}"></span>
+							{{ group.name }}
+							<input type="hidden" name="ex_pak[groups][{{ group.group_id }}][group_id]" value="{{ group.group_id }}">
+							<input type="hidden" name="ex_pak[groups][{{ group.group_id }}][active]" value="{{ group.active }}">
+						</td>
+						<td>{{ group.date.text }}</td>
+						<td>
+							<input type="text" name="ex_pak[groups][{{ group.group_id }}][sort_order]" value="{{ group.sort_order }}" placeholder="0" class="form-control" data-toggle="tooltip" title='{{ txt_sort_order }}'>
+						</td>
+						<td class="text-center">
+							<button type="button" class="btn-icon button-group-remove red"><svg class="ex-icon-red"><use xlink:href="#ex-icon-trash"></use></svg></button>
+							<button type="button" class="btn-icon button-group-open" data-toggle="tooltip" title="{{ txt_open }}"><svg class="ex-icon-green"><use xlink:href="#ex-icon-arrow-down"></use></svg></button>
+						</td>
+					</tr>
+					<tr class="group-setting{% if group.show_in_checkout %} show-in-checkout{% endif %}" data-group-id="{{ group.group_id }}">
+						<td colspan="4">
+							<div class="group-controls">
+								<div class="toolbar">
+									<span class="count"></span> {{ txt_prod_or_select_all }} <button class="btn-icon uncheck-all"><i class="fa fa-times" aria-hidden="true"></i></button>
+								</div>
+								<div class="buttons">
+									<label class="input-switch toolbar-show-in-checkout" data-toggle="tooltip" title="{{ txt_view_to_checkout }}">
+										<input type="checkbox">
+									</label>
+									<button type="button" class="btn-icon button-products-remove red toolbar-show-in-checkout" data-toggle="tooltip" title="{{ txt_remove_selected_product }}"><svg class="ex-icon-red"><use xlink:href="#ex-icon-trash"></use></svg></button>
+									<button type="button" class="btn-icon button-products-add" data-toggle="tooltip" title="{{ txt_add_products }}" style="display: flex;align-items: center"><svg class="ex-icon-green"><use xlink:href="#ex-icon-plus"></use></svg></button>
+									<button type="button" class="btn-icon button-calculator" data-toggle="tooltip" title="{{ txt_calcul_prices }}" style="display: flex;align-items: center"><svg class="ex-icon-green"><use xlink:href="#ex-icon-calculate"></use></svg></button>
+								</div>
+							</div>
+							<div class="group-products">
+								<table class="table table-bordered{% if not group.product_html %} no-products{% endif %}">
+									<thead>
+										<tr>
+											<td class="text-center">
+												<input type="checkbox" class="check-all"/>
+											</td>
+											<td style="white-space: nowrap;">{{ txt_product_name }}</td>
+											<td style="white-space: nowrap;">{{ txt_model }}</td>
+											<td>{{ txt_price }}</td>
+											<td class="text-center" style="white-space: nowrap;">{{ txt_period_action }}</td>
+											<td class="text-center" style="white-space: nowrap;">{{ txt_product_price_in_complect }}</td>
+											<td class="text-center">{{ txt_sorting }}</td>
+											<td class="text-center col-show-in-checkout" style="white-space: nowrap;">{{ txt_to_page_checkout }}</td>
+											<td class="text-center">{{ txt_remove }}</td>
+										</tr>
+									</thead>
+									<tbody>
+										{{ group.product_html }}
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="8" class="text-center">{{ txt_add_products }}</td>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+							<div class="group-properties">
+								<div class="prop-switch-box">
+									<div class="text">{{ txt_view_in_tab }}</div>
+									<label class="input-switch">
+										<input type="checkbox" name="ex_pak[groups][{{ group.group_id }}][show_in_tab]" {% if group.show_in_tab %}checked="checked"{% endif %}>
+									</label>
+								</div>
+								<div class="prop-switch-box">
+									<div class="text">{{ txt_view_in_main }}</div>
+									<label class="input-switch">
+										<input type="checkbox" name="ex_pak[groups][{{ group.group_id }}][show_in_main]" {% if group.show_in_main %}checked="checked"{% endif %}>
+									</label>
+								</div>
+								<div class="prop-switch-box">
+									<div class="text">{{ txt_view_desc }}</div>
+									<label class="input-switch">
+										<input type="checkbox" name="ex_pak[groups][{{ group.group_id }}][show_description]" {% if group.show_description %}checked="checked"{% endif %}>
+									</label>
+								</div>
+								<div class="prop-switch-box">
+									<div class="text">{{ txt_view_to_checkout }}</div>
+									<label class="input-switch">
+										<input type="checkbox" name="ex_pak[groups][{{ group.group_id }}][show_in_checkout]" {% if group.show_in_checkout %}checked="checked"{% endif %} class="group-show-in-checkout">
+									</label>
+								</div>
+								<div class="prop-switch-box">
+									<div class="text">{{ txt_add_with_main }}</div>
+									<label class="input-switch">
+										<input type="checkbox" name="ex_pak[groups][{{ group.group_id }}][add_with_main]" {% if group.add_with_main %}checked="checked"{% endif %}>
+									</label>
+								</div>
+								<div class="prop-switch-box">
+									<div class="text">{{ txt_count_characters }}</div>
+									<input type="text" name="ex_pak[groups][{{ group.group_id }}][description_limit]" value="{{ group.description_limit }}">
+								</div>
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td colspan="4" class="text-center">
+						{{ txt_add_products_group }}
+					</td>
+				</tr>
+			{% endif %}
+		</tbody>
+	</table>
+</div>
+
+<div class="text-right">
+	<a class="btn btn-primary ex-green-button" onclick="ex_pak_complect.showForm();">{{ txt_add_new_completes }}</a>
+</div>
+
+
+<div class="group-list table-responsive complect-list{% if complects %} active{% endif %}">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<td>{{ txt_complect_name }}</td>
+				<td>{{ txt_period_action }}</td>
+				<td class="column-sort">{{ txt_sorting }}</td>
+				<td class="column-action"></td>
+			</tr>
+		</thead>
+		<tbody class="complect-list-body">
+			{% for complect in complects %}
+				{{ complect.html }}
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% if ex_pak_setting %}
+<script>
+	ex_pak_setting = JSON.parse('{{ ex_pak_setting }}');
+</script>
+{% endif %}
+
+
+<div style="position:absolute;left:-9999px;">
+	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<symbol xmlns="http://www.w3.org/2000/svg" id="ex-icon-trash" viewBox="0 -960 960 960">
+			<path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+		</symbol>
+		<symbol xmlns="http://www.w3.org/2000/svg" id="ex-icon-plus" viewBox="0 -960 960 960">
+			<path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+		</symbol>
+		<symbol xmlns="http://www.w3.org/2000/svg" id="ex-icon-calculate" viewBox="0 -960 960 960">
+			<path d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-58 56-56-42-42-56 56-56-56-42 42 56 56-56 58 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+		</symbol>
+		<symbol xmlns="http://www.w3.org/2000/svg" id="ex-icon-arrow-down" viewBox="0 -960 960 960">
+			<path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+		</symbol>
+	</svg>
+</div>

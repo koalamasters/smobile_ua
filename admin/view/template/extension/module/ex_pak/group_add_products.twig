@@ -1,0 +1,162 @@
+<div class="modal add-products" tabindex="-1" role="dialog" data-group-id="{{ group_id }}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ txt_add_product_to_special }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label" for="input-category-id">{{ txt_category }}</label>
+            <div class="form-input">
+          		<select name="ex_pak[add_product][filter_data][category_id]" class="form-control">
+	              	<option value="">{{ txt_no_filtered }}</option>
+	              	{% for category in categories %}
+		              	<option value="{{ category.category_id }}" {% if filter_data.category_id == category.category_id %}selected="selected"{% endif%}>{{ category.name }}</option>
+	              	{% endfor %}
+              </select>
+            </div>
+      	</div>
+        <div class="form-group">
+            <label class="control-label" for="input-manufacturer-id">{{ txt_manufacturer }}</label>
+            <div class="form-input">
+              <select name="ex_pak[add_product][filter_data][manufacturer_id]" class="form-control">
+				<option value="">{{ txt_no_filtered }}</option>
+				{% for manufacturer in manufacturers %}
+					<option value="{{ manufacturer.manufacturer_id }}" {% if filter_data.manufacturer_id == manufacturer.manufacturer_id %}selected="selected"{% endif%}>{{ manufacturer.name }}</option>
+				{% endfor %}
+              </select>
+            </div>
+      	</div>
+        <div class="form-group">
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="control-label" for="input-filter-sku">{{ txt_sku }}</label>
+					<div class="form-input">
+						<input type="text" name="ex_pak[add_product][filter_data][sku]" value="{{ filter_data.sku }}" placeholder="{{ txt_no_filtered }}" id="input-filter-sku" class="form-control" />
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<label class="control-label" for="input-filter-code">{{ txt_model }}</label>
+					<div class="form-input">
+						<input type="text" name="ex_pak[add_product][filter_data][model]" value="{{ ex_pak[add_product][filter_data][model] }}" placeholder="{{ txt_no_filtered }}" id="input-filter-code" class="form-control" />
+					</div>
+				</div>
+			</div>
+      	</div>
+        <div class="form-group">
+            <label class="control-label" for="input-filter-name">{{ txt_product_name }}</label>
+            <div class="form-input">
+              <input type="text" name="ex_pak[add_product][filter_data][name]" value="{{ filter_data.name }}" placeholder="{{ txt_no_filtered }}" id="input-filter-name" class="form-control" />
+            </div>
+      	</div>
+        <div class="form-group">
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="control-label" for="input-filter-price-from">{{ txt_price_from }}</label>
+					<div class="form-input">
+						<input type="text" name="ex_pak[add_product][filter_data][price_from]" value="{{ filter_data.price_from }}" placeholder="{{ txt_no_filtered }}" id="input-filter-price-from" class="form-control" />
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<label class="control-label" for="input-filter-price-to">{{ txt_price_to }}</label>
+					<div class="form-input">
+						<input type="text" name="ex_pak[add_product][filter_data][price_to]" value="{{ filter_data.price_to }}" placeholder="{{ txt_no_filtered }}" id="input-filter-price-to" class="form-control" />
+					</div>
+				</div>
+			</div>
+      	</div>
+      	<div class="form-group">
+            <label class="control-label" for="input-filter-in">{{ txt_belonging_the_promotion }}</label>
+            <div class="form-input">
+              <select name="ex_pak[add_product][filter_data][in]" class="form-control">
+              	<option value="all" {% if filter_data.in == 'all' %}selected="selected"{% endif%}>{{ txt_all_products }}</option>
+              	<option value="in" {% if filter_data.in == 'in' %}selected="selected"{% endif%}>{{ txt_except_those_to_this }}</option>
+              </select>
+            </div>
+      	</div>
+      	<div class="form-group">
+			<div class="input-switch-box">
+				<div class="text">{{ txt_only_included_products }}</div>
+				<label class="input-switch">
+					<input type="checkbox" name="ex_pak[add_product][filter_data][status]" {% if filter_data.status %} checked="checked"{% endif%}>
+				</label>
+			</div>
+			<div class="input-switch-box">
+				<div class="text">{{ txt_only_products_in_stock }}</div>
+				<label class="input-switch">
+					<input type="checkbox" name="ex_pak[add_product][filter_data][stock]" {% if filter_data.stock %} checked="checked"{% endif%}>
+				</label>
+			</div>
+      	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary ex-green-button button-clear">{{ txt_clearing }}</button>
+        <button type="button" class="btn btn-primary ex-green-button button-filter"><i class="fa fa-filter"></i> {{ txt_show }}</button>
+        <button type="button" class="btn btn-primary ex-green-button button-add">{{ txt_add_to_group }}</button>
+        <button type="button" class="btn btn-secondary ex-gray-button" data-dismiss="modal">{{ txt_close }}</button>
+      </div>
+
+	  <div class="modal-body">
+	  	{% if success %}
+			<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i>
+				{{ success }}
+			</div>
+		{% endif %}
+		{% if error %}
+			<div class="alert alert-danger alert-dismissible"><i class="fa fa-check-circle"></i>
+				{{ error}}
+			</div>
+		{% endif %}
+
+		<div class="result-products">
+			{% if filter_data %}
+				{% if products %}
+					<input type="hidden" name="ex_pak[add_product][product_id]" value="">
+					<div class="finded">
+						<div>{{ txt_products_found }}: {{ products|length }}</div>
+					</div>
+					<div class="products">
+						{% for product in products %}
+							<div class="product" data-product-id="{{ product.product_id }}">
+								<div class="check">
+									<input type="checkbox" name="ex_pak[add_product][products][{{ product.product_id }}][product_id]" value="{{ product.product_id }}">
+								</div>
+								<div class="image">
+									<img src="{{ product.image }}">
+								</div>
+								<div class="info">
+									<div class="name">{{ product.name }}</div>
+									<div class="manufacturer">{{ txt_manufacturer }}: {{ product.manufacturer }}</div>
+									<div class="sku">{{ txt_model }}: {{ product.sku }}</div>
+									{% if product.special %} 
+										<div class="price-old">{{ product.price }}</div>
+										<div class="price-new">{{ product.special }}</div>
+									{% else %}
+										<div class="price">{{ product.price }}</div>
+									{% endif %}
+									<div class="quantity">
+										{% if product.quantity == 0 %}
+											{% set quantity_class = "red" %}
+										{% elseif product.quantity <= 5 %}
+											{% set quantity_class = "orange" %}
+										{% else %}
+											{% set quantity_class = "green" %}
+										{% endif %}
+										{{ txt_count }}: <span class="{{ quantity_class }}">{{ product.quantity }}</span>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				{% else %}
+					<div class="not-found text-center">{{ txt_nothing_found }}</div>
+				{% endif %}
+			{% endif %}
+		</div>
+		</div>
+    </div>
+  </div>
+</div>

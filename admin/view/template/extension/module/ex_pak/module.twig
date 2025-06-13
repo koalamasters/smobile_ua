@@ -1,0 +1,386 @@
+{{ header }}{{ column_left }}
+<div class="sp sp_in_module" id="content">
+	<div class="header_module_info">
+		<div class="title">{{ heading_title }} <span id="version">{{ ex_pak_version }}</span></div>
+		<div class="buttons">
+			<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-save"><i class="fa fa-save"></i></button>
+			<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-close"><i class="fa fa-reply"></i></a>
+		</div>
+	</div>
+
+	<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+		<div class="module_form" id="form-module-block">
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{ tab_general }}</a></li>
+				{% if license_status %}
+					{% if not error_license %}
+						<li role="presentation"><a href="#data" aria-controls="data" role="tab" data-toggle="tab">{{ tab_data }}</a></li>
+						<li role="presentation"><a href="#view" aria-controls="view" role="tab" data-toggle="tab">{{ tab_view }}</a></li>
+					{% endif %}
+				{% endif %}
+			</ul>
+
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="general">
+					{% if license_text %}
+						<div class="single_block">
+							<div style="user-select:text;color:black;font-size:14px;">{{ license_text }}</div>
+						</div>
+					{% endif %}
+
+					<div class="single_block">
+						<div class="title">{{ txt_module_settings }}</div>
+						<div class="switch-box full_width">
+							<div class="title">{{ txt_status }}</div>
+							<label class="input-switch">
+								<input type="checkbox" name="module_ex_pak_status" {% if module_ex_pak_status %} checked {% endif %}>
+							</label>
+						</div>
+
+						<div class="sp_animated_input_group">
+							<input id="input-license" type="text" name="module_ex_pak_license" placeholder="{{ txt_license_key }}" value="{{ module_ex_pak_license }}" class="profile-form-input {% if error_license %} error_style {% endif %}">
+							<label for="input-license" class="label">{{ txt_license_key }}</label>
+							<span class="bar"></span>
+							{% if error_license %}
+								<div class="error_style_text">{{ error_license }}</div>
+							{% endif %}
+						</div>
+
+						<div class="sp_animated_input_group">
+							<input id="input-default-product-limit" type="text" name="module_ex_pak_setting[default_product_limit]" placeholder="{{ txt_default_product_limit }}" value="{{ default_product_limit }}" class="profile-form-input">
+							<label for="input-default-product-limit" class="label">{{ txt_default_product_limit }}</label>
+							<span class="bar"></span>
+							<p style="margin: 0;">{{ txt_default_product_limit_h }}</p>
+						</div>
+
+						<br>
+
+						<div class="title">{{ txt_default_popular_sort }}</div>
+						{% for key,product_sort in product_sorts %}
+							<div class="switch-box full_width">
+								<div class="input-radio">
+									<label>
+										<div class="title">{{ product_sort }}</div>
+										<input type="radio" name="module_ex_pak_setting[default_sort]" value="{{ key }}"  {% if key == default_sort %} checked {% endif %}>
+									</label>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+
+					<div class="single_block">
+						<div class="title" style="margin-bottom:12px;">{{ txt_colors }}</div>
+
+						<div class="sp_space_between_color" style="margin-bottom:12px;">
+							<div class="sp_space_between_color_title">{{ txt_btn_color }}</div>
+							<div><input type="text" class="spectrum" data-coloris name="module_ex_pak_style[btn_color]" value="{{ module_ex_pak_style.btn_color }}"></div>
+						</div>
+
+						<div class="sp_space_between_color" style="margin-bottom:12px;">
+							<div class="sp_space_between_color_title">{{ txt_btn_color_hover }}</div>
+							<div><input type="text" class="spectrum" data-coloris name="module_ex_pak_style[btn_color_hover]" value="{{ module_ex_pak_style.btn_color_hover }}"></div>
+						</div>
+					</div>
+
+				</div>
+				<div role="tabpanel" class="tab-pane" id="data">
+					<div id="data-tabs">
+						{% set product_tab_row = 0 %}
+						{% if product_tabs %}
+							{% for product_tab in product_tabs %}
+								<div id="tab-row-{{ product_tab_row }}" class="single_block">
+
+									<input type="hidden" name="product_tabs[{{ product_tab_row }}][tab_id]" value="{{ product_tab.tab_id }}" class="form-control">
+
+									<div class="switch-box full_width">
+										<div class="title">{{ txt_status }}</div>
+										<label class="input-switch">
+											<input type="checkbox" name="product_tabs[{{ product_tab_row }}][status]" value="1" onchange="updateStatusValue(this)" {% if product_tab.status %} checked {% endif %}>
+										</label>
+									</div>
+
+									<span class="title_14">{{ txt_col_title }}</span>
+
+									{% for language in languages %}
+										<div class="sp_animated_input_group">
+											<input id="input_group_description_name" type="text" name="product_tabs[{{ product_tab_row }}][description][{{ language.language_id }}][name]" placeholder="{{ language.name }}" value="{% if product_tab['description'][language.language_id]['name'] %}{{ product_tab['description'][language.language_id]['name'] }}{% endif %}" class="profile-form-input">
+											<label for="input_group_description_name" class="label">{{ language.name }}</label>
+											<span class="bar"></span>
+										</div>
+										{% if error_tab[product_tab_row]['description'][language.language_id]['name'] %}
+											<div class="text-danger">
+												{{ error_tab[product_tab_row]['description'][language.language_id]['name'] }}
+											</div>
+										{% endif %}
+									{% endfor %}
+
+									<span class="title_14">{{ txt_col_title_tab }}</span>
+
+									{% for language in languages %}
+										<div class="sp_animated_input_group">
+											<input id="input_group_description_name" type="text" name="product_tabs[{{ product_tab_row }}][description][{{ language.language_id }}][name_tab]" placeholder="{{ language.name }}" value="{% if product_tab['description'][language.language_id]['name_tab'] %}{{ product_tab['description'][language.language_id]['name_tab'] }}{% endif %}" class="profile-form-input">
+											<label for="input_group_description_name" class="label">{{ language.name }}</label>
+											<span class="bar"></span>
+										</div>
+									{% endfor %}
+
+									<div class="title_14 title_helper" style="margin-bottom: 10px !important;">{{ txt_col_limit_1 }}<a class="info"><svg><use xlink:href="#sp-icon-info"></use></svg><span class="info-content">{{ txt_default_product_limit_h }}</span></a></div>
+
+									<div class="sp_animated_input_group">
+										<input id="input_group_description_name" type="text" name="product_tabs[{{ product_tab_row }}][limit_main]" placeholder="10/6/6" value="{{ product_tab.limit_main }}" class="profile-form-input">
+										<label for="input_group_description_name" class="label">10/6/6</label>
+										<span class="bar"></span>
+									</div>
+
+									<div class="title_14 title_helper" style="margin-bottom: 10px !important;">{{ txt_col_limit_2 }}<a class="info"><svg><use xlink:href="#sp-icon-info"></use></svg><span class="info-content">{{ txt_default_product_limit_h }}</span></a></div>
+
+									<div class="sp_animated_input_group">
+										<input id="input_group_description_name" type="text" name="product_tabs[{{ product_tab_row }}][limit_tab]" placeholder="10/6/6" value="{{ product_tab.limit_tab }}" class="profile-form-input">
+										<label for="input_group_description_name" class="label">10/6/6</label>
+										<span class="bar"></span>
+									</div>
+
+									<div class="title_14 title_helper" style="margin-bottom: 10px !important;">{{ txt_col_limit_3 }}<a class="info"><svg><use xlink:href="#sp-icon-info"></use></svg><span class="info-content">{{ txt_default_product_limit_h }}</span></a></div>
+
+									<div class="sp_animated_input_group">
+										<input id="input_group_description_name" type="text" name="product_tabs[{{ product_tab_row }}][limit_tab_description]" placeholder="10/6/6" value="{{ product_tab.limit_tab_description }}" class="profile-form-input">
+										<label for="input_group_description_name" class="label">10/6/6</label>
+										<span class="bar"></span>
+									</div>
+
+									<div class="title_14 title_helper" style="margin-bottom: 10px !important;">{{ txt_col_limit_4 }}<a class="info"><svg><use xlink:href="#sp-icon-info"></use></svg><span class="info-content">{{ txt_default_product_limit_h }}</span></a></div>
+
+									<div class="sp_animated_input_group">
+										<input id="input_group_description_name" type="text" name="product_tabs[{{ product_tab_row }}][limit_checkout]" placeholder="10/6/6" value="{{ product_tab.limit_checkout }}" class="profile-form-input">
+										<label for="input_group_description_name" class="label">10/6/6</label>
+										<span class="bar"></span>
+									</div>
+
+									<div class="switch-box full_width">
+										<div class="title">{{ txt_delete }}</div>
+										<button type="button" onclick="$('#tab-row-{{ product_tab_row }}').remove();" data-toggle="tooltip" title="{{ txt_delete }}" class="sppg_btn_delete">
+											<svg><use xlink:href="#trash"></use></svg>
+										</button>
+									</div>
+
+								</div>
+								{% set product_tab_row = product_tab_row + 1 %}
+							{% endfor %}
+						{% else %}
+						{% endif %}
+					</div>
+					<div class="single_block_btns">
+						<button type="button" onclick="addProductTab();" class="sp_button_success button-remove-products-from-group">{{ txt_add_tab }}</button>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="view">
+					{% for page_key,page_selector in page_selectors %}
+						<div class="single_block">
+							<div class="title">{{ page_selector.title }}</div>
+							{% for selector_key,selector in page_selector.selectors %}
+								<div class="sp_space_between_color"><div class="sp_space_between_color_title">{{ selector.title }}</div></div>
+
+								<div class="sp_animated_input_group">
+									<input id="input-{{ page_key }}-{{ selector_key }}-limit" type="text" name="module_ex_pak_setting[selectors][{{ page_key }}][{{ selector_key }}][value]" value="{{ selector.value }}" class="profile-form-input">
+									<label for="input-{{ page_key }}-{{ selector_key }}-limit" class="label">{{ txt_page_selectors }}</label>
+									<span class="bar"></span>
+								</div>
+
+								<div class="snp_select">
+									<div class="snp_select_sub">
+										<select name="module_ex_pak_setting[selectors][{{ page_key }}][{{ selector_key }}][type]" id="select-{{ page_key }}-{{ selector_key }}" class="snp_select_select">
+											{% for type in selector_types %}
+												<option value="{{ type }}" {% if selector.type == type %} selected="selected" {% endif %}>{{ type }}</option>
+											{% endfor %}
+										</select>
+										<span class="snp_select_span">
+											<label class="snp_select_span_label">{{ txt_position }}</label>
+											<span class="snp_select_span_arrow"><svg><use xlink:href="#sp-icon-arrow-down"></use></svg></span>
+										</span>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="sp_notify_block"></div>
+
+<script>
+	function spNotify(type, text) {
+		var icon = "fa fa-info";
+		var css = "";
+		switch (type) {
+			case"success":
+				icon = "sp-icon-notify-success";
+				css = "success";
+				break;
+			case"danger":
+				icon = "sp-icon-notify-danger";
+				css = "warning";
+				break;
+			case"warning":
+				icon = "sp-icon-notify-warning"
+				css = "warning"
+		}
+		var randomNumber = Math.floor(Math.random() * 100);
+		$('.sp_notify_block').append('<div id="sp_alert_' + randomNumber + '" class="sp_notify_alert ' + css + '"><div class="sp_notify_alert__icon"><svg><use xlink:href="#' + icon + '"></use></svg></div><div class="sp_notify_alert__message">' + text + '</div></div>');
+		setTimeout(function () {
+			$('#sp_alert_' + randomNumber).addClass('hide');
+			setTimeout(function () {
+				$('#sp_alert_' + randomNumber).remove();
+			}, 2000);
+		}, 5000);
+	}
+</script>
+
+{% if error_warning %}
+	<script>
+		spNotify('warning', '{{ error_warning }}');
+	</script>
+{% endif %}
+
+{% if success %}
+	<script>
+		spNotify('success', '{{ success }}');
+	</script>
+{% endif %}
+
+<div style="display:none;position:absolute;left:-9999px;">
+	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<symbol xmlns="http://www.w3.org/2000/svg" id="trash" viewBox="0 -960 960 960">
+			<path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+		</symbol>
+		<symbol id="sp-icon-notify-success" viewBox="0 0 32 32">
+			<g fill="none" fill-rule="evenodd">
+				<circle fill="#5AE4AA" cx="16" cy="16" r="16"/>
+				<path d="M15.484 23.544V12.83c0-.572.374-.858.99-.858.594 0 1.012.286 1.012.858v10.714c0 .594-.418.88-1.012.88-.616 0-.99-.286-.99-.88zM16.496 7a1.46 1.46 0 0 1 1.474 1.474c0 .858-.66 1.496-1.474 1.496A1.47 1.47 0 0 1 15 8.474C15 7.638 15.66 7 16.496 7z" fill="#383838" fill-rule="nonzero"/>
+			</g>
+		</symbol>
+		<symbol id="sp-icon-notify-warning" viewBox="0 0 35.94 31.63">
+			<path fill="#ffd600" fill-rule="evenodd" d="M19.06,.81c-.62-1.08-1.64-1.08-2.26,0L.24,29.47c-.63,1.07,.04,2.16,1.28,2.16H34.66c1.24,0,1.6-1.09,.98-2.16L19.06,.81Z"/>
+			<path fill="#383838" fill-rule="evenodd" d="M16.45,24.75c0-.83,.68-1.51,1.51-1.51,.83,0,1.51,.68,1.51,1.51,0,.83-.68,1.51-1.51,1.51-.83,0-1.51-.67-1.51-1.5,0,0,0,0,0,0m2.04-3.38c-.03,.29-1.04,.25-1.07,0l-.98-9.93c-.08-.83,.52-1.57,1.36-1.66s1.57,.52,1.66,1.36c.01,.1,.01,.2,0,.3l-.98,9.93h0Z"/>
+		</symbol>
+		<symbol id="sp-icon-notify-danger" viewBox="0 0 37 33">
+			<g fill="none" fill-rule="evenodd">
+				<path d="M19.61 1.677C18.987.6 17.971.6 17.35 1.677L.79 30.339C.165 31.414.826 32.5 2.067 32.5H35.21c1.243 0 1.6-1.086.978-2.161L19.61 1.677z" fill="#FA6767"/>
+				<path d="M17.002 25.617a1.508 1.508 0 1 1 1.507 1.51 1.506 1.506 0 0 1-1.507-1.51M19.042 22.24c-.03.292-1.04.248-1.065 0l-.975-9.931a1.515 1.515 0 1 1 3.015 0l-.975 9.932z" fill="#383838"/>
+			</g>
+		</symbol>
+		<symbol id="sp-icon-arrow-down" viewBox="0 0 24 12">
+			<path fill-rule="evenodd" d="M12,12,0,0H24Z"/>
+		</symbol>
+		<symbol id="sp-icon-info" viewBox="0 0 24 24">
+			<path fill-rule="evenodd" d="M10.8,18h2.4V10.8H10.8ZM12,8.4a1.1,1.1,0,0,0,.85-.35,1.12,1.12,0,0,0,.35-.85,1.15,1.15,0,0,0-.35-.86,1.23,1.23,0,0,0-1.7,0,1.19,1.19,0,0,0-.35.86,1.15,1.15,0,0,0,.35.85A1.1,1.1,0,0,0,12,8.4ZM12,24a11.69,11.69,0,0,1-4.68-.95,12.1,12.1,0,0,1-3.81-2.56A11.94,11.94,0,0,1,1,16.68,11.52,11.52,0,0,1,0,12,11.52,11.52,0,0,1,1,7.32,11.94,11.94,0,0,1,3.51,3.51,12.13,12.13,0,0,1,7.32.94,11.68,11.68,0,0,1,12,0a11.68,11.68,0,0,1,4.68.94,12.13,12.13,0,0,1,3.81,2.57,12.3,12.3,0,0,1,2.57,3.81,12.12,12.12,0,0,1,0,9.36,12.3,12.3,0,0,1-2.57,3.81,12.1,12.1,0,0,1-3.81,2.56A11.69,11.69,0,0,1,12,24Zm0-2.4a9.27,9.27,0,0,0,6.81-2.79A9.27,9.27,0,0,0,21.6,12a9.27,9.27,0,0,0-2.79-6.81A9.27,9.27,0,0,0,12,2.4,9.27,9.27,0,0,0,5.19,5.19,9.27,9.27,0,0,0,2.4,12a9.27,9.27,0,0,0,2.79,6.81A9.27,9.27,0,0,0,12,21.6Z"/>
+		</symbol>
+		<symbol xmlns="http://www.w3.org/2000/svg" id="ex-icon-plus" viewBox="0 -960 960 960">
+			<path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+		</symbol>
+	</svg>
+</div>
+
+<script type="text/javascript">
+	var product_tab_row = {{ product_tab_row }};
+
+	function addProductTab() {
+
+		let html = `<div id="tab-row-` + product_tab_row + `" class="single_block">`;
+		html += `<input type="hidden" name="product_tabs[` + product_tab_row + `][tab_id]" value="{{ product_tab.tab_id }}" class="form-control">`;
+
+		html += `		<div class="switch-box full_width">`;
+		html += `			<div class="title">{{ txt_status }}</div>`;
+		html += `			<label class="input-switch">`;
+		html += `				<input type="checkbox" name="product_tabs[` + product_tab_row + `][status]" value="1" onchange="updateStatusValue(this)">`;
+		html += `			</label>`;
+		html += `		</div>`;
+
+		html += `		<span class="title_14">{{ txt_col_title }}</span>`;
+
+		{% for language in languages %}
+		html += `		<div class="sp_animated_input_group">`;
+		html += `			<input id="input_group_description_name" type="text" name="product_tabs[` + product_tab_row + `][description][{{ language.language_id }}][name]" placeholder="{{ language.name }}" class="profile-form-input">`;
+		html += `				<label for="input_group_description_name" class="label">{{ language.name }}</label>`;
+		html += `				<span class="bar"></span>`;
+		html += `		</div>`;
+		{% endfor %}
+
+		html += `		<span class="title_14">{{ txt_col_title_tab }}</span>`;
+
+		{% for language in languages %}
+		html += `		<div class="sp_animated_input_group">`;
+		html += `			<input id="input_group_description_name" type="text" name="product_tabs[` + product_tab_row + `][description][{{ language.language_id }}][name_tab]" placeholder="{{ language.name }}" class="profile-form-input">`;
+		html += `				<label for="input_group_description_name" class="label">{{ language.name }}</label>`;
+		html += `				<span class="bar"></span>`;
+		html += `		</div>`;
+		{% endfor %}
+
+		html += `		<div class="title_14 title_helper" style="margin-bottom: 10px !important;">{{ txt_col_limit_1 }}<a class="info"><svg><use xlink:href="#sp-icon-info"></use></svg><span class="info-content">{{ txt_default_product_limit_h }}</span></a></div>`;
+
+		html += `		<div class="sp_animated_input_group">`;
+		html += `			<input id="input_group_description_name" type="text" name="product_tabs[` + product_tab_row + `][limit_main]" placeholder="10/6/6" class="profile-form-input">`;
+		html += `				<label for="input_group_description_name" class="label">10/6/6</label>`;
+		html += `				<span class="bar"></span>`;
+		html += `		</div>`;
+
+		html += `		<div class="title_14 title_helper" style="margin-bottom: 10px !important;">{{ txt_col_limit_2 }}<a class="info"><svg><use xlink:href="#sp-icon-info"></use></svg><span class="info-content">{{ txt_default_product_limit_h }}</span></a></div>`;
+
+		html += `		<div class="sp_animated_input_group">`;
+		html += `			<input id="input_group_description_name" type="text" name="product_tabs[` + product_tab_row + `][limit_tab]" placeholder="10/6/6" class="profile-form-input">`;
+		html += `				<label for="input_group_description_name" class="label">10/6/6</label>`;
+		html += `				<span class="bar"></span>`;
+		html += `		</div>`;
+
+		html += `		<div class="title_14 title_helper" style="margin-bottom: 10px !important;">{{ txt_col_limit_3 }}<a class="info"><svg><use xlink:href="#sp-icon-info"></use></svg><span class="info-content">{{ txt_default_product_limit_h }}</span></a></div>`;
+
+		html += `		<div class="sp_animated_input_group">`;
+		html += `			<input id="input_group_description_name" type="text" name="product_tabs[` + product_tab_row + `][limit_tab_description]" placeholder="10/6/6" class="profile-form-input">`;
+		html += `				<label for="input_group_description_name" class="label">10/6/6</label>`;
+		html += `				<span class="bar"></span>`;
+		html += `		</div>`;
+
+		html += `		<div class="title_14 title_helper" style="margin-bottom: 10px !important;">{{ txt_col_limit_4 }}<a class="info"><svg><use xlink:href="#sp-icon-info"></use></svg><span class="info-content">{{ txt_default_product_limit_h }}</span></a></div>`;
+
+		html += `		<div class="sp_animated_input_group">`;
+		html += `			<input id="input_group_description_name" type="text" name="product_tabs[` + product_tab_row + `][limit_checkout]" placeholder="10/6/6" class="profile-form-input">`;
+		html += `				<label for="input_group_description_name" class="label">10/6/6</label>`;
+		html += `				<span class="bar"></span>`;
+		html += `		</div>`;
+
+		html += `		<div class="switch-box full_width">
+							<div class="title">{{ txt_delete }}</div>
+							<button type="button" onclick="$('#tab-row-` + product_tab_row + `').remove();" data-toggle="tooltip" title="{{ txt_delete }}" class="sppg_btn_delete">
+								<svg><use xlink:href="#trash"></use></svg>
+							</button>
+						</div>`;
+
+		html += `</div>`;
+
+		$('#data-tabs').append(html);
+
+		product_tab_row++;
+	}
+
+	function updateStatusValue(checkbox) {
+		if (checkbox.checked) {
+			checkbox.value = "1";
+		} else {
+			checkbox.value = "0";
+		}
+	}
+</script>
+
+<script>
+	$(".spectrum").spectrum({
+		preferredFormat: "rgb",
+		showInitial: true,
+		showInput: true,
+		showAlpha: true,
+		showPalette: false
+	});
+</script>
+
+{{ footer }}

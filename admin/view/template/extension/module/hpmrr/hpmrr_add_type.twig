@@ -1,0 +1,105 @@
+{{ header }}{{ column_left }} 
+<div id="content" class="kit-series kit-edit">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <div class="btn btn-success kit-mods"><i class="fa fa-puzzle-piece fa-fw"></i> {{ url_module }}</div>
+                <button type="submit" form="form-kjseries-add-type" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }}</h1>
+
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %} 
+        <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+        {% endif %} 
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3><i class="fa fa-pencil"></i> {{ add_name_series }}</h3>
+                <button form="help_modals" class="pull-right hm-help btn btn-primary btn-sm" data-toggle="modal" data-target="#Add_Series_Modal">
+                    <i class="fa fa-info"></i> <b>- INFO</b>
+                </button>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" id="form-kjseries-add-type" class="form-horizontal">
+                    <table class='table table-hover table-bordered table-responsive'>
+                        <thead>
+                            <tr>
+                                <td class="name-start">
+                                    <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ text_name }}">
+                                            {{ text_name }}
+                                        </span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="control-label">
+                                        <span data-toggle="tooltip" title="" data-original-title="{{ text_comment }}">
+                                            {{ text_comment }}
+                                        </span>
+                                    </label>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="name" value="{{ name is defined ? name : '' }}" class="form-control" /></td>
+                                <td>
+                                    <textarea class='form-control' name='description'>{{ description }}</textarea>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+
+                        </tfoot>
+                    </table>
+                </form>
+            </div>
+        </div>
+        {{ footer }} 
+    </div>
+</div>
+<!-- Start Kit_Modal -->
+<div class="kit-series modal fade" id="Add_Series_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-cogs"></i> {{ help_name_add }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="help-text">{{ top_add_text }}</div>
+                <hr>
+                <div class="help-text">{{ bottom_kit_text }}</div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">{{ copy_label }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--// END Kit_Modal -->
+<!-- Start Modal Authors -->
+<div class="modal fade" id="Authors_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-copyright"></i> {{ desc_author }}</h4>
+            </div>
+            <div class="modal-body authors">
+                <legend class="text-center">{{ desc_copy }}</legend>
+                <div class="text-center">{{ desc_author_copy }}</div>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">{{ copy_label }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Modal Authors -->
+

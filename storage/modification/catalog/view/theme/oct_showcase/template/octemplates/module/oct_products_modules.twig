@@ -1,0 +1,432 @@
+{% if products %}
+    {% if position == 'column_left' or position == 'column_right' %}
+        <div class="content-block p-0 overflow-hidden with-border position-relative">
+            <div class="sc-column-title fsz-20 fw-700 dark-text">
+                {% if link is defined and link %}
+                <a href="{{ link }}">
+                    {% endif %}
+                    {{ heading_title }}
+                    {% if link is defined and link %}
+                </a>
+                {% endif %}
+            </div>
+            <div id="sc-column-{{ module_name }}_{{ module }}" class="sc-column-products">
+                {% for product in products %}
+                    <div class="sc-column-item">
+                        <div class="sc-module-item h-100 d-flex flex-column p-3{% if product.oct_grayscale %} rm-no-stock{% endif %}">
+                            <div class="sc-module-img position-relative">
+                                <a href="{{ product.href }}">
+                                    <img
+                                            src="{{ product.thumb }}"
+                                            {% if oct_lazyload is defined and oct_lazyload %}
+                                                data-srcset="{{ product.thumb }} 100w"
+                                                srcset="{{ oct_lazy_image }} 100w"
+                                                sizes="100vw"
+                                                class="img-fluid oct-lazy"
+                                            {% else %}
+                                                class="img-fluid"
+                                            {% endif %}
+                                            alt="{{ product.name }}"
+                                            title="{{ product.name }}"
+                                            width="{{ product.width }}"
+                                            height="{{ product.height }}"/>
+                                </a>
+                                <div class="sc-module-stickers d-flex align-items-center mt-3">
+                                    {% if oct_sticker_you_save and product.you_save %}
+                                        <div class="sc-module-sticker br-4 fsz-10 fw-500 sc-module-sticker-red sc-module-sticker-infinity">{{ product.you_save }}</div>
+                                    {% endif %}
+                                    {% if not product.quantity %}
+                                        <div class="sc-module-sticker br-4 fsz-10 fw-500 sc-module-sticker-green sc-module-sticker-infinity">{{ oct_product_stock }}</div>
+                                    {% endif %}
+                                    {% if product.oct_stickers is not empty %}
+                                        {% for key, oct_sticker in product.oct_stickers %}
+                                            {% if oct_sticker is not empty and oct_sticker is iterable %}
+                                                <div class="sc-module-sticker sc-module-sticker-image pe-0 py-0 order-1">
+                                                    <img src="{{ oct_sticker.image }}" alt="{{ oct_sticker.title }}" data-bs-html="true" data-bs-placement="top" data-bs-toggle="popover" data-bs-trigger="hover" title="{{ oct_sticker.title }}" data-bs-content="{{ oct_sticker.description }}" width="24" height="24" />
+                                                </div>
+                                            {% elseif oct_sticker is not empty %}
+                                                <div class="sc-module-sticker br-4 fsz-10 fw-500 sc-module-sticker-{{ key }}">
+                                                    {{ oct_sticker }}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="sc-module-btns d-flex flex-column position-absolute">
+                                    {% if oct_popup_view_status %}
+                                        <button type="button" aria-label="Quick view" class="sc-btn sc-btn-outline sc-btn-outline-secondary sc-btn-with-icon br-4" title="{{ oct_popup_view }}" onclick="octPopUpView('{{ product.product_id }}')">
+                                            <span class="sc-btn-icon sc-btn-icon-viewed"></span>
+                                        </button>
+                                    {% endif %}
+                                    <button type="button" aria-label="Wishlist" class="sc-btn sc-btn-outline sc-btn-outline-secondary sc-btn-with-icon br-4 sc-wishlist-btn" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+                                        <span class="sc-btn-icon sc-btn-icon-wishlist"></span>
+                                    </button>
+                                    <button type="button" aria-label="Compare" class="sc-btn sc-btn-outline sc-btn-outline-secondary sc-btn-with-icon br-4 sc-compare-btn" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');">
+                                        <span class="sc-btn-icon sc-btn-icon-compare"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="sc-module-caption d-flex flex-column justify-content-between pt-md-2 h-100">
+                                <div class="sc-module-info">
+                                    <a href="{{ product.href }}" class="sc-module-title dark-text fw-700">{{ product.name }}</a>
+                                    {% if product.oct_model is defined and product.oct_model %}
+                                        <div class="sc-module-model light-text fsz-10 mt-2"><span>{{ oct_view_model_cat }}</span>{{ product.oct_model }}</div>
+                                    {% endif %}
+                                    {% if product.rating is not same as(false) %}
+                                        <div class="sc-module-rating d-flex align-items-center mt-2 mb-1 br-4">
+                                            <div class="sc-module-rating-stars d-flex align-items-center">
+                                                {% for i in 1..5 %}
+                                                    {% if product.rating < i %}
+                                                        <span class="sc-module-rating-star"></span>
+                                                    {% else %}
+                                                        <span class="sc-module-rating-star sc-module-rating-star-is"></span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="sc-module-reviews d-flex align-items-center">
+                                                <img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--module-comments-icon" alt="" width="12" height="12" />
+                                                <span class="dark-text fsz-12 ps-1">{{ product.reviews }}</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if product.price %}
+                                        <div class="sc-module-price-box py-2 mt-auto">
+                                            {% if product.tax %}
+                                                {#                                                <div class="price-tax fw-300 fsz-12 light-text">#}
+                                                {#                                                    {{ text_tax }} {{ product.tax }}#}
+                                                {#                                                </div>#}
+                                            {% endif %}
+                                            {% if not product.special %}
+                                                <span class="sc-module-price fw-700 dark-text mt-1 1">{{ product.price }}</span>
+                                            {% else %}
+                                                <span class="sc-module-price-old light-text fsz-14">{{ product.price }}</span>
+                                                <span class="sc-module-price fw-700 dark-text mt-1 2">{{ product.special }}</span>
+                                            {% endif %}
+
+                                            {% if product.can_buy is not empty and product.can_buy %}
+                                                <button data-product-id="{{ product.product_id }}" type="button" aria-label="To cart" class="km-grid-add-to-cart sc-btn sc-btn-primary sc-btn-with-icon br-4 sc-module-cart-btn">
+                                                    <img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--btn-cart-icon" alt="" width="20" height="20" class="sc-btn-icon sc-btn-icon-cart-img">
+                                                    {#                                                <span class="sc-btn-text">{{ button_cart }}</span>#}
+                                                </button>
+                                                <script>
+                                                    $('#sc-column-{{ module_name }}_{{ module }} .km-grid-add-to-cart[data-product-id="{{ product.product_id }}"]').on('click', function() {
+                                                        fbq('track', 'AddToCart', {
+                                                            content_type: 'product',
+                                                            content_ids: ['{{ product.product_id }}'],
+                                                            value: {{ product.price_for_ads | number_format(2, '.', '') }},
+                                                            currency: 'UAH'
+                                                        });
+                                                    });
+                                                </script>
+                                            {% endif %}
+                                            <input type="hidden" name="product_id" value="{{ product.product_id }}" />
+
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" aria-label="Previous" id="sc-{{ module_name }}_{{ module }}-button-prev" class="slick-slider-btn slick-slider-btn-prev sc-btn sc-btn-outline sc-btn-outline-secondary sc-btn-with-icon br-4 overflow-hidden d-flex align-items-center justify-content-center">
+                <span class="sc-btn-icon"></span>
+            </button>
+            <button type="button" aria-label="Next" id="sc-{{ module_name }}_{{ module }}-button-next" class="slick-slider-btn slick-slider-btn-next sc-btn sc-btn-outline sc-btn-outline-secondary sc-btn-with-icon br-4 overflow-hidden d-flex align-items-center justify-content-center">
+                <span class="sc-btn-icon"></span>
+            </button>
+            <script>
+                octColumnProducts("sc-{{ module_name }}_{{ module }}-button-prev", "sc-{{ module_name }}_{{ module }}-button-next", "sc-column-{{ module_name }}_{{ module }}");
+            </script>
+        </div>
+    {% else %}
+        <div id="sc-{{ module_name }}_{{ module }}" class="mt-3 mt-md-0 p-3 p-md-0 pt-xl-3 g-2 g-md-3 sc-module km-modif-product-moudle"{% if show_type == '' %} data-type="split"{% endif %}{% if show_type == 'width-100' %} data-type="width100"{% endif %}{% if show_type == 'width-50' %} data-type="width50"{% endif %}{% if show_type == 'width-infinity' %} data-type="slider"{% endif %}{% if show_type == 'width-minimal' %} data-type="minimal"{% endif %}>
+            <div class="sc-module-header fsz-20 dark-text text-center text-md-start mb-30">
+                {% if link is defined and link %}<a href="{{ link }}">{% endif %}
+                    {{ heading_title }}
+                    {% if link is defined and link %}</a>{% endif %}
+            </div>
+            {% if show_type == 'width-infinity' %}<div class="sc-module-infinity col-12"><div class="row p-0 g-2 g-md-3">{% endif %}
+                    <div class="product-grid {% if product_views == 1 %} km-modif-product-moudle-list-viewed {% else%} km-modif-product-moudle-list {% endif %}">
+                        {% for product in products %}
+                            <div class="sc-module-item sc-module-col 3">
+                                <div class=" h-100 d-flex flex-column{% if product.oct_grayscale %} sc-no-stock{% endif %} border-0">
+                                    <div class="sc-module-img position-relative 2">
+                                        <a href="{{ product.href }}">
+                                            <img
+                                                    src="{{ product.thumb }}"
+                                                    class="img-fluid"
+                                                    alt="{{ product.name }}"
+                                                    title="{{ product.name }}"
+                                                    width="{{ product.width }}"
+                                                    height="{{ product.height }}"/>
+                                        </a>
+                                        <div class="sc-module-stickers d-flex align-items-center mt-3">
+                                            {% if oct_sticker_you_save and product.you_save %}
+                                                <div class="sc-module-sticker br-4 fsz-10 fw-500 sc-module-sticker-red sc-module-sticker-infinity">{{ product.you_save }}</div>
+                                            {% endif %}
+                                            {% if not product.quantity %}
+                                                <div class="sc-module-sticker br-4 fsz-10 fw-500 sc-module-sticker-green sc-module-sticker-infinity">{{ oct_product_stock }}</div>
+                                            {% endif %}
+                                            {% if product.oct_stickers is not empty %}
+                                                {% for key, oct_sticker in product.oct_stickers %}
+                                                    {% if oct_sticker is not empty and oct_sticker is iterable %}
+                                                        <div class="sc-module-sticker sc-module-sticker-image pe-0 py-0 order-1">
+                                                            <img src="{{ oct_sticker.image }}" alt="{{ oct_sticker.title }}" data-bs-html="true" data-bs-placement="top" data-bs-toggle="popover" data-bs-trigger="hover" title="{{ oct_sticker.title }}" data-bs-content="{{ oct_sticker.description }}" width="24" height="24" />
+                                                        </div>
+                                                    {% elseif oct_sticker is not empty %}
+                                                        <div class="sc-module-sticker br-4 fsz-10 fw-500 sc-module-sticker-{{ key }}">
+                                                            {{ oct_sticker }}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="sc-module-btns d-flex flex-column position-absolute">
+                                            {% if oct_popup_view_status %}
+                                                <button type="button" aria-label="Quick view" class="sc-btn sc-btn-outline sc-btn-outline-secondary sc-btn-with-icon br-4" title="{{ oct_popup_view }}" onclick="octPopUpView('{{ product.product_id }}')">
+                                                    <span class="sc-btn-icon sc-btn-icon-viewed"></span>
+                                                </button>
+                                            {% endif %}
+                                            <button type="button" aria-label="Wishlist" class="sc-btn sc-btn-outline sc-btn-outline-secondary sc-btn-with-icon br-4 sc-wishlist-btn" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M20.8401 4.60987C20.3294 4.09888 19.7229 3.69352 19.0555 3.41696C18.388 3.14039 17.6726 2.99805 16.9501 2.99805C16.2276 2.99805 15.5122 3.14039 14.8448 3.41696C14.1773 3.69352 13.5709 4.09888 13.0601 4.60987L12.0001 5.66987L10.9401 4.60987C9.90843 3.57818 8.50915 2.99858 7.05012 2.99858C5.59109 2.99858 4.19181 3.57818 3.16012 4.60987C2.12843 5.64156 1.54883 7.04084 1.54883 8.49987C1.54883 9.95891 2.12843 11.3582 3.16012 12.3899L4.22012 13.4499L12.0001 21.2299L19.7801 13.4499L20.8401 12.3899C21.3511 11.8791 21.7565 11.2727 22.033 10.6052C22.3096 9.93777 22.4519 9.22236 22.4519 8.49987C22.4519 7.77738 22.3096 7.06198 22.033 6.39452C21.7565 5.72706 21.3511 5.12063 20.8401 4.60987Z" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </button>
+                                            <button type="button" aria-label="Compare" class="sc-btn sc-btn-outline sc-btn-outline-secondary sc-btn-with-icon br-4 sc-compare-btn" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M11 16H21M11 16L15 20M11 16L15 12M13 8H3M13 8L9 12M13 8L9 4" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+
+                                            </button>
+                                        </div>
+                                        {% if product.can_buy is not empty and product.can_buy %}
+
+                    <div class="45h6k8213">
+                        {% if (hpmrr[product['product_id']] is defined) %}
+
+                            {{ hpmrr[product['product_id']] }}
+
+                        {% endif %}
+                    </div>
+                    
+                                            <div class="popup-cart-button 123">
+                                                <button data-product-id="{{ product.product_id }}" type="button" aria-label="To cart" class="km-grid-add-to-cart sc-btn sc-btn-with-icon br-4 sc-module-cart-btn">
+                                                    {#                                            <img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--btn-cart-icon" alt="" width="20" height="20" class="sc-btn-icon sc-btn-icon-cart-img">#}
+
+                                                    <svg width="16" height="21" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M11.25 5.94922V6.69922H12H15C15.0663 6.69922 15.1299 6.72556 15.1768 6.77244C15.2237 6.81933 15.25 6.88291 15.25 6.94922V17.9492C15.25 18.546 15.0129 19.1183 14.591 19.5402C14.169 19.9622 13.5967 20.1992 13 20.1992H3C2.40326 20.1992 1.83097 19.9622 1.40901 19.5402C0.987053 19.1183 0.75 18.546 0.75 17.9492V6.94922C0.75 6.88292 0.776339 6.81933 0.823223 6.77244C0.870108 6.72556 0.933697 6.69922 1 6.69922H4H4.75V5.94922V4.94922C4.75 4.08727 5.09241 3.26061 5.7019 2.65112C6.3114 2.04163 7.13805 1.69922 8 1.69922C8.86195 1.69922 9.6886 2.04163 10.2981 2.65112C10.9076 3.26061 11.25 4.08727 11.25 4.94922V5.94922ZM10 6.69922H10.75V5.94922V4.94922C10.75 4.21987 10.4603 3.5204 9.94454 3.00468C9.42882 2.48895 8.72935 2.19922 8 2.19922C7.27065 2.19922 6.57118 2.48895 6.05546 3.00467C5.53973 3.5204 5.25 4.21987 5.25 4.94922V5.94922V6.69922H6H10ZM2 7.19922H1.25V7.94922V17.9492C1.25 18.4133 1.43437 18.8585 1.76256 19.1867C2.09075 19.5148 2.53587 19.6992 3 19.6992H13C13.4641 19.6992 13.9092 19.5148 14.2374 19.1867C14.5656 18.8585 14.75 18.4133 14.75 17.9492V7.94922V7.19922H14H12H11.25V7.94922V8.94922C11.25 9.01552 11.2237 9.07911 11.1768 9.126C11.1299 9.17288 11.0663 9.19922 11 9.19922C10.9337 9.19922 10.8701 9.17288 10.8232 9.126C10.7763 9.07911 10.75 9.01552 10.75 8.94922V7.94922V7.19922H10H6H5.25V7.94922V8.94922C5.25 9.01552 5.22366 9.07911 5.17678 9.126C5.12989 9.17288 5.0663 9.19922 5 9.19922C4.9337 9.19922 4.87011 9.17288 4.82322 9.126C4.77634 9.07911 4.75 9.01552 4.75 8.94922V7.94922V7.19922H4H2Z" stroke="#001F3F" stroke-width="1.5"/>
+                                                    </svg>
+
+
+
+                                                    <span class="sc-btn-text">{{ button_cart }}</span>
+                                                </button>
+                                                <input type="hidden" name="product_id" value="{{ product.product_id }}" />
+                                            </div>
+                                            <script>
+                                                $('#sc-{{ module_name }}_{{ module }} .km-grid-add-to-cart[data-product-id="{{ product.product_id }}"]').on('click', function() {
+                                                    fbq('track', 'AddToCart', {
+                                                        content_type: 'product',
+                                                        content_ids: ['{{ product.product_id }}'],
+                                                        value: {{ (product.price_for_ads) | number_format(2, '.', '') }},
+                                                        currency: 'UAH'
+                                                    });
+                                                });
+                                            </script>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="sc-module-caption d-flex flex-column justify-content-between h-100">
+                                        <div class="sc-module-info">
+                                            <a href="{{ product.href }}" class="sc-module-title dark-text fw-400">{{ product.name }}</a>
+                                            {% if product.oct_model is defined and product.oct_model %}
+                                                <div class="sc-module-model light-text fsz-14"><span>{{ oct_view_model_cat }}</span>{{ product.oct_model }}</div>
+                                            {% endif %}
+                                            {% if product.rating is not same as(false) %}
+                                                <div class="sc-module-rating d-flex align-items-center mt-2 mb-1 br-4">
+                                                    <div class="sc-module-rating-stars d-flex align-items-center">
+                                                        {% for i in 1..5 %}
+                                                            {% if product.rating < i %}
+                                                                <span class="sc-module-rating-star"></span>
+                                                            {% else %}
+                                                                <span class="sc-module-rating-star sc-module-rating-star-is"></span>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <div class="sc-module-reviews d-flex align-items-center">
+                                                        <img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--module-comments-icon" alt="" width="12" height="12" />
+                                                        <span class="dark-text fsz-12 ps-1">{{ product.reviews }}</span>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        {% if product.price %}
+                                            <div class="sc-module-price-box py-2 mt-auto">
+                                                {% if product.tax %}
+                                                    {#                                    <div class="price-tax fw-300 fsz-12 light-text">#}
+                                                    {#                                        {{ text_tax }} {{ product.tax }}#}
+                                                    {#                                    </div>#}
+                                                {% endif %}
+
+
+                                                <div class="d-flex justify-content-between">
+
+                                                    <div class="sc-module-price-km">
+                                                        <div class="sc-module-price-km-prices">
+                                                            {% if not product.special %}
+                                                                <div class="km-price-regular">{{ product.price }}</div>
+                                                            {% else %}
+                                                                <div class="km-price-linethrow">{{ product.price }}</div>
+                                                                <div class="km-price-special">{{ product.special }}</div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="sc-module-price-km-usdt">
+                                                            {{ product.usdt_price }} usdt
+                                                        </div>
+                                                    </div>
+
+
+                                                    {#                                            {% if not product.special %}#}
+                                                    {#                                               <div>#}
+                                                    {#                                                   <span class="sc-module-price fw-700 dark-text mt-1 3">{{ product.price }}</span>#}
+                                                    {#                                                   {% if product.usdt_price > 0 %}#}
+                                                    {#                                                       <div class="usdnt-price-grid">{{ product.usdt_price }} <span>usdt</span></div>#}
+                                                    {#                                                   {% endif %}#}
+                                                    {#                                               </div>#}
+                                                    {#                                            {% else %}#}
+                                                    {#                                                <div class="d-flex flex-d-col">#}
+                                                    {#                                                    <span class="sc-module-price-old light-text fsz-14">{{ product.price }}</span>#}
+                                                    {#                                                    <span class="sc-module-price fw-700 dark-text mt-1 4">{{ product.special }}</span>#}
+                                                    {#                                                    {% if product.usdt_price > 0 %}#}
+                                                    {#                                                        <div class="usdnt-price-grid">{{ product.usdt_price }} <span>usdt</span></div>#}
+                                                    {#                                                    {% endif %}#}
+                                                    {#                                                </div>#}
+                                                    {#                                            {% endif %}#}
+
+
+
+                                                </div>
+                                            </div>
+                                            {% if product.can_buy != 1 %}
+
+                                                <button style="width: 100%!important;" onclick="octStockNotifier('{{ product.product_id }}');" type="button" class="fsz-12 sc-btn sc-btn-primary br-4 sc-stock-notifier-btn">
+                                                    <span class="sc-btn-text">{{ oct_stock_notifier_text }}</span>
+                                                </button>
+
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="sc-module-cart d-flex align-items-stretch justify-content-between hidden">
+                                        {% if product.can_buy is not empty and product.can_buy %}
+                                            {% if product.can_buy or not product.quantity %}
+                                                <div class="sc-module-quantity{% if quantity_show or product.quantity_show is defined and product.quantity_show %} d-flex{% else %} d-none{% endif %} align-items-center justify-content-center py-1 br-12">
+                                                    <button type="button" aria-label="Minus" class="sc-module-quantity-btn d-flex align-items-center justify-content-center sc-minus">
+                                                        <span class="minus"></span>
+                                                    </button>
+                                                    <input type="text" class="form-control" name="quantity" value="1" aria-label="Quantity" inputmode="numeric">
+                                                    <button type="button" aria-label="Plus" class="sc-module-quantity-btn d-flex align-items-center justify-content-center sc-plus">
+                                                        <span class="plus"></span>
+                                                    </button>
+                                                </div>
+                                            {% endif %}
+                                            {#<button type="button" aria-label="To cart" class="sc-btn sc-btn-primary sc-btn-with-icon br-4 sc-module-cart-btn">
+                                        <img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--btn-cart-icon" alt="" width="20" height="20" class="sc-btn-icon sc-btn-icon-cart-img">
+                                        <span class="sc-btn-text">{{ button_cart }}</span>
+                                    </button>#}
+                                        {% endif %}
+                                        <input type="hidden" name="product_id" value="{{ product.product_id }}" />
+                                    </div>
+                                    {% if product.oct_atributes is defined and product.oct_atributes %}
+                                        <div class="sc-module-item-attr p-3 fsz-10 dark-text d-none d-md-block">
+                                            {% for attribute in product.oct_atributes %}
+                                                <div class="sc-module-item-attr-item">
+                                                    <span class="fw-500">{{ attribute.name }}:</span> {{ attribute.text }}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if show_type == 'width-infinity' %}</div></div>{% endif %}
+        </div>
+        {% if show_more is defined and show_more and show_type != 'width-infinity' %}
+            <div class="sc-module-showmore d-flex justify-content-center pb-md-3 pt-3">
+                <div class="oct-load-more-button-wrapper w-100 d-flex align-items-center justify-content-center">
+                    <input type="hidden" id="more_{{ module_name }}_{{ module }}" name="more_{{ module_name }}_{{ module }}" value="{{ page }}">
+                    <button id="btn_{{ module_name }}_{{ module }}" class="sc-btn sc-btn-primary br-4" onclick="octShowMoreModule('{{ module_id }}', '{% if oct_lazyload is defined and oct_lazyload %}1{% else %}0{% endif %}', 'btn_{{ module_name }}_{{ module }}', 'sc-{{ module_name }}_{{ module }}', 'more_{{ module_name }}_{{ module }}', '{{ oct_path }}');">
+                        <span class="sc-btn-icon sc-btn-icon-showmore"></span>
+                        <span class="sc-btn-text">{{ oct_show_more }}</span>
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+<script>
+    let moddule_{{ module_name }}_{{ module }} = "{{ module_name }}";
+
+    $('#sc-{{ module_name }}_{{ module }} .km-modif-product-moudle-list').slick({
+        autoplay: false,
+        dots: true,
+        arrows: true,
+        infinite: true,
+        // autoplaySpeed: 3500,
+        slidesToScroll: 2,
+        slidesToShow: 5,
+        prevArrow: '<button type="button" class="slick-custom-arrow slick-prev"><svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1L1 6L6 11" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>',
+        nextArrow: '<button type="button" class="slick-custom-arrow slick-next"><svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L6 6L1 11" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>',
+        responsive: [
+            {
+                breakpoint: 1441,
+                settings: {
+                    slidesToScroll: 2,
+                    slidesToShow: 4,
+                }
+            },
+            {
+                breakpoint: 1201,
+                settings: {
+                    slidesToScroll: 2,
+                    slidesToShow: 3,
+                }
+            },            {
+                breakpoint: 769,
+                settings: {
+                    slidesToScroll: 3,
+                    slidesToShow: 3,
+                }
+            },
+            {
+                breakpoint: 500,
+                settings: {
+                    slidesToScroll: 2,
+                    slidesToShow: 2,
+                }
+            },
+        ]
+    });
+
+    function octStockNotifier(product_id) {
+        masked('body', true);
+
+        $(".modal-backdrop").remove();
+
+        $.ajax({
+            type: 'post',
+            dataType: 'html',
+            url: 'index.php?route=octemplates/module/oct_stock_notifier',
+            data: 'product_id=' + product_id,
+            cache: false,
+            success: function (data) {
+                masked('body', false);
+                $(".modal-holder").html(data);
+                $("#octStockNotifier").modal("show");
+                popupClose();
+            }
+        });
+    }
+</script>

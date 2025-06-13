@@ -1,0 +1,109 @@
+{{ header }}
+{{ column_left }}
+
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_name %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_name }}</div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3></div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module">
+                    <div class="form-group">
+                        <label class="control-label" for="input-name">{{ entry_name }}</label>
+                        <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+                    </div>
+
+                    <h3>Блоки</h3>
+                    <div id="blocks">
+                        {% for rendered in rendered_blocks %}
+                            {{ rendered }}
+                        {% endfor %}
+                    </div>
+
+                    <button type="button" id="add-block" class="btn btn-primary">+ Додати блок</button>
+
+                    <script>
+                        let blockIndex = {{ blocks|length }};
+                        $('#add-block').on('click', function () {
+                            $.ajax({
+                                url: 'index.php?route=extension/module/listing_blocks/blockForm&user_token={{ user_token }}&index=' + blockIndex++,
+                                dataType: 'html',
+                                success: function(html) {
+                                    $('#blocks').append(html);
+                                }
+                            });
+                        });
+                    </script>
+
+
+                    <br>
+                    <br>
+
+                    <button type="submit" class="btn btn-primary">{{ button_save }}</button>
+                    <button type="submit" name="apply" class="btn btn-default">{{ button_apply }}</button>
+                    <a href="{{ cancel }}" class="btn btn-default">{{ button_cancel }}</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('upload-btn')) {
+            const image = e.target.dataset.image; // ID текстового поля
+            const thumb = e.target.dataset.thumb; // ID прев’ю <img>
+            image_upload(image, thumb);
+        }
+    });
+
+    function image_upload(fieldId, thumbId) {
+        const element = document.getElementById(fieldId);
+        const thumbElement = document.getElementById(thumbId);
+
+        $('#modal-image').remove();
+
+        $.ajax({
+            url: 'index.php?route=common/filemanager&user_token={{ user_token }}&field=' + fieldId,
+            dataType: 'html',
+            beforeSend: function () {
+                $('.upload-btn').prop('disabled', true).addClass('loading');
+            },
+            complete: function () {
+                $('.upload-btn').prop('disabled', false).removeClass('loading');
+            },
+            success: function (html) {
+                $('body').append('<div id="modal-image" class="modal">' + html + '</div>');
+                $('#modal-image').modal('show');
+
+                $('#modal-image').on('click', 'a.thumbnail', function (e) {
+                    e.preventDefault();
+
+                    const imageUrl = $(this).attr('href');
+
+                    if (element) element.value = imageUrl;
+                    if (thumbElement) thumbElement.src = imageUrl;
+
+                    $('#modal-image').modal('hide');
+                });
+            }
+        });
+    }
+
+</script>
+
+
+
+{{ footer }}

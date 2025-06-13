@@ -1,0 +1,52 @@
+{% if cartData.products %}
+<div id="cart-summary">
+    <div class="cart-summary-info">
+        <div class="cart-summary-info-cart">
+            <svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.66663 26.1673V9.83398H25.3333V26.1673C25.3333 26.7862 25.1148 27.3797 24.7258 27.8172C24.3368 28.2548 23.8093 28.5007 23.2592 28.5007H8.7407C8.19062 28.5007 7.66307 28.2548 7.27411 27.8172C6.88514 27.3797 6.66663 26.7862 6.66663 26.1673Z" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M21.3333 12.5C21.3333 10.3783 20.7714 8.34344 19.7712 6.84315C18.771 5.34285 17.4144 4.5 16 4.5C14.5855 4.5 13.2289 5.34285 12.2287 6.84315C11.2285 8.34344 10.6666 10.3783 10.6666 12.5" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </div>
+
+        <div class="cart-summary-info-cart-text">
+            У кошику  {{ cartData.total_quantity }} товарів<br>
+            на суму {{ cartData.total_price }}
+        </div>
+    </div>
+
+    <div class="cart-summary-products">
+        {% for product in cartData.products %}
+            <div class="cart-summary-product-item">
+
+                <a href="{{ product.link }}">
+                    <img src="{{ product.image }}" alt="{{ product.name }}">
+                </a>
+{#                {{ product.name }}#}
+{#                <span>Кількість: {{ product.quantity }}</span>#}
+{#                <span>Ціна: {{ product.price }}</span>#}
+{#                <span>Всього: {{ product.total }}</span>#}
+            </div>
+        {% endfor %}
+    </div>
+    
+    <div class="cart-summary-buttons">
+        <a class="cart-summary-button-cart" href="/index.php?route=checkout/cart">Перейти до кошика</a>
+        <a class="cart-summary-button-checkout" href="/index.php?route=checkout/checkout">Оформити замовлення</a>
+        <button type="button"  id="cart-summary-close" class="btn-close">
+        </button>
+    </div>
+</div>
+
+    <script>
+        $('#cart-summary-close').click(function(){
+            $('#cart-summary').hide();
+        });
+    </script>
+
+    <script>
+        $('#cart-summary .cart-summary-button-checkout').on('click', function() {
+            fbq('track', 'InitiateCheckout');
+        });
+    </script>
+
+{% endif %}

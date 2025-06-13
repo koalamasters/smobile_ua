@@ -1,0 +1,141 @@
+{% if categories is not empty %}
+
+	{% if  module_id != 40 %}
+		<div class="row pt-3 pt-xl-4 g-3 g-xl-4 sc-category-wall">
+			<div class="sc-module-header fsz-22 dark-text fw-700 text-center text-md-start mt-3 mt-md-4">
+				{{ heading_title }}
+			</div>
+
+
+			{% for category in categories %}
+				<div class="sc-category-wall-item">
+					{% if category.children %}
+						<div class="content-block sc-category-wall-item-block d-flex flex-column align-items-center text-center h-100">
+							{% if (category.thumb) %}
+								<img src="{{ category.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ category.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="oct-lazy"{% endif %} alt="{{ category.name }}" title="{{ category.name }}" width="{{ category.width }}" height="{{ category.height }}" />
+							{% endif %}
+							<span class="sc-category-wall-title dark-text fw-600 fsz-14 mt-3">{{ category.name }}</span>
+							<div class="sc-category-wall-item-list d-none flex-column text-start">
+								{% set countstop = 1 %}
+								{% for child in category.children %}
+									{% set countstop = countstop + 1 %}
+									<a href="{{ child.href }}" class="blue-link fsz-12">{{ child.name }}</a>
+								{% endfor %}
+								<div class="pt-3 mt-auto">
+									<a href="{{ category.href }}" class="sc-btn sc-btn-primary small br-4 text-center">{{ text_see_more }}</a>
+								</div>
+							</div>
+						</div>
+					{% else %}
+						<a href="{{ category.href }}" class="content-block d-flex flex-column align-items-center text-center h-100">
+							{% if (category.thumb) %}
+								<img src="{{ category.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ category.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="oct-lazy"{% endif %} alt="{{ category.name }}" title="{{ category.name }}" width="{{ category.width }}" height="{{ category.height }}" />
+							{% endif %}
+							<span class="sc-category-wall-title dark-text fw-600 fsz-14 mt-3">{{ category.name }}</span>
+						</a>
+					{% endif %}
+				</div>
+			{% endfor %}
+
+		</div>
+		<div class="row mt-3 d-md-none">
+			<div class="col-12 text-center">
+				<button type="button" class="sc-btn sc-btn-primary br-4 w-100 mb-0" data-menu="open">
+					<span class="sc-btn-icon sc-btn-icon-catalog"></span>
+					<span class="sc-btn-text">{{ oct_menu_catalog }}</span>
+				</button>
+			</div>
+		</div>
+		<script>
+			window.addEventListener('DOMContentLoaded', () => {
+				categoryWall();
+			});
+		</script>
+	{% else %}
+
+		<div class="pt-3 pt-xl-4 g-3 g-xl-4">
+			<div class="sc-module-header  sc-module-header-slick-cat fsz-20 dark-text text-center text-md-start mt-3 mt-md-4">
+				{{ heading_title }}
+			</div>
+
+			<div id="sc-category-wall-slick">
+				{% for category in categories %}
+					<div class="sc-category-wall-item">
+						{% if category.children %}
+							<div class="content-block sc-category-wall-item-block d-flex flex-column align-items-center text-center h-100">
+								{% if (category.thumb) %}
+									<img
+											src="{{ category.thumb }}"{% if oct_lazyload is defined and oct_lazyload %}
+										data-srcset="{{ category.thumb }} 100w"
+										srcset="{{ oct_lazy_image }} 100w" sizes="100vw"
+										class="wall_slick oct-lazy"{% endif %}
+											alt="{{ category.name }}"
+											title="{{ category.name }}"
+									/>
+								{% endif %}
+								<span class="sc-category-wall-title dark-text fw-600 fsz-14 mt-3">{{ category.name }}</span>
+								<div class="sc-category-wall-item-list d-none flex-column text-start">
+									{% set countstop = 1 %}
+									{% for child in category.children %}
+										{% set countstop = countstop + 1 %}
+										<a href="{{ child.href }}" class="blue-link fsz-12">{{ child.name }}</a>
+									{% endfor %}
+									<div class="pt-3 mt-auto">
+										<a href="{{ category.href }}" class="sc-btn sc-btn-primary small br-4 text-center">{{ text_see_more }}</a>
+									</div>
+								</div>
+							</div>
+						{% else %}
+							<a href="{{ category.href }}" class="wall_slick_item content-block d-flex flex-column align-items-center text-center h-100">
+								{% if (category.thumb) %}
+									<img src="{{ category.thumb }}"{% if oct_lazyload is defined and oct_lazyload %} data-srcset="{{ category.thumb }} 100w" srcset="{{ oct_lazy_image }} 100w" sizes="100vw" class="wall_slick_img oct-lazy"{% endif %} alt="{{ category.name }}" title="{{ category.name }}" width="{{ category.width }}" height="{{ category.height }}" />
+								{% endif %}
+							</a>
+							<span class="sc-category-wall-title dark-text fsz-16 mt-3">{{ category.name }}</span>
+						{% endif %}
+					</div>
+				{% endfor %}
+			</div>
+
+		</div>
+		<script>
+			$('#sc-category-wall-slick').slick({
+				dots: false,
+				infinite: true,
+				speed: 450,
+				slidesToShow: 6,
+				slidesToScroll: 3,
+				autoplaySpeed: 3500,
+				centerPadding: '15px',
+				prevArrow: '<button type="button" class="slick-custom-arrow slick-prev"><svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1L1 6L6 11" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>',
+				nextArrow: '<button type="button" class="slick-custom-arrow slick-next"><svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L6 6L1 11" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>',
+				responsive: [
+					{
+						breakpoint: 1441,
+						settings: {
+							slidesToScroll: 2,
+							slidesToShow: 5,
+						}
+					},
+					{
+						breakpoint: 1201,
+						settings: {
+							slidesToScroll: 2,
+							slidesToShow: 3,
+						}
+					},
+					{
+						breakpoint: 769,
+						settings: {
+							slidesToScroll: 2,
+							slidesToShow: 2,
+							centerPadding: '8px',
+						}
+					},
+				]
+			})
+		</script>
+
+	{% endif %}
+
+{% endif %}

@@ -1,0 +1,56 @@
+<div class="sc-footer-subscribe d-flex flex-column">
+	<div class="sc-footer-title fw-400 fsz-14 text-uppercase d-flex mb-15">
+		{#		<img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--footer-subscribe-title-icon" alt="" width="24" height="24" class="me-2">#}
+		{{ oct_text_subscribe_title }}
+	</div>
+	<form action="javascript:;" id="footer-subscribe" class="sc-footer-subscribe-form">
+		<div class="input-group mb-20">
+			<input type="email" id="InputSubscribeEmail" class="form-control sc-input-with-btn fw-400" name="email" placeholder="{{ enter_email_static_subscribe }}">
+			<button type="submit" id="footer-make-subscribe" class="sc-btn sc-btn-primary">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M5 12H19" stroke="#001F3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M12 5L19 12L12 19" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+
+			</button>
+		</div>
+		{% if text_terms %}
+			<div class="d-flex footer-sub-policy-wrapper">
+				<input type="checkbox" class="form-check-input" name="agree" id="oct-scales-static" checked>
+				<label class="form-check-label fsz-12" for="oct-scales-static">{{ text_terms }}</label>
+			</div>
+		{% endif %}
+	</form>
+</div>
+<script>
+	$("#InputSubscribeEmail, #oct-scales-static").on("change paste keyup", function() {
+		$(this).removeClass('error_style');
+	});
+	$('#footer-make-subscribe').on('click', function() {
+		$.ajax({
+			type: 'post',
+			url:  'index.php?route=octemplates/module/oct_subscribe/makeSubscribe',
+			dataType: 'json',
+			cache: false,
+			data: $('#footer-subscribe').serialize(),
+			success: function(json) {
+				if (json['error']) {
+					$('#us-subscribe-modal .text-danger').remove();
+					let errorOption = '';
+
+					$.each(json['error'], function(i, val) {
+						$('#footer-subscribe [name="' + i + '"]').addClass('error_style');
+						errorOption += '<div class="alert-text-item">' + val + '</div>';
+					});
+
+					scNotify('danger', errorOption);
+				} else {
+					if (json['output']) {
+						$('#footer-subscribe [name="email"]').val('');
+						scNotify('success', '<div class="alert-text-item">' + json['output'] + '</div>');
+					}
+				}
+			}
+		});
+	});
+</script>

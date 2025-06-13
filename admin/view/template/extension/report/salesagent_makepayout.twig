@@ -1,0 +1,90 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-makepayout" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ back }}" data-toggle="tooltip" title="{{ button_back }}" class="btn btn-success"><i class="fa fa-reply"></i> {{ button_back }}</a>
+       </div> 
+      <h1><i class="fa fa-user fa-fw" style="color:tomato;"></i> {{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+     {% if error_warning %}
+        <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-bar-chart"></i> {{ text_list }}</h3>
+      </div>
+      <div class="panel-body">
+            <div class="alert alert-info">
+             <b>{{ text_salesagentname }}:</b>&nbsp;&nbsp;{{ salesagent_info['firstname']~' '~salesagent_info['lastname'] }}<br>
+              <b>{{ text_totalorders }}:</b>&nbsp;&nbsp;{{ order_total }}<br>
+              <b>{{ text_amounttopay }}:</b>&nbsp;&nbsp;{{ report_exacttotal['commissiontotal'] }}<br><br>
+              <b>{{ text_payouttext }} 
+            </div>
+            <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-makepayout" class="form-horizontal">
+            <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-transaction_id">{{ entry_transaction_id }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="transaction_id" value="" placeholder="{{ entry_transaction_id }}" id="input-transaction_id" class="form-control" />
+                  {% if (error_transaction_id) %} 
+                  <div class="text-danger">{{ error_transaction_id }}</div>
+                  {% endif %} 
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-amountpaid">{{ entry_amountpaid }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="amountpaid" value="" placeholder="{{ entry_amountpaid }}" id="input-amountpaid" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-paymentdetails">{{ entry_paymentdetails }}</label>
+                <div class="col-sm-10">
+                  <textarea name="paymentdetails" rows="5" placeholder="{{ entry_paymentdetails }}" id="input-paymentdetails" class="form-control">{{ salesagent_info['paymentdetails'] }}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-image-1">{{ entry_image_1 }}</label>
+                <div class="col-sm-10">
+                  <a href="" id="thumb-image-1" data-toggle="image" class="img-thumbnail"><img src="{{ thumbnail }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                  <input type="hidden" name="image_1" value="" id="input-image-1" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-image-2">{{ entry_image_2 }}</label>
+                <div class="col-sm-10">
+                  <a href="" id="thumb-image-2" data-toggle="image" class="img-thumbnail"><img src="{{ thumbnail }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                  <input type="hidden" name="image_2" value="" id="input-image-2" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-notes">{{ entry_notes }}</label>
+                <div class="col-sm-10"><textarea name="notes" rows="5" placeholder="{{ entry_notes }}" id="input-notes" class="form-control"></textarea></div>
+            </div>
+            <input type="hidden" name="filter_date_start" value="{{ filter_date_start }}" />
+            <input type="hidden" name="filter_date_end" value="{{ filter_date_end }}" />
+            <input type="hidden" name="filter_paidout" value="{{ filter_paidout }}" />
+            <input type="hidden" name="filter_salesagent" value="{{ filter_salesagent }}" />
+            <input type="hidden" name="filter_order_status_id" value="{{ filter_order_status_id }}" />
+            <input type="hidden" name="filter_transactionids" value="{{ filter_transactionids }}" />
+            <input type="hidden" name="totalcommissionamount" value="{{ report_exacttotal['commissiontotal'] }}" />
+            <input type="hidden" name="totalorders" value="{{ order_total }}" />
+            <input type="hidden" name="email" value="{{ salesagent_info['email'] }}" />
+            <input type="hidden" name="name" value="{{ salesagent_info['firstname']~' '~salesagent_info['lastname'] }}" />
+            
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

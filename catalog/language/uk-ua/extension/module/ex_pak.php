@@ -1,0 +1,24 @@
+<?php
+$_['ex_pak_all']                            = 'Усі';
+$_['ex_pak_popular']                        = 'Популярне';
+$_['ex_pak_show_more']                      = 'Показати більше';
+$_['ex_pak_checkout_title']                 = 'Додати аксесуари для товарів';
+$_['ex_pak_checkout_do']                    = ' до';
+$_['ex_pak_more_products']                  = 'Більше аксесуарів';
+$_['ex_pak_add_error']                      = 'Спочатку додайте основний товар';
+$_['ex_pak_remove_product']                 = 'Товар видалено з кошика';
+$_['ex_pak_product_info_close']             = 'Закрити';
+$_['ex_pak_product_info_to_cart']           = 'Купити';
+$_['ex_pak_product_info_to_description']    = 'Опис';
+$_['ex_pak_product_to_cart']                = 'Перейти до товару';
+$_['ex_pak_text_option']                    = 'Опції';
+$_['ex_pak_show_product_sidebar']           = 'Вибрати корисні доповнення';
+$_['ex_pak_product_sidebar_to_product']     = 'Корисний додаток до:';
+$_['ex_pak_product_sidebar_to_title']       = 'Це може знадобитися:';
+$_['text_items']                            = 'Товарів: %s (%s)';
+$_['ex_pak_complect_discount']              = 'Знижка на комплект:';
+$_['ex_pak_more_show']                      = 'Показати ще';
+$_['ex_pak_more_hide']                      = 'Приховати';
+$_['ex_pak_to_cart']                        = 'Купити комплект';
+$_['ex_pak_in_cart_error']                  = 'Товар уже додано';
+$_['ex_pak_button_add']                     = 'Замовити';

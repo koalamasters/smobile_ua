@@ -1,0 +1,86 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+{#            <div class="pull-right">#}
+{#                <a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>#}
+{#             </div>#}
+            <h1>Мегаменю</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-list"></i> Мегаменю</h3>
+            </div>
+            <div class="panel-body">
+                <div id="form-menu-list">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <td width="25">ID</td>
+                                    <td width="25">Статус</td>
+                                    <td width="250">Назва</td>
+                                    <td width="150">Дата створення</td>
+                                    <td width="150">Дата редагування</td>
+                                    <td class="text-center" width="175">Дії</td>
+                                    <td class="text-center" width="25">Видалення</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% if menu_list %}
+                                {% for menu_item in menu_list %}
+                                    <tr>
+                                        <td class="text-center">{{ menu_item.id }}</td>
+                                        <td class="text-center"><div class="status-circle-{{ menu_item.status }}"></div></td>
+                                        <td class="">{{ menu_item.name }}</td>
+                                        <td>{{ menu_item.date_create }}</td>
+                                        <td>{{ menu_item.date_edit }}</td>
+                                        <td class="text-center">
+
+                                            <a href="{{ menu_item.edit }}" data-toggle="tooltip" title="Редагувати" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+                                            <a target="_blank" href="{{ menu_item.view }}" data-toggle="tooltip" title="Переглянути" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                            <a href="{{ menu_item.copy }}" data-toggle="tooltip" title="Копіювати" class="btn btn-primary btn-copy"><i class="fa fa-copy"></i></a>
+                                        </td>
+                                        <td class="text-center">
+                                            {% if menu_item.status %}
+                                                <span style="cursor: no-drop;" class="btn btn-default"><i class="fa fa-trash-o"></i></span>
+                                            {% else %}
+                                                <a  href="{{ menu_item.delete_link }}" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+                                            {% endif %}
+
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="4">{{ text_no_results }}</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.btn-copy').click(function (e){
+        e.preventDefault();
+        let redirectLink = $(this).attr('href');
+        fetch(redirectLink, { method: 'POST' });
+        setTimeout(function (){
+            location.reload();
+        }, 500)
+    })
+</script>
+{{ footer }}

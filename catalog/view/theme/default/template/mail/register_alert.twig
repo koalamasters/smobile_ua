@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>{{ title }}</title>
+</head>
+
+<body class="body-mail">
+
+  <table style="border-collapse: collapse; width: 100%; max-width: 765px; margin: 0 auto;">
+    <thead>
+      <tr style="text-align: left;background: #337ab7; display: flex; align-items: center; height: 30px;">
+        <td style="background: #fff; display: inline-block; padding: 0 5px 0 8px;">
+          <a href="https://smobile.ua/" style="text-decoration: none; width: 65px; height: 30px; display: inline-block;">
+            <img src="https://smobile.ua/image/cache/catalog/logo_v1-134x62.png" height="30" alt="Smobile"
+              title="Smobile">
+          </a>
+        </td>
+        <td style="background: #FED430; text-transform: uppercase;;">
+          <a href="{{ mail_cat_link }}"
+            style="padding: 0 10px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 600; line-height: 30px;">
+            {{ mail_cat }}
+          </a>
+        </td>
+        <td style="text-transform: uppercase;">
+          <a href="{{ mail_special_link }}"
+            style="padding: 0 10px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 600; line-height: 30px;">
+            {{ mail_special }}
+          </a>
+        </td>
+        <td style="text-transform: uppercase; padding: 0 8px 0 0;">
+          <a href="{{ mail_contacts_link }}"
+            style="padding: 0 10px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 600; line-height: 30px;">
+            {{ mail_contacts }}
+          </a>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height: 20px;">
+        <td></td>
+      </tr>
+      <tr style="width: 100%;">
+        <td style="padding: 0 8px 0 8px;">
+          {{ text_signup }}
+        </td>
+      </tr>
+      <tr style="width: 100%;">
+        <td style="padding: 0 8px 0 8px;">
+          {{ text_firstname }} {{ firstname }}
+        </td>
+      </tr>
+      <tr style="width: 100%;">
+        <td style="padding: 0 8px 0 8px;">
+          {{ text_lastname }} {{ lastname }}
+        </td>
+      </tr>
+      {% if customer_group %}
+      <tr style="width: 100%;">
+        <td style="padding: 0 8px 0 8px;">
+          {{ text_customer_group }} {{ customer_group }}
+
+        </td>
+      </tr>
+      {% endif %}
+      <tr style="width: 100%;">
+        <td  style="padding: 0 8px 0 8px;">
+          {{ text_email }} <a href="{{ email }}">{{ email }}</a>
+          <br>
+          {{ text_telephone }} <a href="{{ telephone }}">{{ telephone }}</a>
+        </td>
+      </tr>
+      <tr style="height: 20px;">
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <table style="background: #3A4754; border-collapse: collapse; width: 100%; max-width: 765px; margin: 0 auto;">
+    <tr>
+      <td style="width: 50%; padding: 20px;">
+        <a href="https://smobile.ua/" style=" text-decoration: none; color: #fff; font-size: 14px; font-weight: 600;">
+          Smobile
+        </a>
+      </td>
+      <td style="width: 50%; text-align: end; padding: 20px;">
+        <a href="tel:+380678088989" style="text-decoration: none; color: #fff; font-size: 14px; font-weight: 600;">
+          +38 (067) 808 89-89
+        </a>
+        <br>
+        <a href="mailto:an@smobile.com.ua"
+          style="text-decoration: none; color: #fff; font-size: 14px; font-weight: 600;">
+          an@smobile.com.ua
+        </a>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

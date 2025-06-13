@@ -1,0 +1,29 @@
+<div class="dop-product-product-tabs">
+	{% if show_description %}
+		<div class="dop-product-product-list dop-product-description-products" data-show-more="true" data-text-show="{{ ex_pak_more_show }}" data-text-hide="{{ ex_pak_more_hide }}">
+			{% for product in products %}
+				{{ product.html }}
+			{% endfor %}
+		</div>
+	{% else %}
+		<div class="dop-product-categories">
+			{% if categories|length > 1 %}
+				<div class="category-list">
+					{% for category in categories %}
+						<a class="category" data-category-id="{{ category.category_id }}">{{ category.name }}</a>
+					{% endfor %}
+					<div class="toggle"><a><svg><use xlink:href="#ex-icon-arrow-down"></use></svg></a></div>
+				</div>
+			{% endif %}
+			{% for category in categories %}
+				<div class="category-content category-content-{{ category.category_id }}{% if categories|length == 1 %} active{% endif %}">
+					<div class="dop-product-product-list" data-show-more="true" data-text-show="{{ ex_pak_more_show }}" data-text-hide="{{ ex_pak_more_hide }}">
+						{% for product in category.products %}
+							{{ product.html }}
+						{% endfor %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+</div>

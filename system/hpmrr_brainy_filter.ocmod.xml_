@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>brainy filter for hpmrr</name>
+  <code>brainy filter for hpmrr</code>
+  <version>1</version>
+  <author>kj</author>
+  <link>cleanphp.pp.ua</link>
+<file path="catalog/model/extension/module/brainyfilter.php">
+  <operation>
+      <search><![CDATA[return (string)$sql;]]></search>
+      <add position="before"><![CDATA[
+        $sql = $this->hpmrr_cooking($sql);
+        ]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[public function __construct($registry) {]]></search>
+      <add position="before"><![CDATA[
+       
+        function hpmrr_cooking($sql)
+    {
+        if(strpos($sql, "GROUP BY p.product_id"))
+        {
+            $sql = str_replace("GROUP BY p.product_id", "GROUP BY IF(hl.parent_id IS NOT NULL, CONCAT(hl.parent_id, '-', hl.grsort" . ($this->config->get((floatval(VERSION) >= 3 ? "module_" : "") . "hpmrr_grouping_stock") ? ", IF(p.quantity > 0, '-1', '-0')" : "") . "), p.product_id)", $sql);
+        }
+        else if(strpos($sql, "ORDER BY"))
+        {
+            $sql = str_replace("ORDER BY", "GROUP BY IF(hl.parent_id IS NOT NULL, CONCAT(hl.parent_id, '-', hl.grsort" . ($this->config->get((floatval(VERSION) >= 3 ? "module_" : "") . "hpmrr_grouping_stock") ? ", IF(p.quantity > 0, '-1', '-0')" : "") . "), p.product_id) ORDER BY", $sql);
+        }
+       
+        $sql = str_replace("WHERE", "LEFT JOIN " . DB_PREFIX . "hpmrr_links hl ON (p.product_id = hl.product_id) WHERE", $sql);
+        return $sql;
+
+    }
+        ]]></add>
+    </operation>
+    
+  
+  </file>
+</modification>
+
+        
+
+        

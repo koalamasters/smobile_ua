@@ -1,0 +1,61 @@
+<script>
+var hpmrr_pinfo = {{ pds_links }};
+var hpmrr_cat_config =
+{
+    item_selector: '.fm-module-item',
+    price_selector: '.fm-module-price',
+    main_photo_selector: '.fm-module-img img',
+    name_selector: '.fm-module-title a',
+    change_href: '.fm-module-title a, .fm-module-img a',
+    cart_button: 'button[onclick ^= "cart.add"]',
+    price_html: function(newprice, pid)
+    {
+        let html = '<div class="fm-module-price-bottom">';
+			html += '<span class="fm-module-price-new">' + newprice + '</span>';
+			html += '</div>';
+				return html;	
+    },
+    special_price_html: function(newprice, oldprice)
+    {
+       
+
+        let prec = ((oldprice - newprice) * 100)/oldprice;
+  			let html = '<div class="fm-module-price-top d-flex align-items-center justify-content-center">';
+  			html += '<span class="fm-module-price-old">';
+  			html += '<span class="price-area-">' + oldprice + ' грн.</span>';
+            html += '</span>';
+            html += '<div class="fm-module-sticker-discount">-' + Math.round(prec) + '%</div>';
+			html += '</div>';
+			html += '<div class="fm-module-price-bottom">';
+			html += '<span class="fm-module-price-new">' + newprice + ' грн.</span>';
+			html += '</div>';
+				return html;																
+
+    },
+    replace_piece_cat: function($el, $btn)
+    {
+        var $item = $btn.parents(this.item_selector);
+        var cartadd_onclick = "cart.add('" + $el.product_id + "', '1');";
+        var wishlist_onclick = "wishlist.add('" + $el.product_id + "');";
+        //var link = "index.php?route=product/product&product_id=" + $el.product_id;
+        var link = hpmrr_pinfo[$el.product_id]['link'];
+        console.log($el.quantity);
+  		if($el.quantity <= 0)
+  		$item.addClass("fm-no-stock");
+  		else 
+  		$item.removeClass("fm-no-stock");
+  
+  		$item.find(".fm-module-buttons-wishlist button").attr('onclick', wishlist_onclick);
+  
+        $item.find(this.change_href).attr('href', link);
+        $item.find(this.main_photo_selector).attr('src', $el.thumb);
+        $item.find(this.name_selector).html($el.name);
+        $item.find(this.cart_button).attr('onclick', cartadd_onclick);
+
+        if($el.special)
+            $item.find(this.price_selector).html(this.special_price_html($el.special_noformat, $el.price_noformat));
+        else
+            $item.find(this.price_selector).html(this.price_html($el.price, $el.product_id));
+    }
+}
+</script>

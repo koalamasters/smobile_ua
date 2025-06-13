@@ -1,0 +1,13 @@
+<div>
+    <h1>{{ heading_title }}</h1>
+    <form action="{{ action }}" method="post">
+        <div>
+            <label>{{ text_status }}</label>
+            <select name="module_cart_summary_status">
+                <option value="1" {% if module_cart_summary_status == '1' %}selected{% endif %}>{{ text_enabled }}</option>
+                <option value="0" {% if module_cart_summary_status == '0' %}selected{% endif %}>{{ text_disabled }}</option>
+            </select>
+        </div>
+        <button type="submit">{{ button_save }}</button>
+    </form>
+</div>

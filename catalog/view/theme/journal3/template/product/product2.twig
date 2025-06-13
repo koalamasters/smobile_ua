@@ -1,0 +1,1145 @@
+{% set stylePrefix = j3.document.isPopup('quickview') ? 'quickviewPageStyle' : 'productPageStyle' %}
+{% set optionPrice = j3.settings.get(stylePrefix ~ 'OptionPrice') %}
+{% set direction = j3.settings.get(stylePrefix ~ 'AdditionalImagesPosition') == 'left' or j3.settings.get(stylePrefix ~ 'AdditionalImagesPosition') == 'right' ? 'vertical' : 'horizontal' %}
+{% set carousel = direction == 'vertical' or j3.settings.get(stylePrefix ~ 'AdditionalImagesCarousel') %}
+{% set carouselOptions = {
+    slidesPerView: 'auto',
+    spaceBetween: j3.settings.get(stylePrefix ~ 'AdditionalImagesSpacing')|default(0),
+    direction: direction
+} %}
+{% set galleryOptions = {
+    thumbWidth: j3.settings.get('image_dimensions_popup_thumb.width'),
+    thumbConHeight: j3.settings.get('image_dimensions_popup_thumb.height'),
+    addClass: 'lg-product-images',
+    mode: j3.settings.get(stylePrefix ~ 'GalleryMode'),
+    download: j3.settings.get(stylePrefix ~ 'GalleryDownload'),
+    fullScreen: j3.settings.get(stylePrefix ~ 'GalleryFullScreen')
+} %}
+{% set quickviewExpand = not j3.settings.get('quickviewExpandButton') or (j3.settings.get('globalExpandCharactersLimit') > 0 and description and description|length <= j3.settings.get('globalExpandCharactersLimit')) ? 'no-expand': '' %}
+{% if j3.isDescriptionEmpty(description) %}
+    {% set description = '' %}
+{% endif %}
+{{ header }}
+{% if not j3.document.isPopup() %}
+
+
+
+<div id="product-product" class="container modern">
+    
+        <ul class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+                <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+        </ul>
+        {% if j3.settings.get('pageTitlePosition') == 'top' %}
+            <h1 class="title page-title"><span>{{ heading_title }}</span></h1>
+        {% endif %}
+        {{ j3.loadController('journal3/layout', 'top') }}
+
+    <div class="row">{{ column_left }}
+        <div id="content" class="{{ class }}">
+            {% endif %}
+            {{ content_top }}
+            {% if not j3.document.isPopup('options') %}
+                {% if j3.settings.get('pageTitlePosition') == 'default' or j3.document.isPopup('quickview') %}
+                    <h1 class="title page-title">{{ heading_title }}</h1>
+                {% endif %}
+            {% endif %}
+            {% set classes = j3.classes({
+                'out-of-stock': product_quantity <= 0,
+                'has-countdown': date_end,
+                'has-zero-price': not product_price_value,
+                'has-extra-button': product_extra_buttons,
+            }) ~ ' ' ~ product_exclude_classes %}
+            <div class="product-info {{ classes }}">
+                {% if not j3.document.isPopup('options') %}
+                    <div class="product-left">
+                        <div class="product-image direction-{{ direction }} position-{{ j3.settings.get(stylePrefix ~ 'AdditionalImagesPosition') }}">
+
+
+                            <div class="swiper main-image" data-options='{{ j3.carousel(j3.document.getJs(), stylePrefix ~ 'ImageCarouselStyle')|json_encode(constant('JSON_FORCE_OBJECT')) }}' {% if images|length > 1 and j3.settings.get(stylePrefix ~ 'AdditionalImagesStatus') and carousel and direction == 'vertical' %}style="width: calc(100% - {{ j3.settings.get('image_dimensions_additional.width') }}px)"{% endif %}>
+
+                                    <div class="custom_labels">
+                                        {% for key, label in custom_labels %}
+
+                                            <div class="label-{{ key }}">{{ label }}</div>
+                                        {% endfor %}
+                                    </div>
+
+
+
+                                <div class="swiper-container" {% if j3.isRTL() %}dir="rtl"{% endif %}>
+                                    <div class="swiper-wrapper">
+                                        {% set gallery = [] %}
+                                        {% for image in images %}
+                                            {% set gallery = gallery|merge([{src: image.popup, thumb: image.galleryThumb, subHtml: heading_title}]) %}
+                                            <div class="swiper-slide" {% if not j3.document.isPopup() and j3.settings.get(stylePrefix ~ 'GalleryStatus') %} data-gallery=".lightgallery-product-images" data-index="{{ loop.index0 }}" {% endif %}>
+                                                <img src="{{ image.image }}" {% if image.image2x %}srcset="{{ image.image }} 1x, {{ image.image2x }} 2x"{% endif %} data-largeimg="{{ image.popup }}" alt="{{ heading_title }}" title="{{ heading_title }}" width="{{ j3.settings.get('image_dimensions_thumb.width') }}" height="{{ j3.settings.get('image_dimensions_thumb.height') }}" {% if not loop.first %}loading="lazy"{% endif %}/>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="swiper-controls">
+                                    <div class="swiper-buttons">
+                                        <div class="swiper-button-prev"></div>
+                                        <div class="swiper-button-next"></div>
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                                {# % if product_labels %}
+                                    <div class="product-labels">
+                                        {% for id, label in product_labels %}
+                                            <span class="product-label product-label-{{ id }} product-label-{{ label.display }}"><b>{{ label.label }}</b></span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %#}
+                            </div>
+                            {% if images|length > 1 and j3.settings.get(stylePrefix ~ 'AdditionalImagesStatus') %}
+                                {% if carousel %}
+                                    <div class="swiper additional-images" data-options='{{ carouselOptions|json_encode(constant('JSON_FORCE_OBJECT')) }}' {% if direction == 'vertical' %}style="width: {{ j3.settings.get('image_dimensions_additional.width') }}px"{% endif %}>
+                                        <div class="swiper-container" {% if j3.isRTL() %}dir="rtl"{% endif %}>
+                                            <div class="swiper-wrapper">
+                                                {% for image in images %}
+                                                    <div class="swiper-slide additional-image" data-index="{{ loop.index0 }}">
+                                                        <img src="{{ image.thumb }}" {% if image.thumb2x %}srcset="{{ image.thumb }} 1x, {{ image.thumb2x }} 2x"{% endif %} alt="{{ heading_title }}" title="{{ heading_title }}" width="{{ j3.settings.get('image_dimensions_additional.width') }}" height="{{ j3.settings.get('image_dimensions_additional.height') }}" {% if not loop.first %}loading="lazy"{% endif %}/>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="swiper-buttons">
+                                            <div class="swiper-button-prev"></div>
+                                            <div class="swiper-button-next"></div>
+                                        </div>
+                                        <div class="swiper-pagination"></div>
+                                    </div>
+                                {% else %}
+                                    <div class="additional-images">
+                                        {% for image in images %}
+                                            <div class="additional-image" data-index="{{ loop.index0 }}">
+                                                <img src="{{ image.thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" width="{{ j3.settings.get('image_dimensions_additional.width') }}" height="{{ j3.settings.get('image_dimensions_additional.height') }}"/>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        {% if not j3.document.isPopup() and j3.settings.get(stylePrefix ~ 'GalleryStatus') %}
+                            <div class="lightgallery lightgallery-product-images" data-images='{{ gallery|json_encode|e }}' data-options='{{ galleryOptions|json_encode(constant('JSON_FORCE_OBJECT')) }}'></div>
+                        {% endif %}
+                        {% if not j3.document.isPopup('options') %}
+                            {% if product_blocks.image %}
+                                <div class="product-blocks blocks-image">
+                                    {{ product_blocks.image|join }}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        {% if description and j3.document.isPopup('quickview') and j3.settings.get('quickviewDescription') and (j3.settings.get('quickviewDescriptionPosition') == 'image') %}
+                            <div class="description 2 {{ quickviewExpand }}">
+                                <div class="expand-block">
+                                    <div class="expand-content">
+                                        {{ description }}
+                                    </div>
+                                    {% if j3.settings.get('quickviewExpandButton') %}
+                                        <div class="block-expand-overlay"><a class="block-expand btn"></a></div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if tags and not j3.document.isPopup() and (j3.settings.get(stylePrefix ~ 'TagsPosition') == 'image') %}
+                            <div class="tags">
+                                <span class="tags-title">{{ text_tags }}</span>
+                                {% for tag in tags %}
+                                    <a href="{{ tag.href }}">{{ tag.tag }}</a>
+                                    {% if not loop.last %}<b>,</b>{% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <div class="product-right">
+                    <div id="product" class="product-details">
+
+
+                        {% if description and j3.document.isPopup('quickview') and j3.settings.get('quickviewDescription') and (j3.settings.get('quickviewDescriptionPosition') == 'top') %}
+                            {# <div class="description {{ quickviewExpand }}">
+                                <div class="expand-block">
+                                    <div class="expand-content">
+                                        {{ description }}
+                                    </div>
+                                    {% if j3.settings.get('quickviewExpandButton') %}
+                                        <div class="block-expand-overlay"><a class="block-expand btn"></a></div>
+                                    {% endif %}
+                                </div>
+                            </div>#}
+                        {% endif %}
+
+                        {% if not j3.document.isPopup('options') and j3.settings.get(stylePrefix ~ 'Stats') and (j3.settings.get(stylePrefix ~ 'StatsPosition') == 'default') %}
+                            <div class="product-stats 1">
+                                <ul class="list-unstyled">
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductStock')%}
+                                        <li class="product-stock {% if product_quantity > 0 %}in-stock{% else %}out-of-stock{% endif %}"><b>{{ j3.settings.get(stylePrefix ~ 'ProductStockText') }}:</b> <span>{{ stock }}</span></li>
+                                    {% endif %}
+                                    {% if manufacturer and j3.settings.get(stylePrefix ~ 'ProductManufacturer') and (j3.settings.get(stylePrefix ~ 'ProductManufacturerDisplay') == 'list') %}
+                                        <li class="product-manufacturer"><b>{{ j3.settings.get(stylePrefix ~ 'ProductManufacturerText') }}:</b> <a href="{{ manufacturers }}">{{ manufacturer }}</a></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductReward') and reward %}
+                                        <li class="product-reward"><b>{{ j3.settings.get(stylePrefix ~ 'ProductRewardText') }}:</b> <span>{{ reward }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductModel') and model %}
+                                        <li class="product-model"><b>{{ j3.settings.get(stylePrefix ~ 'ProductModelText') }}:</b> <span>{{ model }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductWeight') and product_weight %}
+                                        <li class="product-weight"><b>{{ j3.settings.get(stylePrefix ~ 'ProductWeightText') }}:</b> <span>{{ product_weight }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductDimension') and product_dimension %}
+                                        <li class="product-dimension"><b>{{ j3.settings.get(stylePrefix ~ 'ProductDimensionText') }}:</b> <span>{{ product_length }} x {{ product_width }} x {{ product_height }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductSKU') and product_sku %}
+                                        <li class="product-sku"><b>{{ j3.settings.get(stylePrefix ~ 'ProductSKUText') }}:</b> <span> {{ product_sku }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductUPC') and product_upc %}
+                                        <li class="product-upc"><b>{{ j3.settings.get(stylePrefix ~ 'ProductUPCText') }}:</b> <span>{{ product_upc }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductEAN') and product_ean %}
+                                        <li class="product-ean"><b>{{ j3.settings.get(stylePrefix ~ 'ProductEANText') }}:</b> <span>{{ product_ean }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductJAN') and product_jan %}
+                                        <li class="product-jan"><b>{{ j3.settings.get(stylePrefix ~ 'ProductJANText') }}:</b> <span>{{ product_jan }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductISBN') and product_isbn %}
+                                        <li class="product-isbn"><b>{{ j3.settings.get(stylePrefix ~ 'ProductISBNText') }}:</b> <span>{{ product_isbn }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductMPN') and product_mpn %}
+                                        <li class="product-mpn"><b>{{ j3.settings.get(stylePrefix ~ 'ProductMPNText') }}:</b> <span>{{ product_mpn }}</span></li>
+                                    {% endif %}
+                                    {% if j3.settings.get(stylePrefix ~ 'ProductLocation') and product_location %}
+                                        <li class="product-location"><b>{{ j3.settings.get(stylePrefix ~ 'ProductLocationText') }}:</b> <span>{{ product_location }}</span></li>
+                                    {% endif %}
+                                </ul>
+
+                                <span>11</span>
+
+                                {% if manufacturer and j3.settings.get(stylePrefix ~ 'ProductManufacturer') and (j3.settings.get(stylePrefix ~ 'ProductManufacturerDisplay') == 'image') %}
+                                    <div class="brand-image product-manufacturer desktop-visible">
+                                        <a href="{{ manufacturers }}" title="{{ manufacturer }}">
+                                            {% if manufacturer_image %}
+                                                <img  title="{{ manufacturer }}" src="{{ manufacturer_image }}" {% if manufacturer_image2x %}srcset="{{ manufacturer_image }} 1x, {{ manufacturer_image2x }} 2x"{% endif %} alt="{{ manufacturer }}" width="{{ j3.settings.get('image_dimensions_manufacturer_logo.width') }}" height="{{ j3.settings.get('image_dimensions_manufacturer_logo.height') }}"/>
+                                            {% endif %}
+                                            {#                                            <span>{{ manufacturer }}</span>#}
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if j3.settings.get(stylePrefix ~ 'CustomStats')%}
+                                    <div class="custom-stats">
+                                        {% if j3.settings.get(stylePrefix ~ 'ProductSold')%}
+                                            <div class="product-sold"><b>{{ j3.settings.getWithValue(stylePrefix ~ 'SoldText', products_sold) }}</b></div>
+                                        {% endif %}
+                                        {% if j3.settings.get(stylePrefix ~ 'ProductViews')%}
+                                            <div class="product-views"><b>{{ j3.settings.getWithValue(stylePrefix ~ 'ViewsText', product_views) }}</b></div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+
+
+                        {% if date_end and j3.settings.get(j3.document.isPopup() ? 'quickviewCountdown' : 'countdownStatus') %}
+                            <div class="countdown-wrapper">
+                                {% if j3.settings.get(stylePrefix ~ 'CountdownText') %}
+                                    <h5 class="countdown-title title">{{ j3.settings.get(stylePrefix ~ 'CountdownText') }}</h5>
+                                {% endif %}
+                                <div class="countdown" data-date="{{ date_end }}">
+                                    <div><i class="fa fa-spinner fa-spin"></i><span>{{ j3.settings.get('countdownDay') }}</span></div>
+                                    <div><i class="fa fa-spinner fa-spin"></i><span>{{ j3.settings.get('countdownHour') }}</span></div>
+                                    <div><i class="fa fa-spinner fa-spin"></i><span>{{ j3.settings.get('countdownMin') }}</span></div>
+                                    <div><i class="fa fa-spinner fa-spin"></i><span>{{ j3.settings.get('countdownSec') }}</span></div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if price and not j3.document.isPopup('options') %}
+                            <div class="product-price-group">
+                                <div class="detail-info">
+                                    {% if not j3.document.isPopup('options') and j3.settings.get(stylePrefix ~ 'Stats') and (j3.settings.get(stylePrefix ~ 'StatsPosition') == 'price') %}
+                                        <div class="product-stats 2">
+                                            <ul class="list-unstyled">
+                                                {% if j3.settings.get(stylePrefix ~ 'ProductStock')%}
+                                                    <li class="product-stock {% if product_quantity > 0 %}in-stock{% else %}out-of-stock{% endif %}"><b>{{ j3.settings.get(stylePrefix ~ 'ProductStockText') }}:</b> <span>{{ stock }}</span></li>
+                                                {% endif %}
+
+                                                {#                                            {% if manufacturer and j3.settings.get(stylePrefix ~ 'ProductManufacturer') and (j3.settings.get(stylePrefix ~ 'ProductManufacturerDisplay') == 'list') %}#}
+                                                {#                                                <li class="product-manufacturer"><b>{{ j3.settings.get(stylePrefix ~ 'ProductManufacturerText') }}:</b> <a href="{{ manufacturers }}">{{ manufacturer }}</a></li>#}
+                                                {#                                            {% endif %}#}
+
+                                                {#                                            {% if j3.settings.get(stylePrefix ~ 'ProductReward') and reward %}#}
+                                                {#                                                <li class="product-reward"><b>{{ j3.settings.get(stylePrefix ~ 'ProductRewardText') }}:</b> <span>{{ reward }}</span></li>#}
+                                                {#                                            {% endif %}#}
+                                                {#                                            {% if j3.settings.get(stylePrefix ~ 'ProductModel') and model %}#}
+                                                {#                                                <li class="product-model"><b>{{ j3.settings.get(stylePrefix ~ 'ProductModelText') }}:</b> <span>{{ model }}</span></li>#}
+                                                {#                                            {% endif %}#}
+                                                {#                                            {% if j3.settings.get(stylePrefix ~ 'ProductWeight') and product_weight %}#}
+                                                {#                                                <li class="product-weight"><b>{{ j3.settings.get(stylePrefix ~ 'ProductWeightText') }}:</b> <span>{{ product_weight }}</span></li>#}
+                                                {#                                            {% endif %}#}
+                                                {#                                            {% if j3.settings.get(stylePrefix ~ 'ProductDimension') and product_dimension %}#}
+                                                {#                                                <li class="product-dimension"><b>{{ j3.settings.get(stylePrefix ~ 'ProductDimensionText') }}:</b> <span>{{ product_length }} x {{ product_width }} x {{ product_height }}</span></li>#}
+                                                {#                                            {% endif %}#}
+                                                {% if j3.settings.get(stylePrefix ~ 'ProductSKU') and product_sku %}
+                                                    <li class="product-sku"><b>{{ j3.settings.get(stylePrefix ~ 'ProductSKUText') }}:</b> <span> {{ product_sku }}</span></li>
+                                                {% endif %}
+                                                {#                                            {% if j3.settings.get(stylePrefix ~ 'ProductUPC') and product_upc %}#}
+                                                {#                                                <li class="product-upc"><b>{{ j3.settings.get(stylePrefix ~ 'ProductUPCText') }}:</b> <span>{{ product_upc }}</span></li>#}
+                                                {#                                            {% endif %}#}
+                                                {#                                            {% if j3.settings.get(stylePrefix ~ 'ProductEAN') and product_ean %}#}
+                                                {#                                                <li class="product-ean"><b>{{ j3.settings.get(stylePrefix ~ 'ProductEANText') }}:</b> <span>{{ product_ean }}</span></li>#}
+                                                {#                                            {% endif %}#}
+                                                {#                                            {% if j3.settings.get(stylePrefix ~ 'ProductJAN') and product_jan %}#}
+                                                {#                                                <li class="product-jan"><b>{{ j3.settings.get(stylePrefix ~ 'ProductJANText') }}:</b> <span>{{ product_jan }}</span></li>#}
+                                                {#                                            {% endif %}#}
+                                                {#                                            {% if j3.settings.get(stylePrefix ~ 'ProductISBN') and product_isbn %}#}
+                                                {#                                                <li class="product-isbn"><b>{{ j3.settings.get(stylePrefix ~ 'ProductISBNText') }}:</b> <span>{{ product_isbn }}</span></li>#}
+                                                {#                                            {% endif %}#}
+                                                {% if j3.settings.get(stylePrefix ~ 'ProductMPN') and product_mpn %}
+                                                    <li class="product-mpn"><b>{{ j3.settings.get(stylePrefix ~ 'ProductMPNText') }}:</b> <span>{{ product_mpn }}</span></li>
+                                                {% endif %}
+                                                {#                                            {% if j3.settings.get(stylePrefix ~ 'ProductLocation') and product_location %}#}
+                                                {#                                                <li class="product-location"><b>{{ j3.settings.get(stylePrefix ~ 'ProductLocationText') }}:</b> <span>{{ product_location }}</span></li>#}
+                                                {#                                            {% endif %}#}
+                                            </ul>
+
+
+                                            {% if manufacturer and j3.settings.get(stylePrefix ~ 'ProductManufacturer') and (j3.settings.get(stylePrefix ~ 'ProductManufacturerDisplay') == 'image') %}
+                                                <div class="brand-image product-manufacturer mobile-visible">
+                                                    <a href="{{ manufacturers }}">
+                                                        {% if manufacturer_image %}
+                                                            <img src="{{ manufacturer_image }}" {% if manufacturer_image2x %}srcset="{{ manufacturer_image }} 1x, {{ manufacturer_image2x }} 2x"{% endif %} alt="{{ manufacturer }}" width="{{ j3.settings.get('image_dimensions_manufacturer_logo.width') }}" height="{{ j3.settings.get('image_dimensions_manufacturer_logo.height') }}"/>
+                                                        {% endif %}
+                                                        {#                                            <span>{{ manufacturer }}</span>#}
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+
+                                            {% if j3.settings.get(stylePrefix ~ 'CustomStats')%}
+                                                <div class="custom-stats">
+                                                    {% if j3.settings.get(stylePrefix ~ 'ProductSold') %}
+                                                        <div class="product-sold">
+                                                            <b>{{ j3.settings.getWithValue(stylePrefix ~ 'SoldText', products_sold) }}</b>
+                                                        </div>
+                                                    {% endif %}
+                                                    {% if j3.settings.get(stylePrefix ~ 'ProductViews')%}
+                                                        <div class="product-views">
+                                                            <b>{{ j3.settings.getWithValue(stylePrefix ~ 'ViewsText', product_views) }}</b>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+
+                                        </div>
+
+                                    {% endif %}
+                                </div>
+
+                                <span class="delivery-product">
+                                    <a target="_blank" href="/dostavka-ta-oplata_ua">{{ delivery_info }}</a>
+                                </span>
+
+
+                                <div class="price-brand-row">
+
+                                    <div class="price-wrapper  {% if special %} price-wrapper-sale {% endif %}">
+                                        <div class="price-group">
+                                            {% if not special %}
+                                                <div class="product-price">{{ price }}</div>
+                                            {% else %}
+                                                <div class="product-price-new">{{ special }}</div>
+                                                <div class="product-price-old">{{ price }}</div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="usdt">
+                                            <span class="usdt_value">{{ usdt_price }}</span>
+                                            <span class="usdt_name">USDT</span>
+                                            <span class="usdt_info">?
+                                                <span class="usdt_info_item">
+                                                    <span class="usdt_info_item_text">{{ usdt_info }}</span>
+
+                                                </span>
+                                            </span>
+                                        </div>
+
+                                        {% if tax %}
+                                            <div class="product-tax">{{ text_tax }} {{ tax }}</div>
+                                        {% endif %}
+                                        {% if points %}
+                                            <div class="product-points">{{ text_points }} {{ points }}</div>
+                                        {% endif %}
+
+                                        {% if discounts %}
+                                            <div class="discounts">
+                                                {% for discount in discounts %}
+                                                    <div class="product-discount">{{ discount.quantity }}{{ text_discount }}{{ discount.price }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if manufacturer and j3.settings.get(stylePrefix ~ 'ProductManufacturer') and (j3.settings.get(stylePrefix ~ 'ProductManufacturerDisplay') == 'image') %}
+                                        <div class="brand-image product-manufacturer desktop-visible" >
+                                            <a href="{{ manufacturers }}" title="{{ manufacturer }}">
+                                                {% if manufacturer_image2x %}
+                                                    <img src="{{ manufacturer_image2x }}" alt="{{ manufacturer }}"/>
+                                                {% endif %}
+                                                {#                                            <span>{{ manufacturer }}</span>#}
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if options %}
+                            <div class="product-options">
+                                <h3 class="options-title title">{{ text_option }}</h3>
+                                {% for option in options %}
+                                    {% if option.type == 'select' %}
+                                        <div class="form-group{% if option.required %} required {% endif %} product-option-{{ option.type }} {% if j3.settings.get(stylePrefix ~ 'OptionsPushSelect') %}push-option{% endif %}">
+                                            <label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                            <select name="option[{{ option.product_option_id }}]" id="input-option{{ option.product_option_id }}" class="form-control">
+                                                <option value="">{{ text_select }}</option>
+                                                {% for option_value in option.product_option_value %}
+                                                    <option value="{{ option_value.product_option_value_id }}">{{ option_value.name }}
+                                                        {% if option_value.price and optionPrice %}
+                                                            ({{ option_value.price_prefix }}{{ option_value.price }})
+                                                        {% endif %} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    {% endif %}
+                                    {% if option.type == 'radio' %}
+                                        <div class="form-group{% if option.required %} required {% endif %} product-option-{{ option.type }} {% if j3.settings.get(stylePrefix ~ 'OptionsPushRadio') %}push-option{% endif %}">
+                                            <label class="control-label">{{ option.name }}</label>
+                                            <div id="input-option{{ option.product_option_id }}"> {% for option_value in option.product_option_value %}
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" name="option[{{ option.product_option_id }}]" value="{{ option_value.product_option_value_id }}" />
+                                                            {% if option_value.image %} <img width="{{ j3.settings.get('image_dimensions_options.width') }}" height="{{ j3.settings.get('image_dimensions_options.height') }}" src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price and optionPrice %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" data-toggle="tooltip" data-tooltip-class="push-tooltip" data-placement="{{ j3.settings.get(stylePrefix ~ 'PushTooltipPosition') }}" title="{{ option_value.name }} {% if option_value.price and optionPrice %} ({{ option_value.price_prefix }}{{ option_value.price }}) {% endif %}"/> {% endif %}
+                                                            <span class="option-value">
+                      {{ option_value.name }}
+                                                                {% if option_value.price and optionPrice %}
+                                                                    <span class="option-price">
+                          ({{ option_value.price_prefix }}{{ option_value.price }})
+                        </span>
+                                                                {% endif %}
+                    </span>
+                                                        </label>
+                                                    </div>
+                                                {% endfor %} </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if option.type == 'checkbox' %}
+                                        <div class="form-group{% if option.required %} required {% endif %} product-option-{{ option.type }} {% if j3.settings.get(stylePrefix ~ 'OptionsPushCheckbox') %}push-option{% endif %}">
+                                            <label class="control-label">{{ option.name }}</label>
+                                            <div id="input-option{{ option.product_option_id }}"> {% for option_value in option.product_option_value %}
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="option[{{ option.product_option_id }}][]" value="{{ option_value.product_option_value_id }}" />
+                                                            {% if option_value.image %} <img width="{{ j3.settings.get('image_dimensions_options.width') }}" height="{{ j3.settings.get('image_dimensions_options.height') }}" src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price and optionPrice %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" data-toggle="tooltip" data-tooltip-class="push-tooltip" data-placement="{{ j3.settings.get(stylePrefix ~ 'PushTooltipPosition') }}" title="{{ option_value.name }} {% if option_value.price and optionPrice %} ({{ option_value.price_prefix }}{{ option_value.price }}) {% endif %}"/> {% endif %}
+                                                            <span class="option-value">
+                      {{ option_value.name }}
+                                                                {% if option_value.price and optionPrice %}
+                                                                    <span class="option-price">({{ option_value.price_prefix }}{{ option_value.price }})</span>
+                                                                {% endif %}
+                    </span>
+                                                        </label>
+                                                    </div>
+                                                {% endfor %} </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if option.type == 'text' %}
+                                        <div class="form-group{% if option.required %} required {% endif %} product-option-{{ option.type }}">
+                                            <label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                            <input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="form-control" />
+                                        </div>
+                                    {% endif %}
+                                    {% if option.type == 'textarea' %}
+                                        <div class="form-group{% if option.required %} required {% endif %} product-option-{{ option.type }}">
+                                            <label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                            <textarea name="option[{{ option.product_option_id }}]" rows="5" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="form-control">{{ option.value }}</textarea>
+                                        </div>
+                                    {% endif %}
+                                    {% if option.type == 'file' %}
+                                        <div class="form-group{% if option.required %} required {% endif %} product-option-{{ option.type }}">
+                                            <label class="control-label">{{ option.name }}</label>
+                                            <button type="button" id="button-upload{{ option.product_option_id }}" data-loading-text="{{ text_loading }}" class="btn btn-default btn-block"><i class="fa fa-upload"></i> {{ button_upload }}</button>
+                                            <input type="hidden" name="option[{{ option.product_option_id }}]" value="" id="input-option{{ option.product_option_id }}" />
+                                        </div>
+                                    {% endif %}
+                                    {% if option.type == 'date' %}
+                                        <div class="form-group{% if option.required %} required {% endif %} product-option-{{ option.type }}">
+                                            <label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                            <div class="input-group date" data-picker-class="product-options pp-date-time-picker">
+                                                <input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" data-date-format="YYYY-MM-DD" id="input-option{{ option.product_option_id }}" class="form-control" />
+                                                <span class="input-group-btn">
+                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                </span></div>
+                                        </div>
+                                    {% endif %}
+                                    {% if option.type == 'datetime' %}
+                                        <div class="form-group{% if option.required %} required {% endif %} product-option-{{ option.type }}">
+                                            <label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                            <div class="input-group datetime" data-picker-class="product-options pp-date-time-picker">
+                                                <input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" data-date-format="YYYY-MM-DD HH:mm" id="input-option{{ option.product_option_id }}" class="form-control" />
+                                                <span class="input-group-btn">
+                <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                </span></div>
+                                        </div>
+                                    {% endif %}
+                                    {% if option.type == 'time' %}
+                                        <div class="form-group{% if option.required %} required {% endif %} product-option-{{ option.type }}">
+                                            <label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                            <div class="input-group time" data-picker-class="product-options pp-date-time-picker">
+                                                <input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" data-date-format="HH:mm" id="input-option{{ option.product_option_id }}" class="form-control" />
+                                                <span class="input-group-btn">
+                <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                </span></div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if recurrings %}
+                            <h3 class="title recurring-title">{{ text_payment_recurring }}</h3>
+                            <div class="form-group required">
+                                <select name="recurring_id" class="form-control">
+                                    <option value="">{{ text_select }}</option>
+                                    {% for recurring in recurrings %}
+                                        <option value="{{ recurring.recurring_id }}">{{ recurring.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="help-block" id="recurring-description"></div>
+                            </div>
+                        {% endif %}
+
+
+
+
+
+                        {% if j3.settings.get('catalogCartStatus') or j3.settings.get('catalogWishlistStatus') or j3.settings.get('catalogCompareStatus') or (product_extra_buttons and not j3.document.isPopup()) %}
+                            <div class="button-group-page">
+                                <div class="buttons-wrapper">
+
+
+                                    <div class="stepper-group cart-group">
+                                        {% if product_quantity > 0 %}
+
+                                            {% if j3.settings.get('catalogCartStatus') %}
+                                                <div class="stepper">
+                                                    <label class="control-label"
+                                                           for="product-quantity">{{ entry_qty }}</label>
+                                                    <input id="product-quantity" type="text" name="quantity"
+                                                           value="{{ journal3_product_quantity > 0 ? journal3_product_quantity : minimum }}"
+                                                           data-minimum="{{ minimum }}" class="form-control"/>
+                                                    <input id="product-id" type="hidden" name="product_id"
+                                                           value="{{ product_id }}"/>
+                                                    <span>
+                                                  <i class="fa fa-angle-up"></i>
+                                                  <i class="fa fa-angle-down"></i>
+                                                </span>
+                                                </div>
+
+                                                <a id="button-cart" data-loading-text="<span class='btn-text'>{{ button_cart }}</span>" class="btn-cart" {% if (j3.settings.get(stylePrefix ~ 'CartDisplay') == "icon") and (j3.settings.get(stylePrefix ~ 'CartTooltipStatus')) %} data-toggle="tooltip" data-tooltip-class="pp-cart-tooltip" data-placement="{{ j3.settings.get(stylePrefix ~ 'CartTooltipPosition') }}" title="{{ button_cart }}" {% endif %}>
+                                                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.18333 5.00012H27.54C29.8367 5.00012 31.495 7.11679 30.865 9.24679L28.1083 18.5801C27.6833 20.0135 26.3267 21.0001 24.7833 21.0001H9.52C7.975 21.0001 6.61667 20.0118 6.19333 18.5801L2.18333 5.00012ZM2.18333 5.00012L1 1.00012M23.5 31.0001C24.163 31.0001 24.7989 30.7367 25.2678 30.2679C25.7366 29.799 26 29.1632 26 28.5001C26 27.8371 25.7366 27.2012 25.2678 26.7324C24.7989 26.2635 24.163 26.0001 23.5 26.0001C22.837 26.0001 22.2011 26.2635 21.7322 26.7324C21.2634 27.2012 21 27.8371 21 28.5001C21 29.1632 21.2634 29.799 21.7322 30.2679C22.2011 30.7367 22.837 31.0001 23.5 31.0001ZM10.1667 31.0001C10.8297 31.0001 11.4656 30.7367 11.9344 30.2679C12.4033 29.799 12.6667 29.1632 12.6667 28.5001C12.6667 27.8371 12.4033 27.2012 11.9344 26.7324C11.4656 26.2635 10.8297 26.0001 10.1667 26.0001C9.50363 26.0001 8.86774 26.2635 8.3989 26.7324C7.93006 27.2012 7.66667 27.8371 7.66667 28.5001C7.66667 29.1632 7.93006 29.799 8.3989 30.2679C8.86774 30.7367 9.50363 31.0001 10.1667 31.0001Z" stroke="#E9EFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                        {{ button_cart }}
+                                                </a>
+
+                                                <div class="extra-group extra-group-m">
+                                                    <a class="btn btn-extra btn-extra-46 btn-1-extra btn-1-click" data-quick-buy="" data-loading-text="<span class='btn-text'>{{ text_oneclick }}</span>">
+                                                        <span class="btn-text">{{ text_oneclick }}</span>
+                                                    </a>
+
+                                                    <a class="btn-wishlist-m compare-like" data-toggle="tooltip" data-tooltip-class="extra-tooltip pp-extra-tooltip pp-extra-tooltip-m" data-placement="top" data-original-title="{{ text_like }}" onclick="parent.wishlist.add({{ product_id }});">
+                                                        <span class="bg-btn">
+                                                            <svg width="25" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M18.287 0C15.8056 0 13.6667 1.1794 12.5 3.1331C11.3333 1.1794 9.19444 0 6.71296 0C4.93323 0.00214407 3.22701 0.710089 1.96855 1.96855C0.710089 3.22701 0.00214407 4.93323 0 6.71296C0 10.022 2.08333 13.4803 6.18056 16.9896C8.07234 18.5994 10.115 20.0231 12.2801 21.2407C12.3477 21.2772 12.4232 21.2963 12.5 21.2963C12.5768 21.2963 12.6523 21.2772 12.7199 21.2407C14.885 20.0231 16.9277 18.5994 18.8194 16.9896C22.9167 13.4803 25 10.022 25 6.71296C24.9979 4.93323 24.2899 3.22701 23.0315 1.96855C21.773 0.710089 20.0668 0.00214407 18.287 0ZM12.5 20.3032C10.8796 19.3819 0.925926 13.434 0.925926 6.71296C0.927764 5.17871 1.53806 3.70782 2.62294 2.62294C3.70782 1.53806 5.17871 0.927764 6.71296 0.925926C9.15625 0.925926 11.2095 2.23495 12.0718 4.34144C12.1066 4.42635 12.166 4.49897 12.2422 4.55009C12.3185 4.6012 12.4082 4.62849 12.5 4.62849C12.5918 4.62849 12.6815 4.6012 12.7578 4.55009C12.834 4.49897 12.8934 4.42635 12.9282 4.34144C13.7905 2.23495 15.8438 0.925926 18.287 0.925926C19.8213 0.927764 21.2922 1.53806 22.3771 2.62294C23.4619 3.70782 24.0722 5.17871 24.0741 6.71296C24.0741 13.4259 14.1204 19.3819 12.5 20.3032Z" fill="url(#paint0_linear_541_1222)"/>
+<defs>
+<linearGradient id="paint0_linear_541_1222" x1="9.31323e-08" y1="11.0918" x2="25" y2="11.0918" gradientUnits="userSpaceOnUse">
+<stop stop-color="#1E448A"/>
+<stop offset="1" stop-color="#BE5663"/>
+</linearGradient>
+</defs>
+</svg>
+
+                                                        </span>
+
+
+                                                    </a>
+
+                                                    <a class="btn-compare-m compare-like" data-toggle="tooltip" data-tooltip-class="extra-tooltip pp-extra-tooltip pp-extra-tooltip-m" data-placement="top" data-original-title="{{ text_compare2 }}" onclick="parent.compare.add({{ product_id }});">
+                                                        <span class="bg-btn">
+                                                            <svg width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.2597 13.8504H0.694444C0.497222 13.8504 0.331944 13.7842 0.198611 13.6518C0.0662035 13.5194 0 13.3541 0 13.1559C0 12.9587 0.0662035 12.7934 0.198611 12.6601C0.331944 12.5277 0.497222 12.4615 0.694444 12.4615H10.2597L6.45417 8.65595C6.32361 8.52632 6.25417 8.36799 6.24583 8.18095C6.23657 7.99576 6.30602 7.82632 6.45417 7.67262C6.60694 7.51984 6.77176 7.44345 6.94861 7.44345C7.12546 7.44345 7.29074 7.51984 7.44444 7.67262L12.1417 12.3712C12.263 12.4916 12.3481 12.6152 12.3972 12.7421C12.4463 12.8689 12.4708 13.0069 12.4708 13.1559C12.4708 13.306 12.4463 13.4439 12.3972 13.5698C12.3481 13.6967 12.263 13.8203 12.1417 13.9407L7.43611 18.6476C7.30093 18.7828 7.14167 18.8536 6.95833 18.8601C6.775 18.8666 6.60648 18.793 6.45278 18.6393C6.30463 18.4865 6.22963 18.3226 6.22778 18.1476C6.225 17.9735 6.3 17.8097 6.45278 17.656L10.2597 13.8504ZM14.7403 6.399L18.5458 10.2046C18.6764 10.3342 18.7458 10.4921 18.7542 10.6782C18.7634 10.8643 18.694 11.0342 18.5458 11.1879C18.3931 11.3407 18.2282 11.4171 18.0514 11.4171C17.8745 11.4171 17.7093 11.3407 17.5556 11.1879L12.8583 6.48928C12.737 6.36891 12.6519 6.2453 12.6028 6.11845C12.5537 5.9916 12.5292 5.85363 12.5292 5.70456C12.5292 5.55456 12.5537 5.4166 12.6028 5.29067C12.6519 5.16382 12.737 5.03974 12.8583 4.91845L17.5639 0.212893C17.6991 0.077708 17.8583 0.00687487 18.0417 0.000393385C18.225 -0.0060881 18.3935 0.0675229 18.5472 0.221227C18.6954 0.374004 18.7704 0.53743 18.7722 0.711504C18.775 0.886504 18.7 1.05039 18.5472 1.20317L14.7417 5.00873H24.3056C24.5028 5.00873 24.6681 5.07539 24.8014 5.20873C24.9338 5.34113 25 5.50641 25 5.70456C25 5.90178 24.9338 6.0666 24.8014 6.199C24.6681 6.33234 24.5028 6.399 24.3056 6.399H14.7403Z" fill="url(#paint0_linear_541_1225)"/>
+<defs>
+<linearGradient id="paint0_linear_541_1225" x1="9.31323e-08" y1="9.82318" x2="25" y2="9.82318" gradientUnits="userSpaceOnUse">
+<stop stop-color="#1E448A"/>
+<stop offset="1" stop-color="#BE5663"/>
+</linearGradient>
+</defs>
+</svg>
+
+                                                        </span>
+
+                                                    </a>
+
+                                                    <a class="compare-like" data-toggle="tooltip" data-tooltip-class="extra-tooltip pp-extra-tooltip pp-extra-tooltip-m" data-placement="top" title="" href="javascript:open_popup(22)" data-product_id="{{ product_id }}" data-loading-text="<span class='btn-text'>{{ text_getinfo }}</span>" data-original-title="{{text_getinfo}}">
+                                                        <span class="bg-btn">
+                                                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12.5 25C5.58824 25 0 19.4118 0 12.5C0 5.58824 5.58824 0 12.5 0C19.4118 0 25 5.58824 25 12.5C25 19.4118 19.4118 25 12.5 25ZM12.5 1.47059C6.39706 1.47059 1.47059 6.39706 1.47059 12.5C1.47059 18.6029 6.39706 23.5294 12.5 23.5294C18.6029 23.5294 23.5294 18.6029 23.5294 12.5C23.5294 6.39706 18.6029 1.47059 12.5 1.47059Z" fill="url(#paint0_linear_541_1228)"/>
+<path d="M8.67693 8.52934C8.89752 7.9411 9.11811 7.49993 9.55928 7.13228C9.92693 6.76463 10.3681 6.47052 10.9563 6.24993C11.5446 6.02934 12.1328 5.95581 12.7946 5.95581C13.3093 5.95581 13.824 6.02934 14.2652 6.1764C14.7063 6.32346 15.1475 6.54405 15.5152 6.83816C15.8828 7.13228 16.1769 7.49993 16.324 7.9411C16.5446 8.38228 16.6181 8.89699 16.6181 9.41169C16.6181 10.147 16.471 10.7352 16.1769 11.2499C15.8828 11.7646 15.4416 12.2058 15.0005 12.7205L14.0446 13.6764C13.824 13.897 13.6034 14.1176 13.5299 14.3382C13.3828 14.5588 13.3093 14.8529 13.3093 15.147C13.2358 15.4411 13.2358 15.6617 13.2358 16.2499H12.0593C12.0593 15.6617 12.0593 15.4411 12.1328 14.9999C12.2063 14.6323 12.3534 14.2646 12.5005 13.897C12.6475 13.6029 12.8681 13.3088 13.1622 13.0146C13.4563 12.7205 13.824 12.4264 14.1916 11.9852C14.5593 11.6176 14.8534 11.2499 15.074 10.8823C15.2946 10.5146 15.4416 9.99993 15.4416 9.55875C15.4416 9.1911 15.3681 8.82346 15.221 8.52934C15.074 8.23522 14.8534 7.9411 14.6328 7.72052C14.4122 7.49993 14.1181 7.35287 13.7505 7.20581C13.3828 7.05875 13.0887 6.98522 12.721 6.98522C12.2063 6.98522 11.7652 7.05875 11.3975 7.27934C11.0299 7.4264 10.6622 7.72052 10.4416 8.01463C10.221 8.30875 10.0005 8.6764 9.8534 9.11757C9.70634 9.55875 9.55928 9.77934 9.55928 10.294H8.38281C8.38281 9.63228 8.45634 9.11758 8.67693 8.52934ZM13.2358 17.647V19.1176H11.7652V17.647H13.2358Z" fill="url(#paint1_linear_541_1228)"/>
+<defs>
+<linearGradient id="paint0_linear_541_1228" x1="9.31323e-08" y1="13.0208" x2="25" y2="13.0208" gradientUnits="userSpaceOnUse">
+<stop stop-color="#1E448A"/>
+<stop offset="1" stop-color="#BE5663"/>
+</linearGradient>
+<linearGradient id="paint1_linear_541_1228" x1="8.38281" y1="12.8109" x2="16.6181" y2="12.8109" gradientUnits="userSpaceOnUse">
+<stop stop-color="#1E448A"/>
+<stop offset="1" stop-color="#BE5663"/>
+</linearGradient>
+</defs>
+</svg>
+
+                                                        </span>
+                                                    </a>
+
+                                                </div>
+
+                                            {% endif %}
+
+                                            {#% if product_extra_buttons and not j3.document.isPopup() %}
+                                                <div class="extra-group">
+                                                    {% for id, extra_button in product_extra_buttons %}
+                                                        <a class="btn btn-extra btn-extra-{{ id }} btn-{{ loop.index }}-extra" {% if (j3.settings.get(stylePrefix ~ 'Extra' ~ loop.index ~ 'ButtonDisplay') == "icon") and (j3.settings.get(stylePrefix ~ 'ExtraTooltipStatus')) %} data-toggle="tooltip" data-tooltip-class="extra-tooltip pp-extra-tooltip pp-extra-tooltip-m" data-placement="{{ j3.settings.get(stylePrefix ~ 'ExtraTooltipPosition') }}" title="{{ extra_button.label }}" {% endif %} {% if extra_button.action == 'quickbuy' %}data-quick-buy{% endif %} {% if extra_button.action == 'link' and extra_button.link.href %}href="{{ extra_button.link.href }}" {{ j3.linkAttrs(extra_button.link) }} data-product_id="{{ product_id }}"{% endif %} data-loading-text="<span class='btn-text'>{{ extra_button.label }}</span>"><span class="btn-text">{{ extra_button.label }}</span></a>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %#}
+
+                                        {% else %}
+
+
+                                            <div>
+                                                {% if preorder and preorder.stock_status %}
+                                                    <button{% if preorder['view']['tooltip'] is defined %} data-toggle="tooltip" title="{{ preorder['view']['tooltip'] }}"{% endif %} id="button-preorder"{% if preorder.quantity > 0 %} style="display: none;"{% endif %} type="button"{% if preorder.stock_status == 2 %} onclick="addPreOrder('1', '{{ product_id }}');"{% endif %} class="{{ preorder.class }}">{{ preorder['view']['text'] }}</button>
+                                                {% endif %}
+                                            </div>
+                                        {% endif  %}
+
+                                    </div>
+
+                                    {# % if j3.settings.get('catalogWishlistStatus') or j3.settings.get('catalogCompareStatus') or j3.document.isPopup('quickview') %}
+                                        <div class="wishlist-compare">
+                                            {% if not j3.document.isPopup('options') %}
+                                                {% if j3.settings.get('catalogWishlistStatus') %}
+                                                    <a class="btn btn-wishlist" {% if (j3.settings.get(stylePrefix ~ 'WishlistDisplay') == "icon") and (j3.settings.get(stylePrefix ~ 'WishlistTooltipStatus')) %} data-toggle="tooltip" data-tooltip-class="pp-wishlist-tooltip" data-placement="{{ j3.settings.get(stylePrefix ~ 'WishlistTooltipPosition') }}" title="{{ button_wishlist }}" {% endif %} onclick="parent.wishlist.add({{ product_id }});"><span class="btn-text">{{ button_wishlist }}</span></a>
+                                                {% endif %}
+
+                                                {% if j3.settings.get('catalogCompareStatus') %}
+                                                    <a class="btn btn-compare" {% if (j3.settings.get(stylePrefix ~ 'CompareDisplay') == "icon") and (j3.settings.get(stylePrefix ~ 'CompareTooltipStatus')) %} data-toggle="tooltip" data-tooltip-class="pp-compare-tooltip" data-placement="{{ j3.settings.get(stylePrefix ~ 'CompareTooltipPosition') }}" title="{{ button_compare }}" {% endif %} onclick="parent.compare.add({{ product_id }});"><span class="btn-text">{{ button_compare }}</span></a>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if j3.document.isPopup('quickview') %}
+                                                <a class="btn btn-more-details" href="{{ view_more_url }}" target="_top" {% if (j3.settings.get(stylePrefix ~ 'MoreDetailsDisplay') == "icon") and (j3.settings.get(stylePrefix ~ 'MoreDetailsTooltipStatus')) %} data-toggle="tooltip" data-tooltip-class="more-details-tooltip" data-placement="{{ j3.settings.get(stylePrefix ~ 'MoreDetailsTooltipPosition') }}" title="{{ j3.settings.get('quickviewExtraText') }}" {% endif %}><span class="btn-text">{{ j3.settings.get('quickviewExtraText') }}</span></a>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %#}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {#                        #}
+                        {#                        <div class="usdt_rate" style="display: none">#}
+                        {#                            <div class="usdt_rate_item">#}
+                        {#                                <img src="/image/usdt-logo.svg" alt="USDT logo">#}
+                        {#                                <div class="usdt_content">#}
+
+                        {#                                    <span>USDt</span>#}
+                        {#                                    <span>{{ usdt_rate }} UAH</span>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+
+                        {% if minimum > 1 %}
+                            <div class="minimum alert alert-info"><i class="fa fa-info-circle"></i> {{ text_minimum }}</div>
+                        {% endif %}
+
+                        {% if not j3.document.isPopup('options') %}
+                            {% if product_blocks.details %}
+                                {{ product_blocks.details|join }}
+                            {% endif %}
+                        {% endif %}
+
+
+<div class="swiper-container-squares-arrows">
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+
+    <div class="swiper-container-squares">
+        <div class="squares-wrapper swiper-wrapper">
+
+            <a href="javascript:open_popup(365)"  class="square-item swiper-slide">
+
+                <div class="square-short-info" >
+                    <span class="sqaure_info">
+                        <img src="/image/icons/info_gradient.svg">
+                    </span>
+                </div>
+
+                <img src="/image/icons/off_dist.svg" alt="{{ text_off_dist }}">
+                <span>{{ text_off_dist }}</span>
+            </a>
+
+            <a href="javascript:open_popup(366)" class="square-item swiper-slide">
+                <div class="square-short-info" >
+                    <span class="sqaure_info">
+                        <img src="/image/icons/info_gradient.svg">
+                    </span>
+                </div>
+                <img src="/image/icons/1day_send.svg" alt="{{ text_FreeDelivery }}">
+                <span>{{ text_FreeDelivery }}</span>
+            </a>
+
+            <a href="javascript:open_popup(367)" class="square-item swiper-slide">
+                <div class="square-short-info" >
+                    <span class="sqaure_info">
+                        <img src="/image/icons/info_gradient.svg">
+                    </span>
+                </div>
+                <img src="/image/icons/credit-card.png" alt="{{ text_paument_methods }}">
+                <span>{{ text_paument_methods }}</span>
+            </a>
+
+            <a href="javascript:open_popup(368)" class="square-item swiper-slide">
+                <div class="square-short-info" >
+                    <span href="javascript:open_popup(368)" class="sqaure_info">
+                        <img src="/image/icons/info_gradient.svg">
+                    </span>
+                </div>
+                <img src="/image/icons/delivery_services.svg" alt="{{ text_delivery_service }}">
+                <span>{{ text_delivery_service }}</span>
+            </a>
+
+            <a href="javascript:open_popup(369)" class="square-item swiper-slide">
+                <div class="square-short-info" >
+                    <span  class="sqaure_info">
+                        <img src="/image/icons/info_gradient.svg">
+                    </span>
+                </div>
+                <img src="/image/icons/wallet.png" alt="{{text_cryptopay}}">
+                <span>{{text_cryptopay}}</span>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+
+                        <script>
+
+                            var swiper = new Swiper('.swiper-container-squares', {
+                                slidesPerView: 4,
+                                spaceBetween: 10,
+                                loop: true,
+                                navigation: {
+                                    nextEl: ".swiper-container-squares-arrows .swiper-button-next",
+                                    prevEl: ".swiper-container-squares-arrows .swiper-button-prev",
+                                },
+                                autoplay: {
+                                    delay: 3500,
+                                    disableOnInteraction: true,
+                                    pauseOnMouseEnter: true,
+                                },
+                                breakpoints: {
+                                    601: {
+                                        slidesPerView: 3,
+                                    },
+                                    450: {
+                                        slidesPerView: 2,
+                                    },
+                                }
+                            });
+                        </script>
+
+
+
+                        {% if not j3.document.isPopup('options') %}
+                            <div class="title page-title">{{ heading_title }}</div>
+                            {% if product_blocks.top %}
+                                <div class="product-blocks blocks-top">
+
+
+
+
+                                    {{ product_blocks.top|join }}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        <div class="product-blocks blocks-top table-responsive attribute-table-m">
+                            {% if main_attributes|length > 0 %}
+                                <div class="main_attributes_title">Характеристики</div>
+                                <div class="table-attr">
+
+                                    {% for main_attribute in main_attributes %}
+
+
+                                        <p class="product__details--info__meta--list ">
+                                            <strong><span>{{ main_attribute.name }}</span></strong>
+                                            <span class="attr_value" style="background: #fff !important;">{{ main_attribute.text|replace({", ": "<br>"}) }}</span>
+                                        </p>
+                                    {% endfor %}
+
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% if not j3.document.isPopup('options') %}
+                {% if product_blocks.bottom %}
+                <div class="product-blocks blocks-bottom">
+                    {{ product_blocks.bottom|join }}
+                    {% if review_status and not j3.document.isPopup() %}
+                        <div class="rating rating-page">
+                            <div class="rating-stars">
+                                {% for i in 1..5 %}
+                                    {% if rating < i %}
+                                        <span class="fa fa-stack">
+                                              <i class="fa fa-star-o fa-stack-1x"></i>
+                                            </span>{% else %}
+                                        <span class="fa fa-stack">
+                                              <i class="fa fa-star fa-stack-1x"></i>
+                                              <i class="fa fa-star-o fa-stack-1x"></i>
+                                            </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="review-links">
+                                <a>{{ reviews }}</a>
+                                <b>{{ j3.settings.get(stylePrefix ~ 'RatingSeparator') }}</b>
+                                <a>{{ text_write }}</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% endif %}
+                    {% endif %}
+                    {% if tags and not j3.document.isPopup() and (j3.settings.get(stylePrefix ~ 'TagsPosition') == 'details') %}
+                        <div class="tags">
+                            <span class="tags-title">{{ text_tags }}</span>
+                            {% for tag in tags %}
+                                <a href="{{ tag.href }}">{{ tag.tag }}</a>
+                                {% if not loop.last %}<b>,</b>{% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+
+
+            {% if description and j3.document.isPopup('quickview') and j3.settings.get('quickviewDescription') and (j3.settings.get('quickviewDescriptionPosition') == 'default') %}
+                <div class="description {{ quickviewExpand }}">
+                    <div class="expand-block">
+                        <div class="expand-content">
+                            {{ description }}
+                        </div>
+                        {% if j3.settings.get('quickviewExpandButton') %}
+                            <div class="block-expand-overlay"><a class="block-expand btn"></a></div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if not j3.document.isPopup('options') %}
+                {% if product_blocks.default %}
+                    <div class="product-blocks blocks-default">
+                        {{ product_blocks.default|join }}
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if tags and not j3.document.isPopup() and (j3.settings.get(stylePrefix ~ 'TagsPosition') == 'default') %}
+                <div class="tags">
+                    <span class="tags-title">{{ text_tags }}</span>
+                    {% for tag in tags %}
+                        <a href="{{ tag.href }}">{{ tag.tag }}</a>
+                        {% if not loop.last %}<b>,</b>{% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if not j3.document.isPopup() %}
+            {{ content_bottom }}</div>
+        {{ column_right }}</div>
+</div>
+{% endif %}
+<script type="text/javascript"><!--
+    $('select[name=\'recurring_id\'], input[name="quantity"]').change(function(){
+        $.ajax({
+            url: 'index.php?route=product/product/getRecurringDescription',
+            type: 'post',
+            data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
+            dataType: 'json',
+            beforeSend: function() {
+                $('#recurring-description').html('');
+            },
+            success: function(json) {
+                $('.alert-dismissible, .text-danger').remove();
+
+                if (json['success']) {
+                    $('#recurring-description').html(json['success']);
+                }
+            }
+        });
+    });
+    //--></script>
+<script type="text/javascript"><!--
+    $('#button-cart, [data-quick-buy]').on('click', function () {
+        var $btn = $(this);
+        $.ajax({
+            url: 'index.php?route=checkout/cart/add',
+            type: 'post',
+            data: $(
+                '#product .button-group-page input[type=\'text\'], #product .button-group-page input[type=\'hidden\'], #product .button-group-page input[type=\'radio\']:checked, #product .button-group-page input[type=\'checkbox\']:checked, #product .button-group-page select, #product .button-group-page textarea, ' +
+                '#product .product-options input[type=\'text\'], #product .product-options input[type=\'hidden\'], #product .product-options input[type=\'radio\']:checked, #product .product-options input[type=\'checkbox\']:checked, #product .product-options select, #product .product-options textarea, ' +
+                '#product select[name="recurring_id"]'
+            ),
+            dataType: 'json',
+            beforeSend: function () {
+                $('#button-cart').button('loading');
+            },
+            complete: function () {
+                $('#button-cart').button('reset');
+            },
+            success: function (json) {
+                $('.alert-dismissible, .text-danger').remove();
+                $('.form-group').removeClass('has-error');
+
+                if (json['error']) {
+                    if (json['error']['option']) {
+                        for (i in json['error']['option']) {
+                            var element = $('#input-option' + i.replace('_', '-'));
+
+                            if (element.parent().hasClass('input-group')) {
+                                element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                            } else {
+                                element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                            }
+                        }
+                    }
+
+                    if (json['error']['recurring']) {
+                        $('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
+                    }
+
+                    // Highlight any found errors
+                    $('.text-danger').parent().addClass('has-error');
+
+                    try {
+                        $('html, body').animate({ scrollTop: $('.form-group.has-error').offset().top - 50 }, 'slow');
+                    } catch (e) {
+                    }
+                }
+
+                if (json['success']) {
+                    if ($('html').hasClass('popup-options')) {
+                        parent.$(".popup-options .popup-close").trigger('click');
+                    }
+
+                    if (json['notification']) {
+                        parent.show_notification(json['notification']);
+                    } else {
+                        parent.$('#content').parent().before('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    }
+
+                    parent.$('#cart-total').html(json['total']);
+                    parent.$('#cart-items,.cart-badge').html(json['items_count']);
+
+                    if (json['items_count']) {
+                        parent.$('#cart-items,.cart-badge').removeClass('count-zero');
+                    } else {
+                        parent.$('#cart-items,.cart-badge').addClass('count-zero');
+                    }
+
+                    if (Journal['scrollToTop']) {
+                        parent.$('html, body').animate({ scrollTop: 0 }, 'slow');
+                    }
+
+                    parent.$('.cart-content ul').load('index.php?route=common/cart/info ul li');
+
+                    if (window.location.href.indexOf('quick_buy=true') !== -1) {
+                        parent.location.href = Journal['checkoutUrl'];
+                    }
+
+                    if ($btn.data('quick-buy') !== undefined) {
+                        location = Journal['checkoutUrl'];
+                    }
+
+                    if (parent.window['_QuickCheckout']) {
+                        parent.window['_QuickCheckout'].save();
+                    }
+
+                    if (json['redirect']) {
+                        parent.location.href = json['redirect'];
+                    }
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError + '\r\n' + xhr.statusText + '\r\n' + xhr.responseText);
+            }
+        });
+    });
+    //--></script>
+<script type="text/javascript"><!--
+    $('.date').datetimepicker({
+        language: '{{ datepicker }}',
+        pickTime: false
+    });
+
+    $('.datetime').datetimepicker({
+        language: '{{ datepicker }}',
+        pickDate: true,
+        pickTime: true
+    });
+
+    $('.time').datetimepicker({
+        language: '{{ datepicker }}',
+        pickDate: false
+    });
+
+    $('button[id^=\'button-upload\']').on('click', function() {
+        var node = this;
+
+        $('#form-upload').remove();
+
+        $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+        $('#form-upload input[name=\'file\']').trigger('click');
+
+        if (typeof timer != 'undefined') {
+            clearInterval(timer);
+        }
+
+        timer = setInterval(function() {
+            if ($('#form-upload input[name=\'file\']').val() != '') {
+                clearInterval(timer);
+
+                $.ajax({
+                    url: 'index.php?route=tool/upload',
+                    type: 'post',
+                    dataType: 'json',
+                    data: new FormData($('#form-upload')[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $(node).button('loading');
+                    },
+                    complete: function() {
+                        $(node).button('reset');
+                    },
+                    success: function(json) {
+                        $('.text-danger').remove();
+
+                        if (json['error']) {
+                            $(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+                        }
+
+                        if (json['success']) {
+                            alert(json['success']);
+
+                            $(node).parent().find('input').val(json['code']);
+                        }
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+            }
+        }, 500);
+    });
+    //--></script>
+<script type="text/javascript"><!--
+    $(function () {
+        $('#review').delegate('.pagination a', 'click', function(e) {
+            e.preventDefault();
+
+            $('#review').fadeOut('slow');
+
+            $('#review').load(this.href);
+
+            $('#review').fadeIn('slow');
+        });
+
+        $('#review').load('index.php?route=product/product/review&product_id={{ product_id }}');
+
+        $('#button-review').on('click', function() {
+            $.ajax({
+                url: 'index.php?route=product/product/write&product_id={{ product_id }}',
+                type: 'post',
+                dataType: 'json',
+                data: $("#form-review").serialize(),
+                beforeSend: function() {
+                    $('#button-review').button('loading');
+                },
+                complete: function() {
+                    $('#button-review').button('reset');
+                },
+                success: function(json) {
+                    $('.alert-dismissible').remove();
+
+                    if (json['error']) {
+                        $('#review').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+                    }
+
+                    if (json['success']) {
+                        $('#review').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+                        $('input[name=\'name\']').val('');
+                        $('textarea[name=\'text\']').val('');
+                        $('input[name=\'rating\']:checked').prop('checked', false);
+                    }
+                }
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        $('.thumbnails').magnificPopup({
+            type:'image',
+            delegate: 'a',
+            gallery: {
+                enabled: true
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('.review-links a').on('click', function () {
+            var $review = $('#review');
+            if ($review.length) {
+                $('a[href="#' + $review.closest('.module-item').attr('id') + '"]').trigger('click');
+                $('a[href="#' + $review.closest('.tab-pane').attr('id') + '"]').trigger('click');
+                $('a[href="#' + $review.closest('.panel-collapse').attr('id') + '"]').trigger('click');
+                $review.closest('.expand-block').find('.block-expand.btn').trigger('click');
+
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $review.offset().top - 100
+                }, 200);
+            }
+        });
+    });
+    //--></script>
+{% if not j3.document.isPopup() %}
+    {{ j3.loadController('journal3/seo/rich_snippets', breadcrumbs) }}
+{% endif %}
+{{ footer }}

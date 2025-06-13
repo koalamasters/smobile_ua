@@ -1,0 +1,753 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button onclick="$('#input-apply').attr('value', '1'); $('#' + $('#form-module_tlgrm_notification').attr('id')).submit();" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success"><i class="fa fa-check"></i></button>
+        <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module_tlgrm_notification" class="form-horizontal">
+          <input type="hidden" name="apply" id="input-apply" value="0" />
+          <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#tab-setting" data-toggle="tab">{{ text_setting }}</a></li>
+            <li><a href="#tab-notification" data-toggle="tab">{{ text_notification }}</a></li>
+            <li><a href="#tab-data" data-toggle="tab">{{ text_data }}</a></li>
+            <li><a href="#tab-log" data-toggle="tab">{{ text_log }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-setting">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tlgrm_notification_status" id="input-status" class="form-control">
+                    {% if module_tlgrm_notification_status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-token">{{ entry_token }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="module_tlgrm_notification_token" value="{{ module_tlgrm_notification_token }}" placeholder="{{ entry_token }}" id="input-token" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-id">{{ entry_id }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="module_tlgrm_notification_id" value="{{ module_tlgrm_notification_id }}" placeholder="{{ entry_id }}" id="input-id" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-log">{{ entry_log }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tlgrm_notification_log" id="input-log" class="form-control">
+                    {% if module_tlgrm_notification_log %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-6">
+                  <button class="btn btn-primary pull-right" id="test_message">{{ text_test }}</button>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-notification">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-new_order">{{ entry_new_order }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tlgrm_notification_new_order" id="input-new_order" class="form-control">
+                    {% if module_tlgrm_notification_new_order %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-new_customer">{{ entry_new_customer }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tlgrm_notification_new_customer" id="input-new_customer" class="form-control">
+                    {% if module_tlgrm_notification_new_customer %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-new_review">{{ entry_new_review }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tlgrm_notification_new_review" id="input-new_review" class="form-control">
+                    {% if module_tlgrm_notification_new_review %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-contact_form">{{ entry_contact_form }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tlgrm_notification_contact_form" id="input-contact_form" class="form-control">
+                    {% if module_tlgrm_notification_contact_form %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-new_order_status">{{ entry_new_order_status }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tlgrm_notification_new_order_status" id="input-new_order_status" class="form-control">
+                    {% if module_tlgrm_notification_new_order_status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-return_order">{{ entry_return_order }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tlgrm_notification_return_order" id="input-return_order" class="form-control">
+                    {% if module_tlgrm_notification_return_order %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-data">
+              <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#tab-order" data-toggle="tab">{{ entry_new_order }}</a></li>
+                <li><a href="#tab-customer" data-toggle="tab">{{ entry_new_customer }}</a></li>
+                <li><a href="#tab-review" data-toggle="tab">{{ entry_new_review }}</a></li>
+                <li><a href="#tab-contact" data-toggle="tab">{{ entry_contact_form }}</a></li>
+                <li><a href="#tab-order-status" data-toggle="tab">{{ entry_new_order_status }}</a></li>
+                <li><a href="#tab-return-order" data-toggle="tab">{{ entry_return_order }}</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab-order">
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label" for="input-status">{{ text_send }}</label>
+                    <div class="col-sm-9">
+                      <div class="col-sm-4">
+                        <label class="control-label" for="input-tlgrm_notification_send_1"><span data-toggle="tooltip" title="" data-original-title="{{ help_send_1 }}">{{ text_send_2 }}</span></label>
+                        {% if module_tlgrm_notification_send[1] is not null %}
+                        <input type="checkbox" name="module_tlgrm_notification_send[1]" id="input-tlgrm_notification_send_1" checked="checked" />
+                        {% else %}
+                        <input type="checkbox"name="module_tlgrm_notification_send[1]" id="input-tlgrm_notification_send_1" />
+                        {% endif %}
+                      </div>
+                      <div class="col-sm-4">
+                        <label class="control-label" for="input-tlgrm_notification_send_2"><span data-toggle="tooltip" title="" data-original-title="{{ help_send_2 }}">{{ text_send_2 }}</span></label>
+                        {% if module_tlgrm_notification_send[2] is not null %}
+                        <input type="checkbox" name="module_tlgrm_notification_send[2]" id="input-tlgrm_notification_send_2" checked="checked" />
+                        {% else %}
+                        <input type="checkbox"name="module_tlgrm_notification_send[2]" id="input-tlgrm_notification_send_2" />
+                        {% endif %}
+                      </div>
+                      <div class="col-sm-4">
+                        <label class="control-label" for="input-tlgrm_notification_send_3"><span data-toggle="tooltip" title="" data-original-title="{{ help_send_3 }}">{{ text_send_3 }}</span></label>
+                        {% if module_tlgrm_notification_send[3] is not null %}
+                        <input type="checkbox" name="module_tlgrm_notification_send[3]" id="input-tlgrm_notification_send_3" checked="checked" />
+                        {% else %}
+                        <input type="checkbox"name="module_tlgrm_notification_send[3]" id="input-tlgrm_notification_send_3" />
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label"><span data-toggle="tooltip" title="" data-original-title="{{text_field_merger_help }}">{{ entry_field_merger }}</span></label>
+                    <div class="col-sm-9">
+                      <select name="module_tlgrm_notification_field_merger" class="form-control">
+                        {% if module_tlgrm_notification_field_merger %}
+                        <option value="1" selected="selected">{{ text_enabled }}</option>
+                        <option value="0">{{ text_disabled }}</option>
+                        {% else %}
+                        <option value="1">{{ text_enabled }}</option>
+                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                        {% endif %}
+                      </select>
+                    </div>
+                  </div>
+                  <ul class="nav nav-pills nav-stacked col-sm-3">
+                    <li class="active"><a href="#tab-info" data-toggle="tab">{{ entry_info }}</a></li>
+                    <li><a href="#tab-shipping" data-toggle="tab">{{ entry_shipping }}</a></li>
+                    <li><a href="#tab-payment" data-toggle="tab">{{ entry_payment }}</a></li>
+                    <li><a href="#tab-product" data-toggle="tab">{{ entry_product }}</a></li>
+                    {% if module_tlgrm_notification_simple is not null %} <li><a href="#tab-simple" data-toggle="tab">Simple</a></li>{% endif %}
+                  </ul>
+                  <div class="tab-content order_notification col-sm-9">
+                    <div class="tab-pane active" id="tab-info">
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_title }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_title_order" value="{{ module_tlgrm_notification_title_order }}" placeholder="{{ entry_info }}" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_separator }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_separator_order" value="{{ module_tlgrm_notification_separator_order }}" placeholder="{{ entry_separator }}" class="form-control" />
+                        </div>
+                      </div>
+                      {% set common_info = [
+                          'order_id',
+                          'store_name',
+                          'store_url',
+                          'date_added',
+                          'firstname',
+                          'lastname',
+                          'email',
+                          'telephone',
+                          'comment',
+                          'total',
+                          'order_status',
+                          'customer_id',
+                          'payment_method',
+                          'shipping_method'
+                        ]
+                      %}
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                          <tr>
+                            <th width="240px"></th>
+                            <th class="text-center" width="80px">{{ text_enabled }}</th>
+                            <th width="160px">{{ text_sort }}</th>
+                            <th>{{ text_custom_text }}</th>
+                          </tr>
+                          {% for key in common_info %}
+                          <tr>
+                            <td><label for="input-{{ key }}">{{ attribute(_context, 'entry_'~key) }}</label></td> 
+                            <td class="text-center">{% if attribute(_context, 'module_tlgrm_notification_'~key) %}
+                              <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" checked="checked" />
+                              {% else %}
+                              <input type="checkbox"name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" />
+                              {% endif %}
+                            </td>
+                            <td><input class="form-control" type="text" name="module_tlgrm_notification_sort_{{ key }}" value="{{ attribute(_context, 'module_tlgrm_notification_sort_'~key) }}" /></td>
+                            <td> <input class="form-control" type="text" name="module_tlgrm_notification_text_{{ key }}"  value="{{ attribute(_context, 'module_tlgrm_notification_text_'~key) }}" placeholder="{{ attribute(_context, 'entry_'~key) }}"></td>
+                          </tr>
+                          {% endfor %}
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane" id="tab-shipping">
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_title }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_title_shipping" value="{{ module_tlgrm_notification_title_shipping }}" placeholder="{{ entry_shipping }}" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_separator }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_separator_shipping" value="{{ module_tlgrm_notification_separator_shipping }}" placeholder="{{ entry_separator }}" class="form-control" />
+                        </div>
+                      </div>
+                      {% set shipping_info = [
+                          'shipping_firstname',
+                          'shipping_lastname',
+                          'shipping_company',
+                          'shipping_address_1',
+                          'shipping_address_2',
+                          'shipping_postcode',
+                          'shipping_city',
+                          'shipping_zone',
+                          'shipping_country',
+                        ]
+                      %}
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                          <tr>
+                            <th width="240px"></th>
+                            <th class="text-center" width="80px">{{ text_enabled }}</th>
+                            <th width="160px">{{ text_sort }}</th>
+                            <th>{{ text_custom_text }}</th>
+                          </tr>
+                          {% for key in shipping_info %}
+                          <tr>
+                            <td><label for="input-{{ key }}">{{ attribute(_context, 'entry_'~key) }}</label></td> 
+                            <td class="text-center">{% if attribute(_context, 'module_tlgrm_notification_'~key) %}
+                              <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" checked="checked" />
+                              {% else %}
+                              <input type="checkbox"name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" />
+                              {% endif %}
+                            </td>
+                            <td><input class="form-control" type="text" name="module_tlgrm_notification_sort_{{ key }}" value="{{ attribute(_context, 'module_tlgrm_notification_sort_'~key) }}" /></td>
+                            <td> <input class="form-control" type="text" name="module_tlgrm_notification_text_{{ key }}"  value="{{ attribute(_context, 'module_tlgrm_notification_text_'~key) }}" placeholder="{{ attribute(_context, 'entry_'~key) }}"></td>
+                          </tr>
+                          {% endfor %}
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane" id="tab-payment">
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_title }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_title_payment" value="{{ module_tlgrm_notification_title_payment }}" placeholder="{{ entry_payment }}" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_separator }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_separator_payment" value="{{ module_tlgrm_notification_separator_payment }}" placeholder="{{ entry_separator }}" class="form-control" />
+                        </div>
+                      </div>
+                      {% set payment_info = [
+                            'payment_firstname',
+                            'payment_lastname',
+                            'payment_company',
+                            'payment_address_1',
+                            'payment_address_2',
+                            'payment_postcode',
+                            'payment_city',
+                            'payment_zone',
+                            'payment_country',
+                          ]
+                      %}
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                          <tr>
+                            <th width="240px"></th>
+                            <th class="text-center" width="80px">{{ text_enabled }}</th>
+                            <th width="160px">{{ text_sort }}</th>
+                            <th>{{ text_custom_text }}</th>
+                          </tr>
+                          {% for key in payment_info %}
+                          <tr>
+                            <td><label for="input-{{ key }}">{{ attribute(_context, 'entry_'~key) }}</label></td> 
+                            <td class="text-center">{% if attribute(_context, 'module_tlgrm_notification_'~key) %}
+                              <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" checked="checked" />
+                              {% else %}
+                              <input type="checkbox"name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" />
+                              {% endif %}
+                            </td>
+                            <td><input class="form-control" type="text" name="module_tlgrm_notification_sort_{{ key }}" value="{{ attribute(_context, 'module_tlgrm_notification_sort_'~key) }}" /></td>
+                            <td> <input class="form-control" type="text" name="module_tlgrm_notification_text_{{ key }}"  value="{{ attribute(_context, 'module_tlgrm_notification_text_'~key) }}" placeholder="{{ attribute(_context, 'entry_'~key) }}"></td>
+                          </tr>
+                          {% endfor %}
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane" id="tab-product">
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_title }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_title_product" value="{{ module_tlgrm_notification_title_product }}" placeholder="{{ entry_product }}" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_separator }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_separator_product" value="{{ module_tlgrm_notification_separator_product }}" placeholder="{{ entry_separator }}" class="form-control" />
+                        </div>
+                      </div>
+                      {% set product_info = [
+                          'product_name',
+                          'product_sku',
+                          'product_model',
+                          'product_id',
+                          'product_link',
+                          'product_quantity',
+                          'product_price',
+                          'product_total',
+                          'product_option',
+                          'product_upc',
+                          'product_ean',
+                          'product_jan',
+                          'product_isbn',
+                          'product_mpn',
+                          'product_location'
+                        ]
+                      %}
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                          <tr>
+                            <th width="240px"></th>
+                            <th class="text-center" width="80px">{{ text_enabled }}</th>
+                            <th width="160px">{{ text_sort }}</th>
+                            <th>{{ text_custom_text }}</th>
+                          </tr>
+                          {% for key in product_info %}
+                          <tr>
+                            <td><label for="input-{{ key }}">{{ attribute(_context, 'entry_'~key) }}</label></td> 
+                            <td class="text-center">{% if attribute(_context, 'module_tlgrm_notification_'~key) %}
+                              <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" checked="checked" />
+                              {% else %}
+                              <input type="checkbox"name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" />
+                              {% endif %}
+                            </td>
+                            <td><input class="form-control" type="text" name="module_tlgrm_notification_sort_{{ key }}" value="{{ attribute(_context, 'module_tlgrm_notification_sort_'~key) }}" /></td>
+                            <td> <input class="form-control" type="text" name="module_tlgrm_notification_text_{{ key }}"  value="{{ attribute(_context, 'module_tlgrm_notification_text_'~key) }}" placeholder="{{ attribute(_context, 'entry_'~key) }}"></td>
+                          </tr>
+                          {% endfor %}
+                        </table>
+                      </div>
+                    </div>
+                    {% if module_tlgrm_notification_simple is not null %}
+                    <div class="tab-pane" id="tab-simple">
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_title }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_title_simple" value="{{ module_tlgrm_notification_title_simple }}" placeholder="Simple" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ entry_separator }}</label>
+                        <div class="col-sm-9">
+                          <input type="text" name="module_tlgrm_notification_separator_simple" value="{{ module_tlgrm_notification_separator_simple }}" placeholder="{{ entry_separator }}" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                          <tr>
+                            <th width="240px"></th>
+                            <th class="text-center" width="80px">{{ text_enabled }}</th>
+                            <th width="160px">{{ text_sort }}</th>
+                            <th>{{ text_custom_text }}</th>
+                          </tr>
+                          {% for key in module_tlgrm_notification_simple|keys  %}
+                          <tr>
+                            <td><label for="input-simple-{{ key }}">{{ attribute(_context, 'entry_'~key) }}</label></td> 
+                            <td class="text-center">{% if module_tlgrm_notification_simple[key] %}
+                              <input type="checkbox" name="module_tlgrm_notification_simple[{{ key }}]" id="input-simple-{{ key }}" checked="checked" />
+                              {% else %}
+                              <input type="checkbox" name="module_tlgrm_notification_simple[{{ key }}]" id="input-simple-{{ key }}" />
+                              {% endif %}
+                            </td>
+                            <td><input class="form-control" type="text" name="module_tlgrm_notification_sort_simple[{{ key }}]" value="{{ module_tlgrm_notification_sort_simple[key] }}" /></td>
+                            <td><input class="form-control" type="text" name="module_tlgrm_notification_text_simple[{{ key }}]"  value="{{ module_tlgrm_notification_text_simple[key] }}" placeholder="{{ attribute(_context, 'entry_'~key) }}"></td>
+                          </tr>
+                          {% endfor %}
+                        </table>
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="tab-pane" id="tab-customer">
+                  {% set customer = [
+                      'customer_firstname',
+                      'customer_lastname',
+                      'customer_email',
+                      'customer_telephone',
+                    ]
+                  %}
+                  <div class="form-group">
+                  {% for key in customer %}
+                    <label class="col-sm-2 control-label" for="input-{{ key }}">{{ attribute(_context, 'entry_'~key) }}</label>
+                    <div class="col-sm-1">
+                      <div class="checkbox">
+                        <label>
+                          {% if attribute(_context, 'module_tlgrm_notification_'~key) %}
+                          <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" checked="checked" />
+                          {% else %}
+                          <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" />
+                          {% endif %}
+                        </label>
+                      </div>
+                    </div>
+                  {% endfor %}
+                  </div>
+                </div>
+                <div class="tab-pane" id="tab-review">
+                  {% set review = [
+                      'review_name',
+                      'review_text',
+                      'review_rating',
+                      'review_product_name',
+                    ]
+                  %}
+                  <div class="form-group">
+                  {% for key in review %}
+                    <label class="col-sm-2 control-label" for="input-{{ key }}">{{ attribute(_context, 'entry_'~key) }}</label>
+                    <div class="col-sm-1">
+                      <div class="checkbox">
+                        <label>
+                          {% if attribute(_context, 'module_tlgrm_notification_'~key) %}
+                          <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" checked="checked" />
+                          {% else %}
+                          <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" />
+                          {% endif %}
+                        </label>
+                      </div>
+                    </div>
+                  {% endfor %}
+                  </div>
+                </div>
+                <div class="tab-pane" id="tab-contact">
+                  {% set contact = [
+                      'contact_name',
+                      'contact_email',
+                      'contact_comment',
+                    ]
+                  %}
+                  <div class="form-group">
+                  {% for key in contact %}
+                    <label class="col-sm-2 control-label" for="input-{{ key }}">{{ attribute(_context, 'entry_'~key) }}</label>
+                    <div class="col-sm-1">
+                      <div class="checkbox">
+                        <label>
+                          {% if attribute(_context, 'module_tlgrm_notification_'~key) %}
+                          <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" checked="checked" />
+                          {% else %}
+                          <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" />
+                          {% endif %}
+                        </label>
+                      </div>
+                    </div>
+                  {% endfor %}
+                  </div>
+                </div>
+                <div class="tab-pane" id="tab-order-status">
+                  <div class="form-group">
+                    <div class="col-sm-6 pull-right">
+                      <table class="table table-bordered table-hover">
+                        <tbody>
+                          <tr>
+                            <td colspan="2" class="text-center">{{ entry_info }}</td>
+                          </tr>
+                          <tr>
+                            <th width="35%">{{ text_variable }}</th>
+                            <th width="65%">{{ text_description }}</th>
+                          </tr>
+                          {% for key in common_info %}
+                          <tr>
+                            <td class="copy" id="copy_{{ key }}">{{ '{' ~ key ~ '}' }} <i class="fa fa-copy"></i></td> 
+                            <td>{{ attribute(_context, 'entry_'~key) }}</td>
+                          </tr>
+                          {% endfor %}
+                          <tr>
+                            <td class="copy" id="copy_status_comment">{status_comment} <i class="fa fa-copy"></i></td> 
+                            <td>{{ entry_status_comment }}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" class="text-center">{{ entry_shipping }}</td>
+                          </tr>
+                          <tr>
+                            <th width="35%">{{ text_variable }}</th>
+                            <th width="65%">{{ text_description }}</th>
+                          </tr>
+                          {% for key in shipping_info %}
+                          <tr>
+                            <td class="copy" id="copy_{{ key }}">{{ '{' ~ key ~ '}' }} <i class="fa fa-copy"></i></td> 
+                            <td>{{ attribute(_context, 'entry_'~key) }}</td>
+                          </tr>
+                          {% endfor %}
+                          <tr>
+                            <td colspan="2" class="text-center">{{ entry_payment }}</td>
+                          </tr>
+                          <tr>
+                            <th width="35%">{{ text_variable }}</th>
+                            <th width="65%">{{ text_description }}</th>
+                          </tr>
+                          {% for key in payment_info %}
+                          <tr>
+                            <td class="copy" id="copy_{{ key }}">{{ '{' ~ key ~ '}' }} <i class="fa fa-copy"></i></td> 
+                            <td>{{ attribute(_context, 'entry_'~key) }}</td>
+                          </tr>
+                          {% endfor %}                         
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="col-sm-6">
+                      {% for order_status in order_statuses %}
+                      <label for="input-{{ order_status.order_status_id }}">{{ order_status.name }}</label>
+                      <textarea class="form-control vresize" cols="80" rows="3" name="module_tlgrm_notification_template_order_status[{{ order_status.order_status_id }}]">{{ module_tlgrm_notification_template_order_status[order_status.order_status_id] }}</textarea>
+                      <br>
+                    {% endfor %}
+                    </div>  
+                  </div>
+                </div>
+                <div class="tab-pane" id="tab-return-order">
+                  {% set return = [
+                      'return_order_id',
+                      'return_firstname',
+                      'return_lastname',
+                      'return_email',
+                      'return_telephone',
+                      'return_date_ordered',
+                      'return_product',
+                      'return_model',
+                      'return_quantity',
+                      'return_reason',
+                      'return_opened',
+                      'return_comment',
+                    ]
+                  %}
+                  {% for temp in return|batch(4, 'No item') %}
+                  <div class="form-group">
+                  {% for key in temp %}
+                    <label class="col-sm-2 control-label" for="input-{{ key }}">{{ attribute(_context, 'entry_'~key) }}</label>
+                    <div class="col-sm-1">
+                      <div class="checkbox">
+                        <label>
+                          {% if attribute(_context, 'module_tlgrm_notification_'~key) %}
+                          <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" checked="checked" />
+                          {% else %}
+                          <input type="checkbox" name="module_tlgrm_notification_{{ key }}" id="input-{{ key }}" />
+                          {% endif %}
+                        </label>
+                      </div>
+                    </div>
+                  {% endfor %}
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-log">
+              <div class="form-group">
+                <div class="col-sm-4">
+                  <a href="{{ downloadLog }}" class="btn btn-primary"><i class="fa fa-download"></i> {{ button_download }}</a>
+                  <a href="{{ clearLog }}" class="btn btn-danger"><i class="fa fa-eraser"></i> {{ button_clear }}</a>
+                </div>
+              </div>
+              <textarea wrap="off" rows="15" readonly class="form-control">{{ log }}</textarea>
+            </div>
+            <div class="tab-pane" id="tab-support">
+              <div class="panel-body">
+                <div class="panel-body">
+                <h3>{{ text_help_module }} <a href="mailto:serfbots@gmail.com"><b>serfbots@gmail.com</b></a></h4>
+                <div class="alert bg-info">
+                  <b>{{ text_author }}</b>
+                </div>
+                <h4><strong>{{ text_service_module }}</strong></h4>
+                <hr>
+                <h4>{{ text_service_web }} <a href="https://cmsshop.com.ua/" target="_blank"><b>cmsshop.com.ua</b></a></h4>
+                <hr>
+                <h4>{{ text_service_telegram }} <a href="https://telegrambot.com.ua/" target="_blank"><b>telegrambot.com.ua</b></a></h4>
+                <hr>
+                <h4>{{ text_service_seo }} <strong><a href="mailto:velmob3@gmail.com">velmob3@gmail.com</a></strong></h4>  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .order_notification label{
+    margin-bottom: 0;
+    cursor: pointer;
+    display: block;
+  }
+  .vresize {
+    resize: vertical;
+  }
+  .nav > li > a{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .copy {
+    white-space: nowrap;
+    color: #000;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .copy .fa{
+    float: right;
+    margin-top: 1px;
+    color: #000;
+    font-size: 14px;
+  }
+</style>
+<script>
+  $('#test_message').click(function(e) {
+    e.preventDefault();
+    var token = $('#input-token').val(),
+        id = $('#input-id').val();
+    $.ajax({
+      type: "POST",
+      url: "{{ send_test|convert_encoding('UTF-8', 'HTML-ENTITIES')  }}",
+      data: 'tk='+token+'&id='+id,
+      success: function (data) {
+        if (data['ok']) {
+          alert('{{ text_goods }}');
+        } else {
+          alert('{{ text_error }}' +' '+ data['description']);
+        }
+      },
+      error: function(data){
+        alert('{{ text_error }}');
+      }
+    })
+  })
+  function selectText(elementId) {
+    var doc = document,
+        text = doc.getElementById(elementId),
+        range,
+        selection;
+    if (doc.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(text);
+      range.select();
+    } else if (window.getSelection) {
+      selection = window.getSelection();
+      range = document.createRange();
+      range.selectNodeContents(text);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }}
+
+    $(".copy").click(function() {
+      selectText(this.id);
+      document.execCommand("copy");
+    });
+</script>
+{{ footer }}

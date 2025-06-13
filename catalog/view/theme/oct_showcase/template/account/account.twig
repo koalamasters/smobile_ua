@@ -1,0 +1,69 @@
+{{ header }}
+<div id="account-account" class="container-fluid container-lg flex-grow-1 mobile-no-gutters">
+	<nav aria-label="breadcrumb p-0" >
+        <ul class="breadcrumb sc-breadcrumb fsz-12">
+        {% for breadcrumb in breadcrumbs %}
+            {% if loop.last %}
+                <li class="breadcrumb-item sc-breadcrumb-item">{{ breadcrumb.text }}</li>
+            {% else %}
+                <li class="breadcrumb-item sc-breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </nav>
+	<main class="main">
+
+		<div class="content-top-box">{{ content_top }}</div>
+		{% if success %}
+			<script>
+				scNotify('success', '{{ success }}');
+			</script>
+		{% endif %}
+		<div class="row sc-account-row">
+			{{ column_left }}
+		    {% if column_left and column_right %}
+		    {% set class = 'col-xl-6' %}
+		    {% elseif column_left or column_right %}
+		    {% set class = 'col-xl-9 col-md-8' %}
+		    {% else %}
+		    {% set class = 'col-xl-12' %}
+		    {% endif %}
+		    <div id="content" class="{{ class }}">
+			    <div class="">
+
+					<h1 class="personal-h1">{{ heading_title }}</h1>
+
+					<div class="user-info-content-wrapper">
+						<div class="user-fields-list">
+							<div class="user-field-item">
+								<div class="user-field-item-name">{{ text_name }}</div>
+								<div class="user-field-item-value">{{ customer_info.firstname }}</div>
+							</div>
+							<div class="user-field-item">
+								<div class="user-field-item-name">{{ text_lastname }}</div>
+								<div class="user-field-item-value">{{ customer_info.lastname }}</div>
+							</div>
+							<div class="user-field-item">
+								<div class="user-field-item-name">{{ text_telephone }}</div>
+								<div class="user-field-item-value">{{ customer_info.telephone }}</div>
+							</div>
+							<div class="user-field-item">
+								<div class="user-field-item-name">{{ text_email }}</div>
+								<div class="user-field-item-value">{{ customer_info.email }}</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="user-info-edit-button">
+						<a href="{{ edit }}">{{ text_edit }}</a>
+					</div>
+
+
+			    </div>
+		    </div>
+		    {{ column_right }}
+		</div>
+		{{ content_bottom }}
+	</main>
+</div>
+{{ footer }}

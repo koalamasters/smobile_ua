@@ -1,0 +1,89 @@
+<div class="dop-product-sidebar dop-product-product-sidebar" style="user-select: none">
+    <button type="button" class="close">
+        <img src="catalog/view/javascript/ex_pak/images/images.svg#ex-icon-times" alt="" width="100%" height="100%">
+    </button>
+    <div class="content">
+        <div class="product-selector">
+            <div class="image">
+                {% for product in products %}
+                    <img src="{{ product.thumb }}" class="product-image product-image-{{ product.product_id }}{% if product.product_id == active_product_id %} active{% endif %}"{% if product.product_id != active_product_id %} style="display:none;"{% endif %}>
+                {% endfor %}
+            </div>
+            <div class="control">
+                <div class="name">{{ ex_pak_product_sidebar_to_product }}</div>
+                <div class="products">
+                    <div class="snp_select_sub">
+                        <select class="snp_select_select">
+                            {% for product in products %}
+                                <option value="{{ product.product_id }}"{% if product.product_id == active_product_id %} selected="selected"{% endif %}>{{ product.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="snp_select_span_arrow">
+                            <svg><use xlink:href="#ex-icon-arrow-select"></use></svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for product in products %}
+            <div class="product-content product-content-{{ product.product_id }}{% if product.product_id == active_product_id %} active{% endif %}"{% if product.product_id != active_product_id %} style="display:none;"{% endif %}>
+                {% if product.categories %}
+                    <div class="title">{{ ex_pak_product_sidebar_to_title }}</div>
+                    <div class="dop-product-categories">
+                        {% if product.categories|length > 1 %}
+                            <div class="category-list" data-callback="ex_pak_product_sidebar.setSlider">
+                                {% for category in product.categories %}
+                                    <a class="category" data-category-id="{{ category.category_id }}">
+                                        {{ category.name }}
+                                    </a>
+                                {% endfor %}
+                                <div class="toggle"><a><svg><use xlink:href="#ex-icon-arrow-down"></use></svg></a></div>
+                            </div>
+                        {% endif %}
+                        {% for category in product.categories %}
+                            <div class="category-content category-content-{{ category.category_id }}">
+                                <div class="swiper-holder">
+                                    <div class="dop-product-product-list swiper">
+                                        <div class="swiper-wrapper dop-product-mobile-infinity">
+                                            {% for product in category.products %}
+                                                {{ product.html }}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <a class="swiper-button prev"><svg><use xlink:href="#ex-icon-arrow-scroll"></use></svg></a>
+                                    <a class="swiper-button next"><svg><use xlink:href="#ex-icon-arrow-scroll"></use></svg></a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if product.groups %}
+                    {% for group in product.groups %}
+                        <div class="sub-title">{{ group.name }}</div>
+                        <div class="dop-product-product-list dop-product-description-products">
+                            {% for product in group.products %}
+                                {{ product.html }}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="dop-product-sidebar-overlay"></div>
+
+
+<div style="position:absolute;left:-9999px;">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <symbol xmlns="http://www.w3.org/2000/svg" id="ex-icon-arrow-down" viewBox="0 0 8 5">
+            <path d="M7 1L4.8 3.93333C4.4 4.46667 3.6 4.46667 3.2 3.93333L1 1" stroke-linecap="round"/>
+        </symbol>
+        <symbol fill="none" xmlns="http://www.w3.org/2000/svg" id="ex-icon-arrow-scroll" viewBox="0 0 11 10">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.69226 8.47998C5.40494 8.81564 5.44413 9.32065 5.77979 9.60796C6.11544 9.89528 6.62045 9.85609 6.90777 9.52044L9.8473 6.08633C10.4509 5.48949 10.4509 4.51093 9.8473 3.91409L6.90777 0.479984C6.62045 0.144331 6.11544 0.105143 5.77979 0.392456C5.44413 0.679769 5.40494 1.18478 5.69226 1.52044L7.99043 4.20528C7.96075 4.20194 7.93057 4.20022 7.9 4.20022H1.5C1.05817 4.20022 0.699997 4.5584 0.699997 5.00022C0.699997 5.44205 1.05817 5.80022 1.5 5.80022H7.9C7.93056 5.80022 7.96073 5.79851 7.9904 5.79517L5.69226 8.47998Z" fill="#000000"/>
+        </symbol>
+        <symbol fill="none" xmlns="http://www.w3.org/2000/svg" id="ex-icon-arrow-select" viewBox="0 0 22 22">
+            <path fill="none" stroke="#1d1d1b" stroke-linecap="round" stroke-miterlimit="2.59" stroke-width="2px" d="M1,6.14L10.53,15.67c.26,.26,.68,.26,.94,0h0L21,6.14"/>
+        </symbol>
+    </svg>
+</div>

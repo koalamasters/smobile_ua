@@ -1,0 +1,159 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-attribute_category" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if (error_warning) %} 
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %} 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-attribute_category" class="form-horizontal">
+          <div class="form-group required">
+            <label class="col-sm-2 control-label">{{ entry_name }}</label>
+            <div class="col-sm-10">
+                <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" class="form-control" />
+            </div>
+          </div>
+		  <div id="attribute-list">
+		  {% set row = 0 %} 
+
+		  {% for attribute_id,attribute_languages in attributes %} 
+          <div class="form-group" id="row-{{ row }}">
+            <div class="col-sm-2">
+				<input type="hidden" id="ids-name{% set row = 'undefined' %}" value="{{ attribute_id }}" />
+				<input type="text" data-row="{{ row }}" id="ids-{{ row }}" value="{{ attribute_languages.name }}" placeholder="{{ entry_attribute }}" class="form-control" />
+
+				<div class="is_base_wrapepr"  >
+					<input class="is_base" type="checkbox" name="attributes_base[{{ attribute_id }}][is_base]" {% if attribute_languages[3].base_attr == 1 %} checked {% endif %}>
+					<span>Основний</span>
+				</div>
+
+			</div>
+            <div class="col-sm-10" id="ids-text{{ row }}">
+				{% for language_id,language in languages %} 
+                    <div id="attribute_id-{{ attribute_id }}-{{ language_id }}" class="input-group">
+<span class="input-group-addon"><img title="{{ language.name }}" src="{{ language.image }}"></span>					
+<textarea name="attributes[{{ row }}][{{ attribute_id }}][{{ language_id }}]" rows="3" placeholder="Text" class="form-control">{{ attribute_languages[language_id]['text'] }}</textarea>
+<span class="input-group-addon">{{ attribute_languages[language_id]['name'] }} [{{ attribute_languages[language_id]['group_name'] }}]</span>
+                    </div>
+				{% endfor %} 
+				<span class="input-group-addon"><i class="del fa fa-minus-circle"></i></span>
+            </div>
+          </div>
+		  {% set row = row + 1 %} 
+		  {% endfor %} 
+
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+			<button type="button" onclick="attribute_add();" class="btn btn-warning"><i class="fa fa-plus-circle"></i></button>
+            </div>
+          </div>
+
+		  </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var attribute_row = {{ row }};
+function attribute_add(){
+	var html = '';
+	html += '<div class="form-group" id="row-' + attribute_row + '">';
+	html += '<div class="col-sm-2">';
+	html += '<input type="hidden" id="ids-name' + attribute_row + '" value="" />';
+	html += '<input type="text" data-row="' + attribute_row + '" id="ids-' + attribute_row + '" value="" placeholder="{{ entry_attribute }}" class="form-control" />';
+	html += '<div class="is_base_wrapepr"><input class="is_base" style="display:none;" type="checkbox" name=""></div>';
+	html += '</div>';
+    html += '<div class="col-sm-10" id="ids-text' + attribute_row + '">';
+	html += '</div>';
+	html += '</div>';
+	$('#attribute-list').append(html);
+	attribute_autocomplete('#ids-' + attribute_row);
+	attribute_row++;
+}
+function attribute_autocomplete(selector) {
+	$(selector).autocomplete({
+		'source': function(request, response) {
+			$.ajax({
+				url: 'index.php?route=catalog/attribute/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+				dataType: 'json',
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: item['name'],
+							value: item['attribute_id'],
+							group_name: item['attribute_group']
+						}
+					}));
+				}
+			});
+		},
+		'select': function(item) {
+			$(this).val(item['label']);
+			var id = $(this).attr('data-row');
+			var old_val = item['value'];
+			var elms = $('[id^="ids-name"][value="' + old_val + '"]');
+			var no = true;
+			if (elms.length) {
+				no = confirm("Существующие данные будут удалены");
+			}
+			if (no) {
+				var old_id = elms.siblings('input').attr('data-row');
+				$('#row-' + old_id).remove();
+				
+					$('#ids-name' + id).val(item['value']);
+					var html ='';
+						{% for language_id,language in languages %} 
+					html += '<div id="attribute_id-' + id + '-{{ language_id }}" class="input-group">';
+					html += '<span class="input-group-addon"><img title="{{ language['name'] }}" src="{{ language['image'] }}"></span>';
+					html += '<textarea name="attributes[' + id + '][' + item['value'] + '][{{ language_id }}]" rows="3" placeholder="Text" class="form-control"></textarea>';
+					html += '<span class="input-group-addon">' + item['label'] + ' ['+ item['group_name'] + ']</span>';
+					html += '</div>';
+						{% endfor %} 
+					html += '<span class="input-group-addon"><i class="del fa fa-minus-circle"></i></span>';
+					
+					$('#ids-text' + id).html(html);
+			}
+		}
+	});
+}
+attribute_autocomplete('input[id^=ids]');
+
+$('#form-attribute_category').delegate('.del', 'click', function() {
+	$(this).closest('.form-group').remove();
+});
+//--></script>
+
+</script>
+<style>
+.del {cursor:pointer; color:red;}
+</style>
+
+<script>
+	$(document).on('click', '.col-sm-2 ul li a', function(e){
+		let li = $(e.target)
+		let attribute_id = $(li).closest('li').attr('data-value');
+		let checkBoxName = "attributes_base["+attribute_id+"][is_base]";
+		$(li).closest('.col-sm-2').find('.is_base_wrapepr input').attr('name', checkBoxName)
+		console.log(checkBoxName)
+	});
+</script>
+{{ footer }} 

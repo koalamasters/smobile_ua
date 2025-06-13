@@ -1,0 +1,5 @@
+<?php
+//Этот файл - кастомный код модуля UniXML, фид allo
+//info: https://unixml.pro
+
+$data['lang_data'] = array('lang_id' => 3, 'fields' => 'name,description');

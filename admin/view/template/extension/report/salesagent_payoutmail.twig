@@ -1,0 +1,13 @@
+{{ text_greetings }}
+
+{{ text_payout }}
+
+{{ text_totalorders }} {{ totalorders }}
+{{ text_totalpayment }} {{ amountpaid }}
+{% if paymentdetails %}
+{{ text_paymentdetails }} : {{ paymentdetails }}
+{% endif %}
+{% if transaction_id %}
+{{ text_transactionid }} : {{ transaction_id }}
+{% endif %}
+

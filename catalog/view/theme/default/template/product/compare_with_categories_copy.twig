@@ -1,0 +1,747 @@
+{{ header }}
+<div id="product-compare" class="container compare-page">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li>
+        {% if loop.last %}
+          <span>{{ breadcrumb.text }}</span>
+        {% else %}
+          <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+        {% endif %}
+      </li>
+      {% if not loop.last %}
+          <li><span>/</span></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+  {% if success %}
+  <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+  {% endif %}
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }} compare_with_cat">{{ content_top }}
+      <h1>{{ heading_title }}</h1>
+          {% if products %}
+            {% if cwc_cats %}
+						<div class="compare_top">
+							<ul class="nav nav-tabs compare_tabs">	
+								<li class="active"><a href="#list-all" data-toggle="tab" class="active"><span>Всі товари{% if cwc_cats_counter %}<span class="compare_list_count">{{ all_count }}</span>{% endif %}</span></a></li>
+                {% for category in categories %}
+                  <li><a href="#list-{{ category.id }}" data-toggle="tab"><span>{{ category.name }}{% if cwc_cats_counter %}<span class="compare_list_count">{{ category.count }}</span>{% endif %}</span></a></li>
+                {% endfor %}	
+							</ul>
+						</div>
+            {% endif %}
+
+						<div class="tab-content">	 
+							<div class="tab-pane active{% if not cwc_cats %} no_cats{% endif %}" id="list-all">
+                <div class="buttons compare_page_actions">
+                  <button onclick="window.location.href ='{{ remove_list }}{% for product in products %}{{ product.wish_id }}{% if not loop.last %},{% endif %}{% endfor %}'" class="btn btn-danger" tabindex="0">{{ text_remove_all }}</button>
+                  <div class="pull-right"><label for="diff_all" class="diff"><input type="checkbox" id="diff_all"><span>{{ text_show_diff }}</span></label></div>
+                </div>
+                
+								<div class="compare_main_slider_block main">
+									<div class="compare_main_slider" id="compare_main_slider">
+											{% for product in products %} 
+                        <div>
+                          <div class="product-item">
+                            <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
+                              <div class="caption">
+                                <h4><a href="{{ product.href }}">{{ product.name }}</a></h4>
+                                {% if product.oct_model is defined and product.oct_model %}
+                                    <div class=""><span>{{ oct_view_model_cat }}</span>{{ product.oct_model }}</div>
+                                {% endif %}
+                                {% if cwc_def_vals %}
+                                  {% if cwc_model and not cwc_model_is_slider %}<p>{{ text_model }}: {{ product.model }}</p>{% endif %}
+                                  {% if cwc_manufacturer and not cwc_manufacturer_is_slider %}<p>{{ text_manufacturer }}: {{ product.manufacturer }}</p>{% endif %}
+                                  {% if cwc_availability and not cwc_availability_is_slider %}<p>{{ text_availability }}: {{ product.availability }}</p>{% endif %}
+                                  {% if cwc_weight and not cwc_weight_is_slider %}<p>{{ text_weight }}: {{ product.weight }}</p>{% endif %}
+                                  {% if cwc_dimension and not cwc_dimension_is_slider %}<p>{{ text_dimension_short }}: {{ product.length }} x {{ product.width }} x {{ product.height }}</p>{% endif %}
+                                  {% if review_status and cwc_rating and not cwc_rating_is_slider %}
+                                    <p>{{ text_rating }}</p>
+                                    <span class="rating"> {% for i in 1..5 %}
+                                      {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                                      {% endfor %} <br />
+                                      {{ product.reviews }}</span>
+                                  {% endif %}
+                                {% endif %}
+
+                                {% if product.price %}
+                                  <p class="price"> 
+                                    {% if not product.special %}
+                                      {{ product.price }}
+                                    {% else %} 
+                                      <span class="price-new">{{ product.special }}</span> 
+                                      <span class="price-old">{{ product.price }}</span> 
+                                      {% endif %}
+                                    <span>{{ product.usdt_price }} usdt</span>
+                                    {% if product.tax %} 
+                                      <span class="price-tax">{{ text_tax }} {{ product.tax }}</span> 
+                                    {% endif %} 
+                                  </p>
+                                {% endif %}
+                              </div>
+                              <div class="button-group">
+                                <button onclick="wishlist.add('{{ product.product_id }}');">Wishlist</button>
+                                {# <input type="button" value="{{ button_cart }}" class="btn btn-primary btn-block" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" /> #}
+                                <a href="{{ product.remove }}" class="compare_remove_btn">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 0C5.40891 0 0 5.40891 0 12C0 18.5911 5.40891 24 12 24C18.5911 24 24 18.5911 24 12C24 5.40891 18.5911 0 12 0ZM17.9662 15.9777L15.9777 17.9662L12 13.9885L8.02228 17.9662L6.03375 15.9777L10.0115 12L6.03375 8.02228L8.02228 6.03375L12 10.0115L15.9777 6.03375L17.9662 8.02228L13.9885 12L17.9662 15.9777Z" fill="#DA4F49"/>
+                                  </svg>
+                                </a>
+                              </div>
+                          </div>
+                        </div>
+											{% endfor %} 
+									</div>
+								</div>
+
+								<div class="compare_attributes_block">
+                  {% if cwc_def_vals and ( (cwc_model and cwc_model_is_slider) or (cwc_manufacturer and cwc_manufacturer_is_slider) or (cwc_availability and cwc_availability_is_slider) or (cwc_weight and cwc_weight_is_slider) or (cwc_dimension and cwc_dimension_is_slider) or (cwc_rating and cwc_rating_is_slider) ) %}
+                  <div class="compare_attributes_group">
+                    {% if cwc_group_name %}
+                      <div class="compare_attributes_group_title">
+                        <span class="attribute_group_title">{{ cwc_heading }}</span>
+                      </div>
+                    {% endif %}
+                    <div class="compare_attributes_group_list">
+
+                      {% if cwc_model and cwc_model_is_slider %}
+                      <div class="compare_attribute_group">
+                        <span class="attribute_title">{{ text_model }}</span>
+                        <div class="compare_attribute_slider" id="p_model_slider">
+                          {% for product in products %}
+                            {% if product.model is not empty %}
+                              <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.model }}</span></div></div>
+                            {% else %}
+                              <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      {% endif %}
+
+                      {% if cwc_manufacturer and cwc_manufacturer_is_slider %}
+                      <div class="compare_attribute_group">
+                        <span class="attribute_title">{{ text_manufacturer }}</span>
+                        <div class="compare_attribute_slider" id="p_manufacturer_slider">
+                          {% for product in products %}
+                            {% if product.manufacturer %}
+                              <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.manufacturer }}</span></div></div>
+                            {% else %}
+                              <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      {% endif %}
+                      
+                      {% if cwc_rating and cwc_rating_is_slider %}
+                      <div class="compare_attribute_group">
+                        <span class="attribute_title">{{ text_rating }}</span>
+                        <div class="compare_attribute_slider" id="p_rating_slider">
+                          {% for product in products %}
+                            <div class="slick-slide product-grid">
+                            <div class="attribute_value">
+                              <span class="rating"> {% for i in 1..5 %}
+                                  {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                                  {% endfor %} <br />
+                                  {{ product.reviews }}</span>
+                            </div>
+                            </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+                      {% endif %}
+
+                      {% if cwc_availability and cwc_availability_is_slider %}
+                      <div class="compare_attribute_group">
+                        <span class="attribute_title">{{ text_availability }}</span>
+                        <div class="compare_attribute_slider" id="p_availability_slider">
+                          {% for product in products %}
+                            {% if product.availability %}
+                              <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.availability }}</span></div></div>
+                            {% else %}
+                              <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      {% endif %}
+
+                      {% if cwc_weight and cwc_weight_is_slider %}
+                      <div class="compare_attribute_group">
+                        <span class="attribute_title">{{ text_weight }}</span>
+                        <div class="compare_attribute_slider" id="p_weight_slider">
+                          {% for product in products %}
+                            {% if product.weight != 0 %}
+                              <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.weight }}</span></div></div>
+                            {% else %}
+                              <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      {% endif %}
+
+                      {% if cwc_dimension and cwc_dimension_is_slider %}
+                      <div class="compare_attribute_group">
+                        <span class="attribute_title">{{ text_dimension }}</span>
+                        <div class="compare_attribute_slider" id="p_dimension_slider">
+                          {% for product in products %}
+                            {% if product.length != 0 and product.width != 0 and product.height != 0 %}
+                              <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.length }} x {{ product.width }} x {{ product.height }}</span></div></div>
+                            {% else %}
+                              <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      {% endif %}
+
+                    </div>
+                  </div>
+                  {% endif %}
+
+									{% for attribute_group in attribute_groups %}
+										<div class="compare_attributes_group">
+                      {% if cwc_group_name %}
+                        <div class="compare_attributes_group_title">
+                          <span class="attribute_group_title">{{ attribute_group.name }}</span>
+                        </div>
+                      {% endif %}
+											<div class="compare_attributes_group_list">
+												{% for key, attribute in attribute_group.attribute %}
+													<div class="compare_attribute_group">
+														<span class="attribute_title">{{ attribute.name }}</span>
+														<div class="compare_attribute_slider" id="attribute_slider_{{ attribute.attribute_id }}">
+															{% for product in products %}
+																{% if product.attribute[key] and (product.attribute[key]) is not empty %}
+																  <div class="slick-slide product-grid"><div class="attribute_value to_check"><span>{{ product.attribute[key] }}</span></div></div>
+																{% else %}
+																  <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+																{% endif %}
+															{% endfor %}
+														</div>
+													</div>
+												{% endfor %} 
+											</div>
+										</div>
+									{% endfor %} 
+								</div>
+
+                <script>
+                  {% set combined_attributes = '' %}
+
+                  {% for attribute_group in attribute_groups %}
+                      {% for key, attribute in attribute_group.attribute %}
+                          {% set combined_attributes = combined_attributes ~ '#attribute_slider_' ~ attribute.attribute_id ~ ', ' %}
+                      {% endfor %}
+                  {% endfor %}
+
+                  {% if attribute_groups %}
+                      {% set combined_attributes = combined_attributes ~ '#model_slider' %}
+                  {% endif %}
+                  {% if cwc_def_vals and cwc_model and cwc_model_is_slider %}
+                      {% set combined_attributes = combined_attributes ~ ', #p_model_slider' %}
+                  {% endif %}
+                  {% if cwc_def_vals and cwc_manufacturer and cwc_manufacturer_is_slider %}
+                      {% set combined_attributes = combined_attributes ~ ', #p_manufacturer_slider' %}
+                  {% endif %}
+                  {% if cwc_def_vals and cwc_availability and cwc_availability_is_slider %}
+                      {% set combined_attributes = combined_attributes ~ ', #p_availability_slider' %}
+                  {% endif %}
+                  {% if cwc_def_vals and cwc_weight and cwc_weight_is_slider %}
+                      {% set combined_attributes = combined_attributes ~ ', #p_weight_slider' %}
+                  {% endif %}
+                  {% if cwc_def_vals and cwc_dimension and cwc_dimension_is_slider %}
+                      {% set combined_attributes = combined_attributes ~ ', #p_dimension_slider' %}
+                  {% endif %}
+                  {% if cwc_def_vals and cwc_rating and cwc_rating_is_slider %}
+                      {% set combined_attributes = combined_attributes ~ ', #p_rating_slider' %}
+                  {% endif %}
+
+                  {% set combined_attributes = combined_attributes|trim(', ') %}
+
+
+                  $('#compare_main_slider').slick({
+                    slidesToShow: {{ cwc_slides_def }},
+                    slidesToScroll: 1,
+                    autoplay: false,
+                    infinite: false,
+                    speed: 300,
+                    swipe: false,
+                    touchMove: false,
+                    draggable: false,
+                    arrows: true,
+                      prevArrow: '<div class="prev"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>',
+                      nextArrow: '<div class="next"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>',
+                    cssEase: "linear",
+                    dots: false,
+                    responsive: [
+                      {
+                        breakpoint: 1200,
+                        settings: {
+                          slidesToScroll: 1,
+                          slidesToShow: {{ cwc_slides_1200 }}
+                        }
+                      },
+                      {
+                        breakpoint: 1024,
+                        settings: {
+                          slidesToScroll: 1,
+                          slidesToShow: {{ cwc_slides_1024 }}
+                        }
+                      },
+                      {
+                        breakpoint: 600,
+                        settings: {
+                          slidesToScroll: 1,
+                          slidesToShow: {{ cwc_slides_600 }}
+                        }
+                      },
+                      {
+                        breakpoint: 480,
+                        settings: {
+                          slidesToScroll: 1,
+                          slidesToShow: {{ cwc_slides_480 }}
+                        }
+                      }
+                    ],
+                    {% if combined_attributes is not empty %}asNavFor: '{{ combined_attributes }}',{% endif %}
+                  });
+
+                  {% if combined_attributes is not empty %}
+                    $('{{ combined_attributes }}').slick({
+                      speed: 300,
+                      slidesToShow: {{ cwc_slides_def }},
+                      slidesToScroll: 1,
+                      autoplay: false,
+                      infinite: false,
+                      arrows: false,
+                      dots: false,
+                      touchMove: false,
+                      cssEase: "linear",
+                      swipe: false,
+                      draggable: false,
+                      responsive: [
+                        {
+                          breakpoint: 1200,
+                          settings: {
+                            slidesToScroll: 1,
+                            slidesToShow: {{ cwc_slides_1200 }}
+                          }
+                        },
+                        {
+                          breakpoint: 1024,
+                          settings: {
+                            slidesToScroll: 1,
+                            slidesToShow: {{ cwc_slides_1024 }}
+                          }
+                        },
+                        {
+                          breakpoint: 600,
+                          settings: {
+                            slidesToScroll: 1,
+                            slidesToShow: {{ cwc_slides_600 }}
+                          }
+                        },
+                        {
+                          breakpoint: 480,
+                          settings: {
+                            slidesToScroll: 1,
+                            slidesToShow: {{ cwc_slides_480 }}
+                          }
+                        }
+                      ],
+                    });
+                  {% endif %}
+
+
+                  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {	
+                    $('.diff input').prop('checked', false).change();				
+                    $('#compare_main_slider{% if combined_attributes is not empty %}, {{ combined_attributes }}{% endif %}').slick('setPosition');
+                  });
+                </script>
+							</div>
+
+              {% if cwc_cats %}
+                {% for category in categories %}
+                  <div class="tab-pane" id="list-{{ category.id }}">
+                    <div class="buttons compare_page_actions">
+                      <button onclick="window.location.href ='{{ remove_list }}{% for product in category.category_products %}{{ product.wish_id }}{% if not loop.last %},{% endif %}{% endfor %}'" class="btn btn-danger" tabindex="0">{{ text_remove_cat }} {{ category.name }}</button>
+                      <div class="pull-right"><label for="diff_{{ category.id }}" class="diff"><input type="checkbox" id="diff_{{ category.id }}"><span>{{ text_show_diff }}</span></label>
+                      </div>
+                    </div>
+                    
+                    <div class="compare_main_slider_block category_{{ category.id }}">
+                      <div class="compare_main_slider" id="compare_main_slider_{{ category.id }}">
+                          {% for product in category.category_products %} 
+                            <div>
+                              <div class="product-item">
+                                <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
+                                <div class="caption">
+                                  <h4><a href="{{ product.href }}">{{ product.name }}</a></h4>
+                                  {% if cwc_def_vals %}
+                                    {% if cwc_model and not cwc_model_is_slider %}<p>{{ text_model }}: {{ product.model }}</p>{% endif %}
+                                    {% if cwc_manufacturer and not cwc_manufacturer_is_slider %}<p>{{ text_manufacturer }}: {{ product.manufacturer }}</p>{% endif %}
+                                    {% if cwc_availability and not cwc_availability_is_slider %}<p>{{ text_availability }}: {{ product.availability }}</p>{% endif %}
+                                    {% if cwc_weight and not cwc_weight_is_slider %}<p>{{ text_weight }}: {{ product.weight }}</p>{% endif %}
+                                    {% if cwc_dimension and not cwc_dimension_is_slider %}<p>{{ text_dimension_short }}: {{ product.length }} x {{ product.width }} x {{ product.height }}</p>{% endif %}
+                                    {% if review_status and cwc_rating and not cwc_rating_is_slider %}
+                                      <p>{{ text_rating }}</p>
+                                      <span class="rating"> {% for i in 1..5 %}
+                                        {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                                        {% endfor %} <br />
+                                        {{ product.reviews }}</span>
+                                    {% endif %}
+                                  {% endif %}
+
+                                  {% if product.price %}
+                                    <p class="price"> 
+                                      {% if not product.special %}
+                                        {{ product.price }}
+                                      {% else %} 
+                                        <span class="price-new">{{ product.special }}</span> 
+                                        <span class="price-old">{{ product.price }}</span> 
+                                        {% endif %}
+                                      <span>{{ product.usdt_price }} usdt1</span>
+                                      {% if product.tax %} 
+                                        <span class="price-tax">{{ text_tax }} {{ product.tax }}</span> 
+                                      {% endif %} 
+                                    </p>
+                                  {% endif %}
+                                </div>
+                                <div class="button-group">
+                                  <input type="button" value="{{ button_cart }}" class="btn btn-primary btn-block" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" />
+                                  <a href="{{ product.remove }}" class="compare_remove_btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                      <path d="M12 0C5.40891 0 0 5.40891 0 12C0 18.5911 5.40891 24 12 24C18.5911 24 24 18.5911 24 12C24 5.40891 18.5911 0 12 0ZM17.9662 15.9777L15.9777 17.9662L12 13.9885L8.02228 17.9662L6.03375 15.9777L10.0115 12L6.03375 8.02228L8.02228 6.03375L12 10.0115L15.9777 6.03375L17.9662 8.02228L13.9885 12L17.9662 15.9777Z" fill="#DA4F49"/>
+                                    </svg>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          {% endfor %} 
+                      </div>
+                    </div>
+
+                    <div class="compare_attributes_block">     
+                      {% if cwc_def_vals and ( (cwc_model and cwc_model_is_slider) or (cwc_manufacturer and cwc_manufacturer_is_slider) or (cwc_availability and cwc_availability_is_slider) or (cwc_weight and cwc_weight_is_slider) or (cwc_dimension and cwc_dimension_is_slider) or (cwc_rating and cwc_rating_is_slider) ) %}
+                      <div class="compare_attributes_group">
+                        {% if cwc_group_name %}
+                          <div class="compare_attributes_group_title">
+                            <span class="attribute_group_title">{{ cwc_heading }}</span>
+                          </div>
+                        {% endif %}
+                        <div class="compare_attributes_group_list">
+
+                          {% if cwc_model and cwc_model_is_slider %}
+                          <div class="compare_attribute_group">
+                            <span class="attribute_title">{{ text_model }}</span>
+                            <div class="compare_attribute_slider" id="p_model_slider_{{ category.id }}">
+                              {% for product in category.category_products %}
+                                {% if product.model is not empty %}
+                                  <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.model }}</span></div></div>
+                                {% else %}
+                                  <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+                          {% endif %}
+
+                          {% if cwc_manufacturer and cwc_manufacturer_is_slider %}
+                          <div class="compare_attribute_group">
+                            <span class="attribute_title">{{ text_manufacturer }}</span>
+                            <div class="compare_attribute_slider" id="p_manufacturer_slider_{{ category.id }}">
+                              {% for product in category.category_products %}
+                                {% if product.manufacturer %}
+                                  <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.manufacturer }}</span></div></div>
+                                {% else %}
+                                  <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+                          {% endif %}
+                          
+                          {% if cwc_rating and cwc_rating_is_slider %}
+                          <div class="compare_attribute_group">
+                            <span class="attribute_title">{{ text_rating }}</span>
+                            <div class="compare_attribute_slider" id="p_rating_slider_{{ category.id }}">
+                              {% for product in category.category_products %}
+                                <div class="slick-slide product-grid">
+                                <div class="attribute_value">
+                                  <span class="rating"> {% for i in 1..5 %}
+                                      {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                                      {% endfor %} <br />
+                                      {{ product.reviews }}</span>
+                                </div>
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                          {% endif %}
+
+                          {% if cwc_availability and cwc_availability_is_slider %}
+                          <div class="compare_attribute_group">
+                            <span class="attribute_title">{{ text_availability }}</span>
+                            <div class="compare_attribute_slider" id="p_availability_slider_{{ category.id }}">
+                              {% for product in category.category_products %}
+                                {% if product.availability %}
+                                  <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.availability }}</span></div></div>
+                                {% else %}
+                                  <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+                          {% endif %}
+
+                          {% if cwc_weight and cwc_weight_is_slider %}
+                          <div class="compare_attribute_group">
+                            <span class="attribute_title">{{ text_weight }}</span>
+                            <div class="compare_attribute_slider" id="p_weight_slider_{{ category.id }}">
+                              {% for product in category.category_products %}
+                                {% if product.weight != 0 %}
+                                  <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.weight }}</span></div></div>
+                                {% else %}
+                                  <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+                          {% endif %}
+
+                          {% if cwc_dimension and cwc_dimension_is_slider %}
+                          <div class="compare_attribute_group">
+                            <span class="attribute_title">{{ text_dimension }}</span>
+                            <div class="compare_attribute_slider" id="p_dimension_slider_{{ category.id }}">
+                              {% for product in category.category_products %}
+                                {% if product.length != 0 and product.width != 0 and product.height != 0 %}
+                                  <div class="slick-slide product-grid"><div class="attribute_value"><span>{{ product.length }} x {{ product.width }} x {{ product.height }}</span></div></div>
+                                {% else %}
+                                  <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+                          {% endif %}
+
+                        </div>
+                      </div>
+                      {% endif %}
+
+                      {% for attribute_group in category.attribute_groups %}
+                        <div class="compare_attributes_group">
+                          {% if cwc_group_name %}
+                            <div class="compare_attributes_group_title">
+                              <span class="attribute_group_title">{{ attribute_group.name }}</span>
+                            </div>
+                          {% endif %}
+                          <div class="compare_attributes_group_list">
+                            {% for key, attribute in attribute_group.attribute %}
+                              <div class="compare_attribute_group">
+                                <span class="attribute_title">{{ attribute.name }}</span>
+                                <div class="compare_attribute_slider" id="attribute_slider_{{ attribute.attribute_id }}_{{ category.id }}">
+                                  {% for product in category.category_products %}
+                                    {% if product.attribute[key] and (product.attribute[key]) is not empty %}
+                                      <div class="slick-slide product-grid"><div class="attribute_value to_check"><span>{{ product.attribute[key] }}</span></div></div>
+                                    {% else %}
+                                      <div class="slick-slide product-grid empty"><div class="attribute_value"><span>—</span></div></div>
+                                    {% endif %}
+                                  {% endfor %}
+                                </div>
+                              </div>
+                            {% endfor %} 
+                          </div>
+                        </div>
+                      {% endfor %} 
+                    </div>
+
+                    <script>
+                      {% set c_combined_attributes = '' %}
+
+                      {% for attribute_group in category.attribute_groups %}
+                          {% for key, attribute in attribute_group.attribute %}
+                              {% set c_combined_attributes = c_combined_attributes ~ '#attribute_slider_' ~ attribute.attribute_id ~'_'~ category.id ~ ', ' %}
+                          {% endfor %}
+                      {% endfor %}
+
+                      {% if category.attribute_groups %}
+                          {% set c_combined_attributes = c_combined_attributes ~ '#model_slider_' ~ category.id %}
+                      {% endif %}
+                      {% if cwc_def_vals and cwc_model and cwc_model_is_slider %}
+                          {% set c_combined_attributes = c_combined_attributes ~ ', #p_model_slider_' ~ category.id %}
+                      {% endif %}
+                      {% if cwc_def_vals and cwc_manufacturer and cwc_manufacturer_is_slider %}
+                          {% set c_combined_attributes = c_combined_attributes ~ ', #p_manufacturer_slider_' ~ category.id %}
+                      {% endif %}
+                      {% if cwc_def_vals and cwc_availability and cwc_availability_is_slider %}
+                          {% set c_combined_attributes = c_combined_attributes ~ ', #p_availability_slider_' ~ category.id %}
+                      {% endif %}
+                      {% if cwc_def_vals and cwc_weight and cwc_weight_is_slider %}
+                          {% set c_combined_attributes = c_combined_attributes ~ ', #p_weight_slider_' ~ category.id %}
+                      {% endif %}
+                      {% if cwc_def_vals and cwc_dimension and cwc_dimension_is_slider %}
+                          {% set c_combined_attributes = c_combined_attributes ~ ', #p_dimension_slider_' ~ category.id %}
+                      {% endif %}
+                      {% if cwc_def_vals and cwc_rating and cwc_rating_is_slider %}
+                          {% set c_combined_attributes = c_combined_attributes ~ ', #p_rating_slider_' ~ category.id %}
+                      {% endif %}
+
+                      {% set c_combined_attributes = c_combined_attributes|trim(', ') %}
+
+                      // main
+                      $('#compare_main_slider_{{ category.id }}').slick({
+                        slidesToShow: {{ cwc_slides_def }},
+                        slidesToScroll: 1,
+                        autoplay: false,
+                        infinite: false,
+                        speed: 300,
+                        swipe: false,
+                        touchMove: false,
+                        draggable: false,
+                        arrows: true,
+                          prevArrow: '<div class="prev"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>',
+                          nextArrow: '<div class="next"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>',
+                          cssEase: "linear",
+                        dots: false,
+                        responsive: [
+                          {
+                            breakpoint: 1200,
+                            settings: {
+                              slidesToScroll: 1,
+                              slidesToShow: {{ cwc_slides_1200 }}
+                            }
+                          },
+                          {
+                            breakpoint: 1024,
+                            settings: {
+                              slidesToScroll: 1,
+                              slidesToShow: {{ cwc_slides_1024 }}
+                            }
+                          },
+                          {
+                            breakpoint: 600,
+                            settings: {
+                              slidesToScroll: 1,
+                              slidesToShow: {{ cwc_slides_600 }}
+                            }
+                          },
+                          {
+                            breakpoint: 480,
+                            settings: {
+                              slidesToScroll: 1,
+                              slidesToShow: {{ cwc_slides_480 }}
+                            }
+                          }
+                        ],
+                        {% if c_combined_attributes is not empty %}asNavFor: '{{ c_combined_attributes }}',{% endif %}
+                      });
+
+                      {% if c_combined_attributes is not empty %}
+                        $('{{ c_combined_attributes }}').slick({
+                          speed: 300,
+                          slidesToShow: {{ cwc_slides_def }},
+                          slidesToScroll: 1,
+                          autoplay: false,
+                          infinite: false,
+                          arrows: false,
+                          dots: false,
+                          cssEase: "linear",
+                          swipe: false,
+                          draggable: false,
+                          responsive: [
+                            {
+                              breakpoint: 1200,
+                              settings: {
+                                slidesToScroll: 1,
+                                slidesToShow: {{ cwc_slides_1200 }}
+                              }
+                            },
+                            {
+                              breakpoint: 1024,
+                              settings: {
+                                slidesToScroll: 1,
+                                slidesToShow: {{ cwc_slides_1024 }}
+                              }
+                            },
+                            {
+                              breakpoint: 600,
+                              settings: {
+                                slidesToScroll: 1,
+                                slidesToShow: {{ cwc_slides_600 }}
+                              }
+                            },
+                            {
+                              breakpoint: 480,
+                              settings: {
+                                slidesToScroll: 1,
+                                slidesToShow: {{ cwc_slides_480 }}
+                              }
+                            }
+                          ],
+                        });
+                      {% endif %}
+                      
+
+                      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                        $('.diff input').prop('checked', false).change();					
+                        $('#compare_main_slider_{{ category.id }}{% if c_combined_attributes is not empty %}, {{ c_combined_attributes }}{% endif %}').slick('setPosition');
+                      });
+                    </script>
+                  </div>
+                {% endfor %}	
+                {% endif %}
+							
+						</div>
+					{% else %}
+						<p>{{ text_empty }}</p>
+						<div class="buttons">
+							<div class="pull-right"><a href="{{ continue }}" class="btn btn-default">{{ button_continue }}</a></div>
+						</div>
+					{% endif %}
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+
+<script>
+$('.diff input').change(function() {
+    var category_id = $(this).attr('id').replace('diff_', '');
+    var attribute_groups = $('#list-' + category_id + ' .compare_attribute_group');
+
+    attribute_groups.each(function() {
+        var attribute_values = $(this).find('.attribute_value.to_check span');
+        var valueCounts = {};
+
+        // count for each attribute value within the current compare_attribute_group
+        attribute_values.each(function() {
+            var value = $(this).text();
+            valueCounts[value] = (valueCounts[value] || 0) + 1;
+        });
+
+        // change not_diff based on checkbox
+        attribute_values.each(function() {
+            var value = $(this).text();
+            if ($('.diff input').is(':checked') && valueCounts[value] > 1) {
+                $(this).addClass('not_diff');
+            } else {
+                $(this).removeClass('not_diff');
+            }
+        });
+    });
+});
+
+
+</script>
+{{ footer }} 

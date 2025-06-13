@@ -1,0 +1,105 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-editor" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-editor" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tinymce_status" id="input-status" class="form-control">
+                    {% if module_tinymce_status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>                  
+                </div>
+            </div>
+            
+             <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_language }}</label>
+                <div class="col-sm-10">
+                  <select name="module_tinymce_language" id="input-status" class="form-control">
+                       <option value="">English</option>
+                       <option value="ar" {% if module_tinymce_language == 'ar' %}selected="selected"{% endif %}>Arabic</option>
+                       <option value="eu" {% if module_tinymce_language == 'eu' %}selected="selected"{% endif %}>Basque</option>
+                       <option value="bg_BG" {% if module_tinymce_language == 'bg_BG' %}selected="selected"{% endif %}>Bulgarian (Bulgaria)</option>
+                       <option value="ca" {% if module_tinymce_language == 'ca' %}selected="selected"{% endif %}>Catalan</option>
+                       <option value="zh_CN" {% if module_tinymce_language == 'zh_CN' %}selected="selected"{% endif %}>Chinese (China)</option>
+                       <option value="zh_TW" {% if module_tinymce_language == 'zh_TW' %}selected="selected"{% endif %}>Chinese (Taiwan)</option>
+                       <option value="hr" {% if module_tinymce_language == 'hr' %}selected="selected"{% endif %}>Croatian</option>
+                       <option value="cs" {% if module_tinymce_language == 'cs' %}selected="selected"{% endif %}>Czech</option>
+                       <option value="da" {% if module_tinymce_language == 'da' %}selected="selected"{% endif %}>Danish</option>
+                       <option value="nl" {% if module_tinymce_language == 'nl' %}selected="selected"{% endif %}>Dutch</option>
+                       <option value="fi" {% if module_tinymce_language == 'fi' %}selected="selected"{% endif %}>Finnish</option>
+                       <option value="fr_FR" {% if module_tinymce_language == 'fr_FR' %}selected="selected"{% endif %}>French (France)</option>
+                       <option value="gl" {% if module_tinymce_language == 'gl' %}selected="selected"{% endif %}>Galician</option>
+                       <option value="de" {% if module_tinymce_language == 'de' %}selected="selected"{% endif %}>German</option>
+                       <option value="el" {% if module_tinymce_language == 'el' %}selected="selected"{% endif %}>Greek</option>
+                       <option value="he_IL" {% if module_tinymce_language == 'he_IL' %}selected="selected"{% endif %}>Hebrew (Israel)</option>
+                       <option value="hu_HU" {% if module_tinymce_language == 'hu_HU' %}selected="selected"{% endif %}>Hungarian (Hungary)</option>
+                       <option value="id" {% if module_tinymce_language == 'id' %}selected="selected"{% endif %}>Indonesian</option>
+                       <option value="it" {% if module_tinymce_language == 'it' %}selected="selected"{% endif %}>Italian</option>
+                       <option value="it_IT" {% if module_tinymce_language == 'it_IT' %}selected="selected"{% endif %}>Italian (Italy)</option>
+                       <option value="ja" {% if module_tinymce_language == 'ja' %}selected="selected"{% endif %}>Japanese</option>
+                       <option value="kk" {% if module_tinymce_language == 'kk' %}selected="selected"{% endif %}>Kazakh</option>
+                       <option value="ko_KR" {% if module_tinymce_language == 'ko_KR' %}selected="selected"{% endif %}>Korean (Korea)</option>
+                       <option value="lt" {% if module_tinymce_language == 'lt' %}selected="selected"{% endif %}>Lithuanian</option>
+                       <option value="nb_NO" {% if module_tinymce_language == 'nb_NO' %}selected="selected"{% endif %}>Norwegian Bokmål (Norway)</option>
+                       <option value="fa" {% if module_tinymce_language == 'fa' %}selected="selected"{% endif %}>Persian</option>
+                       <option value="fa_IR" {% if module_tinymce_language == 'fa_IR' %}selected="selected"{% endif %}>Persian (Iran)</option>
+                       <option value="pl" {% if module_tinymce_language == 'pl' %}selected="selected"{% endif %}>Polish</option>
+                       <option value="pt_BR" {% if module_tinymce_language == 'pt_BR' %}selected="selected"{% endif %}>Portuguese (Brazil)</option>
+                       <option value="pt_PT" {% if module_tinymce_language == 'pt_PT' %}selected="selected"{% endif %}>Portuguese (Portugal)</option>
+                       <option value="ro" {% if module_tinymce_language == 'ro' %}selected="selected"{% endif %}>Romanian</option>
+                       <option value="ro_RO" {% if module_tinymce_language == 'ro_RO' %}selected="selected"{% endif %}>Romanian (Romania)</option>
+                       <option value="ru" {% if module_tinymce_language == 'ru' %}selected="selected"{% endif %}>Russian</option>
+                       <option value="sk" {% if module_tinymce_language == 'sk' %}selected="selected"{% endif %}>Slovak</option>
+                       <option value="sl" {% if module_tinymce_language == 'sl' %}selected="selected"{% endif %}>Slovenian</option>
+                       <option value="sl_SI" {% if module_tinymce_language == 'sl_SI' %}selected="selected"{% endif %}>Slovenian (Slovenia)</option>
+                       <option value="es" {% if module_tinymce_language == 'es' %}selected="selected"{% endif %}>Spanish</option>
+                       <option value="es_MX" {% if module_tinymce_language == 'es_MX' %}selected="selected"{% endif %}>Spanish (Mexico)</option>
+                       <option value="es_ES" {% if module_tinymce_language == 'es_ES' %}selected="selected"{% endif %}>Spanish (Spain)</option>
+                       <option value="sv_SE" {% if module_tinymce_language == 'sv_SE' %}selected="selected"{% endif %}>Swedish (Sweden)</option>
+                       <option value="ta" {% if module_tinymce_language == 'ta' %}selected="selected"{% endif %}>Tamil</option>
+                       <option value="ta_IN" {% if module_tinymce_language == 'ta_IN' %}selected="selected"{% endif %}>Tamil (India)</option>
+                       <option value="th_TH" {% if module_tinymce_language == 'th_TH' %}selected="selected"{% endif %}>Thai (Thailand)</option>
+                       <option value="tr" {% if module_tinymce_language == 'tr' %}selected="selected"{% endif %}>Turkish</option>
+                       <option value="tr_TR" {% if module_tinymce_language == 'tr_TR' %}selected="selected"{% endif %}>Turkish (Turkey)</option>
+                       <option value="uk" {% if module_tinymce_language == 'uk' %}selected="selected"{% endif %}>Ukrainian</option>
+                       <option value="vi" {% if module_tinymce_language == 'vi' %}selected="selected"{% endif %}>Vietnamese</option>
+                       <option value="cy" {% if module_tinymce_language == 'cy' %}selected="selected"{% endif %}>Welsh</option>
+                   </select>                  
+                </div>
+            </div>
+            
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}
