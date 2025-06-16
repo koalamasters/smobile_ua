@@ -4,11 +4,11 @@
 /logs
 /image
 /error_log
-/storage/
 /image/data/
 /image/cache/
 /system/cache/
 /system/logs/
+/storage/modification
 /storage/cache
 /storage/cache_fv
 /storage/logs
@@ -30,3 +30,4 @@ robots.txt
 *.sql
 *.bin
 *.tmp
+.gitignore
