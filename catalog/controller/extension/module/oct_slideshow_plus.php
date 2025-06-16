@@ -92,8 +92,8 @@ class ControllerExtensionModuleOctSlideshowPlus extends Controller {
 
 
                 if( $use_avif){
-                    $image2 = str_replace('https://smobile.ua/image/','',$image2);
-                    $mobile_image2 = str_replace('https://smobile.ua/image/','',$mobile_image2);
+                    $image2 = str_replace(HTTPS_SERVER.'image/','',$image2);
+                    $mobile_image2 = str_replace(HTTPS_SERVER.'image/','',$mobile_image2);
                     $image2 = $this->model_tool_image->getAvif($image2);
                     $mobile_image2 = $this->model_tool_image->getAvif($mobile_image2);
                 }

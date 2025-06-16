@@ -1,7 +1,10 @@
 /.well-known
 /upload
+/min/
 /logs
 /image
+/error_log
+/storage/
 /image/data/
 /image/cache/
 /system/cache/
