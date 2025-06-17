@@ -169,7 +169,7 @@
                 <h1 class="produc-page-h1">{{ heading_title }}</h1>
                 <div class="sc-product-info d-flex d-flex sc-product-info-top">
                     {% if review_status %}
-                        <div class="sc-product-info-right">
+                        <div class="sc-product-info-right mobile-hide">
                             <div class="d-flex align-items-center">
                                 <div class="sc-module-rating-stars d-flex align-items-center">
                                     {% for i in 1..5 %}
@@ -469,7 +469,7 @@
                         <div class="sc-product-info d-flex d-flex sc-product-info-top">
 
                             {% if review_status %}
-                                <div class="sc-product-info-right">
+                                <div class="sc-product-info-right ">
                                     <div class="d-flex align-items-center">
                                         <div class="sc-module-rating-stars d-flex align-items-center">
                                             {% for i in 1..5 %}
@@ -1149,6 +1149,24 @@
 
 
                     {% else %}
+
+                    {% if review_status %}
+                        <div class="content-block mobile-visible">
+                            <div class="d-flex align-items-center">
+                                <div class="sc-module-rating-stars d-flex align-items-center">
+                                    {% for i in 1..5 %}
+                                        {% if rating < i %}
+                                            <span class="sc-module-rating-star"></span>
+                                        {% else %}
+                                            <span class="sc-module-rating-star sc-module-rating-star-is"></span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <span class="sc-product-info-item-badge dark-text">{{ total_reviews }} {{ oct_product_reviews }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
                     {% if main_attributes|length > 0 %}
                         <div class="sc-product-attr d-md-block">
                             <div class="sc-product-attr-title p-3">
