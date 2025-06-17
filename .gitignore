@@ -32,3 +32,4 @@ robots.txt
 *.bin
 *.tmp
 .gitignore
+.htaccess
