@@ -245,10 +245,10 @@
                                             slidesPerView: 3,
                                         },
                                         480: {
-                                            slidesPerView: 3,
+                                            slidesPerView: 4,
                                         },
                                         640: {
-                                            slidesPerView: 4,
+                                            slidesPerView: 5,
                                         },
                                         767: {
                                             slidesPerView: 5,
@@ -281,8 +281,9 @@
                         $('.product-images-grid .oct-gallery').on('click', function(e) {
                             e.preventDefault();
 
-                            var trueIndex = $(this).attr('data-position')
+                            var trueIndex = $(this).attr('data-position') * 1;
                             console.log(trueIndex)
+
 
                             $.fancybox.open(
                                 $('.product-images-grid .oct-gallery'),
