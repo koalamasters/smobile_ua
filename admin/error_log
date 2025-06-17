@@ -8089,3 +8089,13 @@ Stack trace:
 #4 /home/smobile/public_html/storage/modification/admin/controller/catalog/category.php(111): Proxy->__call('addProductToCat...', Array)
 #5 /home/smobile/public_html/storage/modification/system/engine/action.php(79): ControllerCatalogCategory->edit()
 #6 in /home/smobile/public_html/storage/modification/system/library/db/mysqli.php on line 43
+[16-Jun-2025 12:57:51 UTC] PHP Fatal error:  Uncaught Error: Class 'ScssPhp\ScssPhp\Compiler' not found in /home/smobile/dev.smobile.ua/admin/controller/startup/sass.php:14
+Stack trace:
+#0 /home/smobile/dev.smobile.ua/system/engine/action.php(79): ControllerStartupSass->index()
+#1 /home/smobile/dev.smobile.ua/system/engine/router.php(67): Action->execute(Object(Registry))
+#2 /home/smobile/dev.smobile.ua/system/engine/router.php(46): Router->execute(Object(Action))
+#3 /home/smobile/dev.smobile.ua/system/framework.php(165): Router->dispatch(Object(Action), Object(Action))
+#4 /home/smobile/dev.smobile.ua/system/startup.php(105): require_once('/home/smobile/d...')
+#5 /home/smobile/dev.smobile.ua/admin/index.php(19): start('admin')
+#6 {main}
+  thrown in /home/smobile/dev.smobile.ua/admin/controller/startup/sass.php on line 14

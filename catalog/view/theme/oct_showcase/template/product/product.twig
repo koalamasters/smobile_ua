@@ -185,7 +185,7 @@
                         </div>
                     {% endif %}
 
-                    <div class="sc-product-info-left d-flex align-items-center">
+                    <div class="sc-product-info-left d-flex align-items-center mobile-hide">
                         {% if oct_showcase_data.product_model is defined and oct_showcase_data.product_model == 'on' %}
                             <div class=" ">
                                 <span class="dark-text">Артикул (SKU)</span> <span class="color-blue fw-500">{{ model }}</span>
@@ -202,13 +202,80 @@
             <div id="productImages" class="col-md-6">
                 <div>
 
-                    <div class="product-images-grid">
-                        {% for key, image in images %}
-                            <a href="{{ image.popup }}" class="oct-gallery d-block" data-position="{{ key }}">
-                                <img src="{{ image.popup }}" class="d-block mx-auto" alt="{{ heading_title }}" title="{{ heading_title }}" width="{{ thumb_width }}" height="{{ thumb_height }}" />
-                            </a>
-                        {% endfor %}
+                    <!-- Основний слайдер -->
+                    <div class="swiper product-images-slider product-images-grid">
+                        <div class="swiper-wrapper ">
+                            {% for key, image in images %}
+                                <div class="swiper-slide">
+                                    <a href="{{ image.popup }}" class="oct-gallery d-block" data-position="{{ key }}">
+                                        <img src="{{ image.popup }}" class="d-block mx-auto" alt="{{ heading_title }}" title="{{ heading_title }}" width="{{ thumb_width }}" height="{{ thumb_height }}" />
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
+
+                    <!-- Слайдер мініатюр -->
+                    <div class="swiper product-thumbs-slider">
+                        <div class="swiper-wrapper">
+                            {% for key, image in images %}
+                                <div class="swiper-slide">
+                                    <img src="{{ image.thumb }}" alt="thumb" width="80" height="80" />
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <script>
+                        let mainSwiper;
+                        let thumbsSwiper;
+
+                        function initMobileSwiper() {
+                            if (window.innerWidth <= 767 && !mainSwiper) {
+                                thumbsSwiper = new Swiper('.product-thumbs-slider', {
+                                    spaceBetween: 10,
+                                    slidesPerView: 6,
+                                    loop: true,
+                                    freeMode: true,
+                                    loopedSlides: 5, //looped slides should be the same
+                                    watchSlidesVisibility: true,
+                                    watchSlidesProgress: true,
+                                    breakpoints: {
+                                        0: {
+                                            slidesPerView: 3,
+                                        },
+                                        480: {
+                                            slidesPerView: 3,
+                                        },
+                                        640: {
+                                            slidesPerView: 4,
+                                        },
+                                        767: {
+                                            slidesPerView: 5,
+                                        }
+                                    }
+                                });
+
+                                mainSwiper = new Swiper('.product-images-slider', {
+                                    spaceBetween: 10,
+                                    loop: true,
+                                    loopedSlides: 5, //looped slides should be the same
+                                    thumbs: {
+                                        swiper: thumbsSwiper,
+                                    },
+                                });
+                            } else if (window.innerWidth > 767 && mainSwiper) {
+                                mainSwiper.destroy(true, true);
+                                thumbsSwiper.destroy(true, true);
+                                mainSwiper = null;
+                                thumbsSwiper = null;
+                            }
+                        }
+
+                        window.addEventListener('load', initMobileSwiper);
+                        window.addEventListener('resize', initMobileSwiper);
+
+                    </script>
 
                     <script>
                         $('.product-images-grid .oct-gallery').on('click', function(e) {
@@ -231,6 +298,7 @@
                             return false;
                         });
                     </script>
+
 
                 </div>
                 <div class="">
@@ -1088,6 +1156,16 @@
                                 <span class="blue-link fsz-12" id="attr-quick-view" onclick="scrollToElement('.sc-product-content-attributes', '.sc-product-tab-attributes', -140);">{{ oct_product_attributes_seeall }}</span>
                             </div>
                             <div class="sc-product-attr-list fsz-14">
+                                <div class="sc-product-attr-list-item d-flex mobile-visible">
+                                    <div class="dark-text fw-500 fsz-14">Артикул (SKU</div>
+                                    <div>{{ model }}</div>
+                                </div>
+
+                                <div class="sc-product-attr-list-item d-flex mobile-visible">
+                                    <div class="dark-text fw-500 fsz-14">{{ text_manufacturer }}</div>
+                                    <div>{{ manufacturer }}</div>
+                                </div>
+
                                 {% for attribute in main_attributes %}
                                     <div class="sc-product-attr-list-item d-flex">
                                         <div class="dark-text fw-500 fsz-14">{{ attribute.name }}</div>

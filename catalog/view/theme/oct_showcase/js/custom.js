@@ -15,5 +15,11 @@ function openRecentlyViewd(){
     setTimeout(function (){
         $('#oct_sidebar_viewed_toggle').click()
     },100)
-
 }
+
+
+$(function () {
+    $('.breadcrumb-item').last().on('click', function () {
+        $('.breadcrumb').addClass('show-all');
+    });
+});

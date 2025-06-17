@@ -13,6 +13,7 @@
 /storage/cache_fv
 /storage/logs
 /admin/config.php
+/admin/error_log
 config.php
 .htpasswd
 *.zip
