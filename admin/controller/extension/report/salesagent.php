@@ -89,6 +89,8 @@ class ControllerExtensionReportSalesAgent extends Controller {
 
 		$data['report_results'] = $this->getOrderTransactionsSummary($filter_data);
 
+
+
 		$data['user_token'] = $this->session->data['user_token'];
 
 		$this->load->model('localisation/order_status');
@@ -636,13 +638,47 @@ class ControllerExtensionReportSalesAgent extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
+        if (isset($this->request->get['filter_salesagent'])) {
+            $filter_salesagent = $this->request->get['filter_salesagent'];
+            $data['salesagent_info'] = $this->model_extension_module_salesagent->getsalesagent($this->request->get['filter_salesagent']);
+        } else {
+            $this->response->redirect($this->url->link('extension/report/salesagent', 'user_token=' . $this->session->data['user_token'], true));
+        }
+
+        $data['partner_customer_user_id'] = $data['salesagent_info']['customer_id'];
+
+        $data['partner_customer'] = [];
+
+        if (!empty($data['partner_customer_user_id'])) {
+            $this->load->model('customer/customer');
+            $customer_info = $this->model_customer_customer->getCustomer((int)$data['partner_customer_user_id']);
+            if ($customer_info) {
+                $data['partner_customer'] = [
+                    'name'  => $customer_info['firstname'] . ' ' . $customer_info['lastname'],
+                    'email' => $customer_info['email'],
+                    'id'    => $customer_info['customer_id']
+                ];
+            }
+        }
+
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 
 			$data['report_results'] = $this->getOrderTransactions($this->request->post);
-			$this->model_extension_report_salesagent->addPayout($this->request->post,$data['report_results']);
 
+            $reward_mode = isset($this->request->post['reward_as_points']) ? (int)$this->request->post['reward_as_points'] : 1;
+
+            if ($reward_mode && !empty($this->request->post['partner_customer_user_id']) && (float)$this->request->post['totalcommissionamount'] > 0) {
+                $this->load->model('customer/customer');
+                $description = 'Партнерська комісія';
+                $this->model_customer_customer->addReward(
+                    (int)$this->request->post['partner_customer_user_id'],
+                    $description,
+                    (float)$this->request->post['totalcommissionamount']
+                );
+            }
+
+            $this->model_extension_report_salesagent->addPayout($this->request->post, $data['report_results'], $reward_mode);
 			$this->session->data['success'] = $this->language->get('text_success');
-
 			$this->response->redirect($this->url->link('extension/report/salesagent/payouts', 'user_token=' . $this->session->data['user_token'], true));
 		}
 
@@ -667,12 +703,7 @@ class ControllerExtensionReportSalesAgent extends Controller {
 			$this->response->redirect($this->url->link('extension/report/salesagent', 'user_token=' . $this->session->data['user_token'], true));
 		}
 
-		if (isset($this->request->get['filter_salesagent'])) {
-			$filter_salesagent = $this->request->get['filter_salesagent'];
-			$data['salesagent_info'] = $this->model_extension_module_salesagent->getsalesagent($this->request->get['filter_salesagent']);
-		} else {
-			$this->response->redirect($this->url->link('extension/report/salesagent', 'user_token=' . $this->session->data['user_token'], true));
-		}
+
 
 		if (isset($this->request->get['filter_order_status_id'])) {
 			$filter_order_status_id = $this->request->get['filter_order_status_id'];

@@ -259,6 +259,9 @@ class ControllerExtensionModuleMonoCheckout extends Controller
 
         $curl = curl_init();
 
+
+        file_put_contents(DIR_ROOT.'mono_checkout_debug.log', print_r($json,1)."\n", 8);
+
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.monobank.ua/personal/checkout/order/',
             CURLOPT_RETURNTRANSFER => true,

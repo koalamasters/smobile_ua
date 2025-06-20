@@ -47,7 +47,28 @@
                   <input type="text" name="amountpaid" value="" placeholder="{{ entry_amountpaid }}" id="input-amountpaid" class="form-control" />
                 </div>
             </div>
-            <div class="form-group">
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-reward-as-points">Зробити виплату в бали сайту</label>
+                    <div class="col-sm-10">
+                        <select name="reward_as_points" id="input-reward-as-points" class="form-control">
+                            <option value="1" selected="selected">Так</option>
+                            <option value="0">Ні</option>
+                        </select>
+                        {% if partner_customer %}
+                            <div class="form-group">
+                                <div class="col-sm-10" style="padding-top:7px;">
+                                    <strong>{{ partner_customer.name }}</strong> ({{ partner_customer.email }})
+                                </div>
+                            </div>
+                        {% endif %}
+
+
+                    </div>
+                </div>
+                <input type="hidden" name="partner_customer_user_id" value="{{ partner_customer.id }}">
+
+                <div class="form-group">
                 <label class="col-sm-2 control-label" for="input-paymentdetails">{{ entry_paymentdetails }}</label>
                 <div class="col-sm-10">
                   <textarea name="paymentdetails" rows="5" placeholder="{{ entry_paymentdetails }}" id="input-paymentdetails" class="form-control">{{ salesagent_info['paymentdetails'] }}</textarea>
