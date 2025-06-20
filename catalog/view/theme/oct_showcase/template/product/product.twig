@@ -174,7 +174,7 @@
                     {% if review_status %}
                         <div data-tab-target="#review-question-wrapper" data-click="reviews" class="tab-trigger sc-product-tab sc-product-tab-reviews d-flex align-items-center justify-content-center">
                             {#                            <img src="catalog/view/theme/oct_showcase/img/sprite.svg#include--product-tab-reviews-icon" alt="" width="24" height="24">#}
-                            <span class="sc-product-tab-title ps-2 fsz-14">{{ tab_review_text }}</span>
+                            <span class="sc-product-tab-title ps-2 fsz-14">{{ tab_review_text }} {% if total_reviews > 0 %} ({{ total_reviews }}){% endif %}</span>
                         </div>
                     {% endif %}
                     {% if oct_product_faq %}
@@ -2326,6 +2326,9 @@
     <style>
         #comptest{
             display:block!important;
+        }
+        #oct-infobar{
+            display: none;
         }
     </style>
 {% endif %}
