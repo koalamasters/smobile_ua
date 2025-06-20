@@ -6626,7 +6626,7 @@ button.ocf-checkbox.value-item-image{
 
     .mobile-product-info{
         display: block;
-        margin-bottom: 24px;
+        margin-bottom: 5px;
     }
 
     .mobile-product-info .sc-product-info{
@@ -9227,6 +9227,70 @@ label[for="registerCheckbox"]{
     display:none!important;
 }
 
+.breadcrumb-mobile-button{
+    display: flex;
+    align-items: center;
+}
+.breadcrumb-mobile-button svg{
+    max-width: 28px;
+    max-height: 28px;
+}
+
+.breadcrumb-mobile-button-carret{
+    width: 24px;
+    height: 24px;
+}
+
+.breadcrumb-mobile-last-item{
+    font-weight: 500;
+    color: #001f3f;
+}
+
+#breadcrumb-mobile{
+    border-bottom: 1px solid #001F3F1A;
+    padding-bottom: 10px;
+}
+
+.breadcrumb-mobile{
+    position: relative;
+    overflow: unset;
+    z-index: 2;
+}
+
+.breadcrumb-mobile-dropdown{
+    position: absolute;
+    background: #ffffffc7;
+    top: 31px;
+    left: 15px;
+    padding: 15px;
+    backdrop-filter: blur(2px);
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px #d3d3d3;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 15px;
+    visibility: hidden;
+    z-index: -1;
+}
+
+.breadcrumb-mobile.active .breadcrumb-mobile-dropdown{
+    visibility: visible;
+    z-index: 1;
+}
+#breadcrumb-mobile{
+    padding-left: 15px;
+}
+
+.breadcrumb-mobile-button-img{
+    margin-right: 5px;
+}
+
+.breadcrumb-mobile-button li a{
+    font-size: 16px;
+    text-decoration: none;
+}
+
+
 @media (max-width: 767px) {
     #productImages .swiper-slide a img{
         object-fit: contain;
@@ -9237,7 +9301,7 @@ label[for="registerCheckbox"]{
 
     .product-thumbs-slider{
         display:block;
-        margin-top: 25px;
+        margin-top: 15px;
     }
 
     .product-thumbs-slider .swiper-slide img{
@@ -9247,19 +9311,24 @@ label[for="registerCheckbox"]{
         max-height: 60px;
     }
 
-    .product-thumbs-slider .swiper-slide{
-        opacity: .33;
-        transition: .2s;
-    }
-    .product-thumbs-slider .swiper-slide.swiper-slide-thumb-active{
-        opacity: 1;
-    }
+    /*.product-thumbs-slider .swiper-slide{*/
+    /*    opacity: .33;*/
+    /*    transition: .2s;*/
+    /*}*/
+    /*.product-thumbs-slider .swiper-slide.swiper-slide-thumb-active{*/
+    /*    opacity: 1;*/
+    /*}*/
+
+    /*.product-thumbs-slider .swiper-slide.swiper-slide-active{*/
+    /*    opacity: 1;*/
+    /*}*/
 
 
     #product-product .produc-page-h1{
-        font-size: 22px;
-        line-height: 28px;
-        margin-top: 10px;
+        font-size: 20px;
+        line-height: 24px;
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
 
     .breadcrumb.sc-breadcrumb{
@@ -9302,12 +9371,43 @@ label[for="registerCheckbox"]{
         display: none!important;
     }
 
+    .sc-product-tab{
+        padding: 10px 0 10px 0;
+    }
+
+    .sc-product-tab-title {
+        font-size: 12px!important;
+    }
 }
 
 @media (max-width: 420px) {
     #product-product .produc-page-h1 {
-        font-size: 18px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .sc-product-tab{
+        padding: 8px 0 8px 0;
+    }
+
+
+    .breadcrumb.sc-breadcrumb{
+        padding-top: 5px;
+    }
+
+    #product .sc-product-actions{
+        margin-top: 15px;
+    }
+
+    #product #button-cart{
+        margin-top: 0;
+    }
+
+    .sc-product-actions-top-mobile{
+        margin-top: 15px;
+    }
+    .body-product{
+        padding-top: 90px;
     }
 }
 @media (min-width: 768px) {

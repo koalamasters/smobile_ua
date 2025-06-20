@@ -363,6 +363,13 @@ class ControllerProductProduct extends Controller
                 'href' => $this->url->link('product/product', $url . '&product_id=' . $this->request->get['product_id'])
             );
 
+
+            $data['mobile_breadcrumbs'] = $data['breadcrumbs'];
+
+            $data['mobile_breadcrumbs'] = array_reverse($data['mobile_breadcrumbs']);
+
+            unset($data['mobile_breadcrumbs'][0]);
+
             $this->document->setRobots('index, follow');
 
             if ($this->config->get('config_language_id') == 3) {
